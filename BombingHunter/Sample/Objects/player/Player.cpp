@@ -19,8 +19,8 @@ Player::~Player()
 void Player::Initialize()
 {
 	//画像の読み込み
-	animation[0] = LoadGraph("Resource/Images/tri_pilot1.png");
-	animation[1] = LoadGraph("Resource/Images/tri_pilot2.png");
+	animation[0] = LoadGraph("Resource/Images/Tri_pilot1.png");
+	animation[1] = LoadGraph("Resource/Images/Tri_pilot2.png");
 
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
@@ -31,8 +31,8 @@ void Player::Initialize()
 	//向きの設定
 	radian = 0.0f;
 
-	//大きさの設定
-	scale = 64.0;
+	//当たり判定の大きさを設定
+	scale = 64.0f;
 
 	//初期画像の設定
 	image = animation[0];
@@ -56,10 +56,9 @@ void Player::Draw() const
 	//デバック用
 	#if _DEBUG
 		//当たり判定の可視化
-		Vector2D box_collisi_upper_left = location - (Vector2D(1.0f) *
-			(float)scale / 2.0f);
-	Vector2D box_collision_lower_right = location + (Vector2D(1.0f) *
-		GetColor(255, 0, 0), FALSE);
+	Vector2D ul = location - (scale / 2.0f);
+	Vector2D br = location + (scale/ 2.0f);
+	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 #endif
 }
 

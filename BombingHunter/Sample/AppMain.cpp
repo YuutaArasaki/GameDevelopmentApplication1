@@ -59,6 +59,18 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 		result = -1;
 	}
 
-	//
+	//シーン情報の削除する
+	if (scene != nullptr)
+	{
+		scene->Finalize();
+		delete scene;
+		scene = nullptr;
+	}
+
+	//DXライブラリの終了時処理
+	DxLib_End();
+
+	//終了状態を通知
+	return result;
 
 }

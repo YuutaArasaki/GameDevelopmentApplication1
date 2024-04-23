@@ -14,6 +14,7 @@ protected:
 
 public:
 	GameObject();
+	~GameObject();
 	virtual void Initialize();	//‰Šú‰»İ’è
 	virtual void Update();		//XVˆ—
 	virtual void Draw() const;	//•`‰æˆ—

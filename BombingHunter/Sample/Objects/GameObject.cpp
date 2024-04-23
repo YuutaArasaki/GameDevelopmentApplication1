@@ -11,8 +11,9 @@ GameObject::GameObject() :
 }
 
 //デストラクタ
-GameObject::GameObject()
+GameObject::~GameObject()
 {
+
 }
 
 //初期化処理
