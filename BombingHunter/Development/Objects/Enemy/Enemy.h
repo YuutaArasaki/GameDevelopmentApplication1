@@ -7,7 +7,7 @@ class Enemy : public GameObject
 private:
 	int animation[2];	//アニメーション画像
 	int animation_count;	//アニメーション時間
-	Vector2D direction;		//進行方向
+	Vector2D velocity;		//進行方向
 
 public:
 	Enemy();

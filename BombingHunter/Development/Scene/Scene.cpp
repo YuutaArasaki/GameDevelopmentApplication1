@@ -1,10 +1,11 @@
 #include "Scene.h"
+#include "DxLib.h"
 
 #include "../Objects/player/Player.h"
 #include "../Objects/Enemy/Enemy.h"
 
 //コンストラクタ
-Scene::Scene() : objects()
+Scene::Scene() : objects(), back_scene()
 {
 
 }
@@ -20,9 +21,12 @@ Scene::~Scene()
 void Scene::Initialize()
 {
 	//プレイヤーを生成する
-	CreateObject<Player>(Vector2D(320.0f, 240.0f));
+	CreateObject<Player>(Vector2D(320.0f, 100.0f));
+	//敵を生成する
+	CreateObject<Enemy>(Vector2D(320.0f, 400.0f));
 
-	CreateObject<Enemy>(Vector2D(320.0f, 240.0f));
+	back_scene = LoadGraph("Resource/images/backscene.png");
+
 }
 
 //更新処理
@@ -38,6 +42,8 @@ void Scene::Update()
 //描画処理
 void Scene::Draw() const
 {
+	DrawRotaGraphF(320, 260, 0.73, 0, back_scene, TRUE);
+
 	//シーンに存在するオブジェクトの描画処理
 	for (GameObject* obj : objects)
 	{
