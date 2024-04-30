@@ -16,8 +16,8 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//画像の読み込み
-	animation[0] = LoadGraph("Resource/Images/haneteki1.png");
-	animation[1] = LoadGraph("Resource/Images/haneteki2.png");
+	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
+	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
 
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
@@ -35,6 +35,38 @@ void Enemy::Initialize()
 	image = animation[0];
 
 	//進行方向の設定
-	progress = Vector2D(1.0f, -0.5f);
+	/*direction = Vector2D(1.0f, -0.5f);*/
+
+}
+
+void Enemy::Update()
+{
+	Movement();
+
+	AnimationControl();
+}
+
+void Enemy::Draw() const
+{
+	DrawRotaGraphF(location.x, location.y, 1.0, radian, image, TRUE);
+}
+
+void Enemy::Finalize()
+{
+
+}
+
+void Enemy::OnHitCollision(GameObject* hit_object)
+{
+
+}
+
+void Enemy::Movement()
+{
+
+}
+
+void Enemy::AnimationControl()
+{
 
 }

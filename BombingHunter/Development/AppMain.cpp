@@ -21,7 +21,6 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 
 	//ローカル変数定義
 	Scene* scene = new Scene();		//シーン情報
-	GameObject* obj = new GameObject();
 	int result = 0;					//終了状態情報
 
 	//描画先を裏画面から始めるように指定する
@@ -41,6 +40,8 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 
 			//シーンの更新処理
 			scene->Update();
+
+
 
 			//画面の初期化
 			ClearDrawScreen();

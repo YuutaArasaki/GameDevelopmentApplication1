@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "DxLib.h"
 
 //コンストラクタ
 GameObject::GameObject() :
@@ -19,7 +20,8 @@ GameObject::~GameObject()
 //初期化処理
 void GameObject::Initialize()
 {
-
+	//画像の読み込み
+	image = LoadGraph("Resource/Images/haneteki1.png");
 }
 
 //更新処理
@@ -27,11 +29,14 @@ void GameObject::Update()
 {
 
 }
+
+//描画処理
 void GameObject::Draw() const
 {
 
 }
 
+//終了処理
 void GameObject::Finalize()
 {
 
