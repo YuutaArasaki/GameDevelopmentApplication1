@@ -83,14 +83,6 @@ void Enemy::Movement()
 	if (((location.x + velocity.x) < scale)||(640.0f - scale)< (location.x + velocity.x))
 	{
 		velocity *= -1.0f;
-		/*if (location.y < 260)
-		{
-			location.y = 400.0f;
-		}*/
-		
-		
-			location.y += GetRand(10);
-		
 	}
 
 	location.x += velocity.x;
