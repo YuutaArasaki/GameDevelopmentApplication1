@@ -80,7 +80,7 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 
 void Enemy::Movement()
 {
-	if (((location.x + velocity.x) < scale)||(640.0f - scale)< (location.x + velocity.x))
+	if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
 	{
 		velocity *= -1.0f;
 	}

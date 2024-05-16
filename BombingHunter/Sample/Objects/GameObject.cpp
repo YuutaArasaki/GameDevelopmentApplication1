@@ -4,7 +4,7 @@
 //コンストラクタ
 GameObject::GameObject() :
 	location(0.0f),
-	box_size(0.0),
+	box_size(0.0f),
 	radian(0.0),
 	image(0),
 	sound(0)
@@ -20,8 +20,7 @@ GameObject::~GameObject()
 //初期化処理
 void GameObject::Initialize()
 {
-	//画像の読み込み
-	image = LoadGraph("Resource/Images/haneteki1.png");
+
 }
 
 //更新処理
@@ -70,4 +69,9 @@ Vector2D GameObject::GetLocation() const
 void GameObject::SetLocation(const Vector2D& location)
 {
 	this->location = location;
+}
+
+Vector2D GameObject::GetBoxSize() const
+{
+	return box_size;
 }

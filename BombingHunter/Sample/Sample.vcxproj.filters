@@ -36,9 +36,6 @@
     <ClCompile Include="Scene\Scene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Enemy\Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>

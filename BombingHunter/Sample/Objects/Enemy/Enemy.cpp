@@ -16,8 +16,8 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//画像の読み込み
-	animation[0] = LoadGraph("Resource/Images/BoxEnemy/1.png");
-	animation[1] = LoadGraph("Resource/Images/BoxEnemy/2.png");
+	animation[0] = LoadGraph("Resource/Images/teki/hakoteki1.png");
+	animation[1] = LoadGraph("Resource/Images/teki/hakoteki2.png");
 
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
@@ -39,6 +39,15 @@ void Enemy::Initialize()
 }
 
 //更新処理
+void Enemy::Update()
+{
+	//移動処理
+	Movement();
+
+	//アニメーション制御
+	AnimationControl();
+}
+//描画処理
 void Enemy::Draw() const
 {
 	//画像反転グラフ
@@ -83,5 +92,32 @@ void Enemy::Movement()
 		(640.0f - box_size.x) < (location.x + direction.x))
 	{
 		direction.x *= -1.0f;
+	}
+
+	//進行方向に向かって、位置座標を変更する
+	location += direction;
+}
+
+//アニメーション制御
+void Enemy::AnimationControl()
+{
+	//アニメーションカウントを加算する
+	animation_count++;
+
+	//３０フレーム目に到達したら
+	if (animation_count >= 30)
+	{
+		//カウントのリセット
+		animation_count = 0;
+
+		//画像の切り替え
+		if (image == animation[0])
+		{
+			image = animation[1];
+		}
+		else
+		{
+			image = animation[0];
+		}
 	}
 }

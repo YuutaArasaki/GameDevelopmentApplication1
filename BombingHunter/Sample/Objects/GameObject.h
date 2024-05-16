@@ -7,7 +7,7 @@ class GameObject
 {
 protected:
 	Vector2D location;		//ˆÊ’uî•ñ
-	double box_size;			//‘å‚«‚³
+	Vector2D box_size;			//‘å‚«‚³
 	double radian;			//Œü‚«
 	int image;				//•`‰æ‚·‚é‰æ‘œ
 	int sound;				//Ä¶‚·‚é‰¹Œ¹
@@ -27,5 +27,8 @@ public:
 	Vector2D GetLocation() const;
 	//ˆÊ’uî•ñ•ÏXˆ—
 	void SetLocation(const Vector2D& location);
+
+	//“–‚½‚è”»’è‚Ì‘å‚«‚³‚ğæ“¾‚·‚é
+	Vector2D GetBoxSize() const;
 };
 

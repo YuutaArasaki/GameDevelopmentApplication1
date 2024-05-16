@@ -7,7 +7,7 @@ class GameObject
 {
 protected:
 	Vector2D location;		//ˆÊ’uî•ñ
-	double scale;			//‘å‚«‚³
+	Vector2D scale;			//‘å‚«‚³
 	double radian;			//Œü‚«
 	int image;				//•`‰æ‚·‚é‰æ‘œ
 	int sound;				//Ä¶‚·‚é‰¹Œ¹
