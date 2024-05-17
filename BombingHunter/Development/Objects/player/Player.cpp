@@ -3,7 +3,7 @@
 #include "DxLib.h"
 
 //コンストラクタ
-Player::Player() : animation_count(0), filp_flag(FALSE)
+Player::Player() : animation_count(0), filp_flag(FALSE), boomimage()
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
@@ -21,6 +21,7 @@ void Player::Initialize()
 	//画像の読み込み
 	animation[0] = LoadGraph("Resource/Images/Tri_pilot1.png");
 	animation[1] = LoadGraph("Resource/Images/Tri_pilot2.png");
+	boomimage = LoadGraph("Resource/Images/bom/bom.png");
 
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
@@ -45,6 +46,8 @@ void Player::Update()
 	Movement();
 	//アニメーション制御
 	AnimeControl();
+
+	PlayerBoom();
 }
 
 //描画処理
@@ -123,5 +126,19 @@ void Player::AnimeControl()
 		{
 			image = animation[0];
 		}
+	}
+}
+
+Vector2D Player::GetLocation()
+{
+	return location;
+}
+
+void Player::PlayerBoom()
+{
+	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
+	{
+		DrawFormatString(320, 240, GetColor(255, 255, 255), );
+		DrawRotaGraph(location.x, location.y, 1.0, radian, boomimage, TRUE, filp_flag);
 	}
 }

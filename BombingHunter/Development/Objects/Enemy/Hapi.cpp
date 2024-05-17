@@ -1,28 +1,27 @@
-#include "Enemy.h"
 #include "DxLib.h"
+#include "Hapi.h"
 
-Enemy::Enemy() : animation_count(0), velocity(0.0f)
+Hapi::Hapi() : animation_count(0), velocity(0.0f)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
 }
 
-Enemy::~Enemy()
+Hapi::~Hapi()
 {
 
 }
 
-//初期化処理
-void Enemy::Initialize()
+void Hapi::Initialize()
 {
 	//画像の読み込み
-	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
-	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
+	animation[0] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-1.png");
+	animation[1] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-2.png");
 
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
 	{
-		throw ("ハネテキの画像がありません\n");
+		throw ("ハーピーの画像がありません\n");
 	}
 
 	//向きの設定
@@ -36,17 +35,16 @@ void Enemy::Initialize()
 
 	//進行方向の設定
 	velocity = Vector2D(1.0f, -0.5f);
-
 }
 
-void Enemy::Update()
+void Hapi::Update()
 {
 	Movement();
 
 	AnimationControl();
 }
 
-void Enemy::Draw() const
+void Hapi::Draw() const
 {
 	int flip_flag = TRUE;
 
@@ -61,26 +59,27 @@ void Enemy::Draw() const
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 
 	__super::Draw();
-	
+
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 }
 
-void Enemy::Finalize()
+
+void Hapi::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
-void Enemy::OnHitCollision(GameObject* hit_object)
+void Hapi::OnHitCollision(GameObject* hit_object)
 {
 	velocity = 0.0f;
 }
 
-void Enemy::Movement()
+void Hapi::Movement()
 {
-	if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
+	if (((location.x + velocity.x) < scale.x) || (640.0f - scale.x) < (location.x + velocity.x))
 	{
 		velocity *= -1.0f;
 	}
@@ -88,7 +87,8 @@ void Enemy::Movement()
 	location.x += velocity.x;
 }
 
-void Enemy::AnimationControl()
+
+void Hapi::AnimationControl()
 {
 	//フレームカウントを加算する
 	animation_count++;
@@ -109,5 +109,7 @@ void Enemy::AnimationControl()
 			image = animation[0];
 		}
 	}
-
 }
+
+
+

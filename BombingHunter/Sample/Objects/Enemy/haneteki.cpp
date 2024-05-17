@@ -63,7 +63,7 @@ void Enemy::Draw() const
 		flip_flag = TRUE;
 	}
 
-	//情報を基にハコテキ画像を描画する
+	//情報を基にハネテキ画像を描画する
 	DrawRotaGraphF(location.x, location.y, 1.0, radian, image, TRUE, flip_flag);
 
 	//親クラスの描画処理を呼び出す

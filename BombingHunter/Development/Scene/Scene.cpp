@@ -4,6 +4,7 @@
 #include "../Objects/player/Player.h"
 #include "../Objects/Enemy/Enemy.h"
 #include "../Utility/InputControl.h"
+#include "../Objects/Enemy/Hapi.h"
 
 //コンストラクタ
 Scene::Scene() : objects(), back_scene()
@@ -37,19 +38,19 @@ void Scene::Update()
 		obj->Update();
 	}
 
-	for (int i = 0; i < objects.size(); i++)
+	for (int i = 1; i < objects.size(); i++)
 	{
-		for (int j = i + 1; j < objects.size(); j++)
-		{
+		
 			//当たり判定チェック処理
-			HitCheckObject(objects[i], objects[j]);
-		}
+			HitCheckObject(objects[0], objects[i]);
+		
 	}
 
 	if (InputControl::GetKeyDown(KEY_INPUT_Z))
 	{
 		//敵を生成する
 		CreateObject<Enemy>(Vector2D(320.0f, 200.0f));
+		CreateObject<Hapi>(Vector2D(320.0f, 250.0f));
 	}
 }
 
