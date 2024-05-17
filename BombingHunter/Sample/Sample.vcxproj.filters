@@ -36,7 +36,7 @@
     <ClCompile Include="Scene\Scene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Enemy\Enemy.cpp">
+    <ClCompile Include="Objects\Enemy\haneteki.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

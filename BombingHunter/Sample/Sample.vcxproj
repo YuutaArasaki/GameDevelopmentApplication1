@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppMain.cpp" />
-    <ClCompile Include="Objects\Enemy\Enemy.cpp" />
+    <ClCompile Include="Objects\Enemy\haneteki.cpp" />
     <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Objects\player\Player.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />

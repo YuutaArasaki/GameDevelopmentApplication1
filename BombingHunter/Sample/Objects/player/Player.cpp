@@ -73,7 +73,7 @@ void Player::Finalize()
 //“–‚½‚è”»’è’Ê’mˆ—
 void Player::OnHitCollision(GameObject* hit_object)
 {
-	//“–‚½‚Á‚½‚Ìˆ—
+	 
 }
 
 //ˆÚ“®ˆ—
@@ -85,12 +85,12 @@ void Player::Movement()
 	//¶‰EˆÚ“®
 	if (InputControl::GetKey(KEY_INPUT_LEFT))
 	{
-		velocity.x += -1.0f;
+		velocity.x += -2.0f;
 		filp_flag = TRUE;
 	}
 	else if (InputControl::GetKey(KEY_INPUT_RIGHT))
 	{
-		velocity.x += 1.0f;
+		velocity.x += 2.0f;
 		filp_flag = FALSE;
 	}
 	else

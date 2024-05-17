@@ -75,7 +75,7 @@ void Enemy::Finalize()
 
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
-
+	velocity = 0.0f;
 }
 
 void Enemy::Movement()

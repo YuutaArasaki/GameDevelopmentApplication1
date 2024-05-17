@@ -59,3 +59,9 @@ void GameObject::SetLocation(const Vector2D& location)
 {
 	this->location = location;
 }
+
+//“–‚½‚è”»’è‘å‚«‚³æ“¾ˆ—
+Vector2D GameObject::GetBoxSize() const
+{
+	return scale;
+}
