@@ -39,7 +39,7 @@
     <ClCompile Include="Objects\Enemy\Hapi.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\player\Boom.cpp">
+    <ClCompile Include="Objects\player\Bom.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClInclude Include="Objects\Enemy\Hapi.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\player\Boom.h">
+    <ClInclude Include="Objects\player\Bom.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -24,7 +24,7 @@ void Player::Initialize()
 	boomimage = LoadGraph("Resource/Images/bom/bom.png");
 
 	//エラーチェック
-	if (animation[0] == -1 || animation[1] == -1)
+	if (animation[0] == -1 || animation[1] == -1 || boomimage == -1)
 	{
 		throw("トリパイロットの画像がありません\n");
 	}
@@ -46,8 +46,6 @@ void Player::Update()
 	Movement();
 	//アニメーション制御
 	AnimeControl();
-
-	PlayerBoom();
 }
 
 //描画処理
@@ -134,11 +132,16 @@ Vector2D Player::GetLocation()
 	return location;
 }
 
-void Player::PlayerBoom()
-{
-	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
-	{
-		DrawFormatString(320, 240, GetColor(255, 255, 255), );
-		DrawRotaGraph(location.x, location.y, 1.0, radian, boomimage, TRUE, filp_flag);
-	}
-}
+//void Player::PlayerBoom()
+//{
+//	int Boomlocation = location.y;
+//
+//	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
+//	{
+//		DrawFormatString(320, 240, GetColor(255, 255, 255), "ボムの座標%d\n", Boomlocation, TRUE);
+//		DrawRotaGraph(location.x, Boomlocation, 1.0, radian, boomimage, TRUE, filp_flag);
+//	}
+//
+//	Boomlocation += -1.0f;
+//
+//}

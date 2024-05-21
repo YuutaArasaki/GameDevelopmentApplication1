@@ -132,7 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AppMain.cpp" />
-    <ClCompile Include="Objects\player\Boom.cpp" />
+    <ClCompile Include="Objects\player\Bom.cpp" />
     <ClCompile Include="Objects\Enemy\Hapi.cpp" />
     <ClCompile Include="Objects\Enemy\haneteki.cpp" />
     <ClCompile Include="Objects\GameObject.cpp" />
@@ -142,7 +142,7 @@
     <ClCompile Include="Utility\Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Objects\player\Boom.h" />
+    <ClInclude Include="Objects\player\Bom.h" />
     <ClInclude Include="Objects\Enemy\Enemy.h" />
     <ClInclude Include="Objects\Enemy\Hapi.h" />
     <ClInclude Include="Objects\GameObject.h" />

@@ -32,6 +32,6 @@ private:
 
 	Vector2D GetLocation();
 
-	void PlayerBoom();
+	/*void PlayerBoom();*/
 };
 

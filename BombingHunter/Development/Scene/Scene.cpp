@@ -2,6 +2,7 @@
 #include "DxLib.h"
 
 #include "../Objects/player/Player.h"
+#include "../Objects/player/Bom.h"
 #include "../Objects/Enemy/Enemy.h"
 #include "../Utility/InputControl.h"
 #include "../Objects/Enemy/Hapi.h"
@@ -51,6 +52,11 @@ void Scene::Update()
 		//ìGÇê∂ê¨Ç∑ÇÈ
 		CreateObject<Enemy>(Vector2D(320.0f, 200.0f));
 		CreateObject<Hapi>(Vector2D(320.0f, 250.0f));
+	}
+
+	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
+	{
+		CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
 	}
 }
 
