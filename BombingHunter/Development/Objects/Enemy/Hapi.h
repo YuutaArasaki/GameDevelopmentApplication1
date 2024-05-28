@@ -1,8 +1,9 @@
 #pragma once
 
 #include "../GameObject.h"
+#include "Enemy.h"
 
-class Hapi : public GameObject
+class Hapi :  public Enemy
 {
 private:
 	int animation[2];	//アニメーション画像

@@ -1,18 +1,15 @@
-#pragma once
+#include "Enemy.h"
 
-#include "../GameObject.h"
-
-class Enemy : public GameObject
+class Hakoteki : public Enemy
 {
 private:
-	int enemy_image[3]; //敵画像
-	int animation[10];	//アニメーション画像
+	int animation[2];	//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
 
 public:
-	Enemy();
-	~Enemy();
+	Hakoteki();
+	~Hakoteki();
 
 	//初期化処理
 	virtual void Initialize() override;
@@ -26,13 +23,9 @@ public:
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	static Vector2D Enemy_Location(float location_x, float location_y);
-
 private:
 	//移動処理
 	void Movement();
 	//アニメーション制御
 	void AnimationControl();
-
 };
-

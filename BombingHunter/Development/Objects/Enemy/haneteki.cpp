@@ -82,7 +82,7 @@ void Enemy::Draw() const
 		flip_flag = TRUE;
 	}
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[0], TRUE, flip_flag);
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);
+	/*DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);*/
 	__super::Draw();
 	
 	Vector2D ul = location - (scale / 2.0f);
@@ -133,4 +133,26 @@ void Enemy::AnimationControl()
 		}
 	}
 
+}
+
+Vector2D Enemy::Enemy_Location(float location_x, float location_y)
+{
+	switch (GetRand(2))
+	{
+	case 0:
+		return location_x = 0.0f,location_y = 200.0f;
+		
+		break;
+
+	case 1:
+		return location_x = 0.0f,location_y = 270.0f;
+		
+		break;
+
+	case 2:
+		return location_x = 0.0f,location_y = 350.0f;
+		
+		break;
+
+	}
 }

@@ -6,11 +6,12 @@
 #include "../Objects/Enemy/Enemy.h"
 #include "../Utility/InputControl.h"
 #include "../Objects/Enemy/Hapi.h"
+#include "../Objects/Enemy/Hakoteki.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count()
+Scene::Scene() : objects(), back_scene(), count(2)
 {
-
+	
 }
 
 //デストラクタ
@@ -48,12 +49,19 @@ void Scene::Update()
 	}
 	
 
-	if (InputControl::GetKeyDown(KEY_INPUT_Z) && count < 2)
+	if (InputControl::GetKeyDown(KEY_INPUT_Z))
 	{
-		count += 1;
+		
 		//敵を生成する
-		CreateObject<Enemy>(Vector2D(320.0f, 200.0f));
-		CreateObject<Hapi>(Vector2D(320.0f, 270.0f));
+		CreateObject<Enemy>(Vector2D(Enemy::Enemy_Location(0, 0)));
+		CreateObject<Hakoteki>(Vector2D(70.0f,430.0f));
+		if (count > 0)
+		{
+			CreateObject<Hapi>(Vector2D(Enemy::Enemy_Location(0, 0)));
+		}
+
+		count--;
+	
 	}
 
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
