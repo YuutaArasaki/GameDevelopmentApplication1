@@ -3,8 +3,15 @@
 
 Enemy::Enemy() : animation_count(0), velocity(0.0f)
 {
-	animation[0] = NULL;
-	animation[1] = NULL;
+	for (int i = 0; i < 10; i++)
+	{
+		animation[i] = NULL;
+	}
+
+	for (int j = 0; j < 3; j++)
+	{
+		enemy_image[j] = 0;
+	}
 }
 
 Enemy::~Enemy()
@@ -16,14 +23,29 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//画像の読み込み
+	//ハネテキの画像
 	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
+	//ハーピーの画像
+	animation[2] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-1.png");
+	animation[3] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-2.png");
+	//ハコテキの画像
+	animation[4] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
+	animation[5] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
+	//金のテキの画像
+	/*animation[6] = LoadGraph("Resource/Images/teki/haneteki/Ha-pi-1.png");
+	animation[7] = LoadGraph("Resource/Images/teki/Hapi/Ha-pi-2.png");*/
+
 
 	//エラーチェック
-	if (animation[0] == -1 || animation[1] == -1)
+	for (int i = 0; i < 10; i++)
 	{
-		throw ("ハネテキの画像がありません\n");
+		if (animation[i] == -1)
+			{
+				throw ("テキの画像がありません\n");
+			}
 	}
+	
 
 	//向きの設定
 	radian = 0.0f;
@@ -32,7 +54,8 @@ void Enemy::Initialize()
 	scale = 64.0f;
 
 	//初期画像の設定
-	image = animation[0];
+	enemy_image[0] = animation[0];
+	enemy_image[1] = animation[2];
 
 	//進行方向の設定
 	velocity = Vector2D(1.0f, -0.5f);
@@ -58,8 +81,8 @@ void Enemy::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
-
+	DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[0], TRUE, flip_flag);
+	DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);
 	__super::Draw();
 	
 	Vector2D ul = location - (scale / 2.0f);
@@ -100,13 +123,13 @@ void Enemy::AnimationControl()
 		animation_count = 0;
 
 		//画像の切り替え
-		if (image == animation[0])
+		if (enemy_image[0] == animation[0])
 		{
-			image = animation[1];
+			enemy_image[0] = animation[1];
 		}
 		else
 		{
-			image = animation[0];
+			enemy_image[0] = animation[0];
 		}
 	}
 

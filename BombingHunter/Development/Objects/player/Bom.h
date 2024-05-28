@@ -6,6 +6,7 @@ class Bom : public GameObject
 private:
 	int bom_image[4];
 	int animation_count;
+	int count;
 	
 
 public:

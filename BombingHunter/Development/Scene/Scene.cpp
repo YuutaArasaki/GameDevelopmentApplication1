@@ -8,7 +8,7 @@
 #include "../Objects/Enemy/Hapi.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene()
+Scene::Scene() : objects(), back_scene(), count()
 {
 
 }
@@ -41,17 +41,19 @@ void Scene::Update()
 
 	for (int i = 1; i < objects.size(); i++)
 	{
-		
+
 			//当たり判定チェック処理
 			HitCheckObject(objects[0], objects[i]);
 		
 	}
+	
 
-	if (InputControl::GetKeyDown(KEY_INPUT_Z))
+	if (InputControl::GetKeyDown(KEY_INPUT_Z) && count < 2)
 	{
+		count += 1;
 		//敵を生成する
 		CreateObject<Enemy>(Vector2D(320.0f, 200.0f));
-		CreateObject<Hapi>(Vector2D(320.0f, 250.0f));
+		CreateObject<Hapi>(Vector2D(320.0f, 270.0f));
 	}
 
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
@@ -104,7 +106,7 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	//	if ((fabs(Hitlocation.x) < HitBoxSize.x) && (fabs(Hitlocation.y) < HitBoxSize.y))
 	//	{
 	//		a->OnHitCollision(b);
-	//		b->OnHitCollision(a);
+	//		b->OnHitCollision(a);jd
 	//	}
 
 	//２つのオブジェクトの距離を取得

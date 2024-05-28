@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "DxLib.h"
 
-Bom::Bom() : animation_count(0)
+Bom::Bom() : animation_count(0), count(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -73,6 +73,12 @@ void Bom::Finalize()
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
+	animation_count = 0;
+	animation_count++;
+
+	//‰æ‘œ‚ÌØ‚è‘Ö‚¦
+	
+		
 
 }
 
@@ -83,7 +89,7 @@ void Bom::Movement()
 
 void Bom::BomHit()
 {
-
+	
 }
 
 Vector2D Bom::SetLocation()

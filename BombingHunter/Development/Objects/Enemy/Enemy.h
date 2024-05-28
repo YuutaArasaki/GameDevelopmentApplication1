@@ -5,7 +5,8 @@
 class Enemy : public GameObject
 {
 private:
-	int animation[2];	//アニメーション画像
+	int enemy_image[3]; //敵画像
+	int animation[10];	//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
 
