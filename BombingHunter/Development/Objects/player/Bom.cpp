@@ -73,11 +73,25 @@ void Bom::Finalize()
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
-	animation_count = 0;
 	animation_count++;
 
 	//画像の切り替え
-	
+	if (animation_count >= 30)
+	{
+		if (count > 4)
+		{
+			count = 0;
+		}
+		//カウントのリセット
+		animation_count = 0;
+
+		for (count; count < 4;)
+		{
+			image = bom_image[count];
+			break;
+		}
+		count++;
+	}
 		
 
 }

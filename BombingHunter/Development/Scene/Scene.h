@@ -10,6 +10,8 @@ private:
 	std::vector<GameObject*> objects;
 	int back_scene;
 	int count;
+	float Location_X[2];
+	float Location_Y[4];
 	
 
 public:

@@ -26,16 +26,6 @@ void Enemy::Initialize()
 	//ハネテキの画像
 	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
-	//ハーピーの画像
-	animation[2] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-1.png");
-	animation[3] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-2.png");
-	//ハコテキの画像
-	animation[4] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
-	animation[5] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
-	//金のテキの画像
-	/*animation[6] = LoadGraph("Resource/Images/teki/haneteki/Ha-pi-1.png");
-	animation[7] = LoadGraph("Resource/Images/teki/Hapi/Ha-pi-2.png");*/
-
 
 	//エラーチェック
 	for (int i = 0; i < 10; i++)
@@ -103,10 +93,16 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 
 void Enemy::Movement()
 {
-	if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
+	/*if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
+	{
+		velocity *= -1.0f;
+	}*/
+
+	if ((location.x < 0) || (location.x > 640))
 	{
 		velocity *= -1.0f;
 	}
+
 
 	location.x += velocity.x;
 }

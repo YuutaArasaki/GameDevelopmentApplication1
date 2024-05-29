@@ -7,18 +7,29 @@
 #include "../Utility/InputControl.h"
 #include "../Objects/Enemy/Hapi.h"
 #include "../Objects/Enemy/Hakoteki.h"
+#include "../Objects/Enemy/Kinnoteki.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(2)
+Scene::Scene() : objects(), back_scene(), count(5)
 {
-	
+	//X座標の設定
+	Location_X[0] = 0.0f;
+	Location_X[1] = 640.0f;
+
+	//Y座標の設定
+	Location_Y[0] = 200.0f;
+	Location_Y[1] = 270.0f;
+	Location_Y[2] = 350.0f;
+	Location_Y[3] = 440.0f;
+
+
 }
 
 //デストラクタ
 Scene::~Scene()
 {
 	//忘れ防止
-	Finalize();
+	 Finalize();
 }
 
 //初期化処理
@@ -40,12 +51,21 @@ void Scene::Update()
 		obj->Update();
 	}
 
-	for (int i = 1; i < objects.size(); i++)
-	{
+	//for (int i = 0; i < objects.size(); i++)
+	//{
 
+	//		//当たり判定チェック処理
+	//		HitCheckObject(objects[0], objects[i]);
+	//	
+	//}
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		for (int j = i + 1; j < objects.size(); j++)
+		{
 			//当たり判定チェック処理
-			HitCheckObject(objects[0], objects[i]);
-		
+			HitCheckObject(objects[i], objects[j]);
+		}
 	}
 	
 
@@ -53,11 +73,16 @@ void Scene::Update()
 	{
 		
 		//敵を生成する
-		CreateObject<Enemy>(Vector2D(Enemy::Enemy_Location(0, 0)));
-		CreateObject<Hakoteki>(Vector2D(70.0f,430.0f));
-		if (count > 0)
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
+		
+		if (count > 2)
 		{
-			CreateObject<Hapi>(Vector2D(Enemy::Enemy_Location(0, 0)));
+			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[1]));
+			/*CreateObject<Hakoteki>(Vector2D(70.0f,430.0f));*/
+		}
+		if (count > 4)
+		{
+			CreateObject<Kinnoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[3]));
 		}
 
 		count--;
