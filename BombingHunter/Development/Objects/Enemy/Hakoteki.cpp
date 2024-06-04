@@ -20,10 +20,6 @@ void Hakoteki::Initialize()
 	//ハコテキの画像
 	animation[0] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
-	//金のテキの画像
-	/*animation[6] = LoadGraph("Resource/Images/teki/haneteki/Ha-pi-1.png");
-	animation[7] = LoadGraph("Resource/Images/teki/Hapi/Ha-pi-2.png");*/
-
 
 	//エラーチェック
 	for (int i = 0; i < 10; i++)
@@ -45,7 +41,7 @@ void Hakoteki::Initialize()
 	image = animation[0];
 	
 	//進行方向の設定
-	velocity = Vector2D(1.0f, -0.5f);
+	velocity = Vector2D(0.8f, -0.5f);
 
 }
 
@@ -70,7 +66,6 @@ void Hakoteki::Draw() const
 	}
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 	/*DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);*/
-	__super::Draw();
 
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);

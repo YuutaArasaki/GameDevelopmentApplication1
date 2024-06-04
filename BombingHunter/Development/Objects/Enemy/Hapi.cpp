@@ -58,7 +58,6 @@ void Hapi::Draw() const
 	}
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 
-	__super::Draw();
 
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
@@ -84,7 +83,7 @@ void Hapi::Movement()
 		velocity *= -1.0f;
 	}*/
 
-	if ((location.x < 0) || (location.x > 640))
+	if ((location.x < 0.0f) || (location.x > 640.0f))
 	{
 		velocity *= -1.0f;
 	}

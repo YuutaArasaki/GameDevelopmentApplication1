@@ -3,15 +3,8 @@
 
 Enemy::Enemy() : animation_count(0), velocity(0.0f)
 {
-	for (int i = 0; i < 10; i++)
-	{
-		animation[i] = NULL;
-	}
-
-	for (int j = 0; j < 3; j++)
-	{
-		enemy_image[j] = 0;
-	}
+	animation[0] = NULL;
+	animation[1] = NULL;
 }
 
 Enemy::~Enemy()
@@ -32,7 +25,7 @@ void Enemy::Initialize()
 	{
 		if (animation[i] == -1)
 			{
-				throw ("テキの画像がありません\n");
+				throw ("ハネテキの画像がありません\n");
 			}
 	}
 	
@@ -44,8 +37,7 @@ void Enemy::Initialize()
 	scale = 64.0f;
 
 	//初期画像の設定
-	enemy_image[0] = animation[0];
-	enemy_image[1] = animation[2];
+	image = animation[0];
 
 	//進行方向の設定
 	velocity = Vector2D(1.0f, -0.5f);
@@ -71,7 +63,7 @@ void Enemy::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[0], TRUE, flip_flag);
+	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 	/*DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);*/
 	__super::Draw();
 	
@@ -119,36 +111,36 @@ void Enemy::AnimationControl()
 		animation_count = 0;
 
 		//画像の切り替え
-		if (enemy_image[0] == animation[0])
+		if (image == animation[0])
 		{
-			enemy_image[0] = animation[1];
+			image = animation[1];
 		}
 		else
 		{
-			enemy_image[0] = animation[0];
+			image = animation[0];
 		}
 	}
 
 }
 
-Vector2D Enemy::Enemy_Location(float location_x, float location_y)
-{
-	switch (GetRand(2))
-	{
-	case 0:
-		return location_x = 0.0f,location_y = 200.0f;
-		
-		break;
-
-	case 1:
-		return location_x = 0.0f,location_y = 270.0f;
-		
-		break;
-
-	case 2:
-		return location_x = 0.0f,location_y = 350.0f;
-		
-		break;
-
-	}
-}
+//Vector2D Enemy::Enemy_Location(float location_x, float location_y)
+//{
+//	switch (GetRand(2))
+//	{
+//	case 0:
+//		return location_x = 0.0f,location_y = 200.0f;
+//		
+//		break;
+//
+//	case 1:
+//		return location_x = 0.0f,location_y = 270.0f;
+//		
+//		break;
+//
+//	case 2:
+//		return location_x = 0.0f,location_y = 350.0f;
+//		
+//		break;
+//
+//	}
+//}

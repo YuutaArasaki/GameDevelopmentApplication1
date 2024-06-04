@@ -62,8 +62,6 @@ void Kinnoteki::Draw() const
 	}
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 
-	__super::Draw();
-
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);

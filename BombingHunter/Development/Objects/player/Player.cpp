@@ -99,6 +99,18 @@ void Player::Movement()
 		velocity.x = 0.0f;
 	}
 
+	//¶‰EˆÚ“®
+	if (InputControl::GetKey(KEY_INPUT_UP))
+	{
+		velocity.y += -1.0f;
+		filp_flag = TRUE;
+	}
+	else if (InputControl::GetKey(KEY_INPUT_DOWN))
+	{
+		velocity.y += 1.0f;
+		filp_flag = FALSE;
+	}
+	
 	//Œ»İ‚ÌˆÊ’uÀ•W‚É‘¬‚³‚ğ‰ÁZ‚·‚é
 	location += velocity;
 }
