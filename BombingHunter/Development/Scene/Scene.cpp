@@ -10,11 +10,11 @@
 #include "../Objects/Enemy/Kinnoteki.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5)
+Scene::Scene() : objects(), back_scene(), count(5), StartTime()
 {
 	//X座標の設定
-	Location_X[0] = 0.0f;
-	Location_X[1] = 640.0f;
+	Location_X[0] = 1.0f;
+	Location_X[1] = 639.0f;
 
 	//Y座標の設定
 	Location_Y[0] = 200.0f;
@@ -39,6 +39,8 @@ void Scene::Initialize()
 	CreateObject<Player>(Vector2D(320.0f, 100.0f));
 	
 	back_scene = LoadGraph("Resource/images/backscene.png");
+
+	StartTime = GetNowCount();
 
 }
 
@@ -69,25 +71,66 @@ void Scene::Update()
 	
 
 	if (InputControl::GetKeyDown(KEY_INPUT_Z))
-	{
-		//敵を生成する
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-		
-		
-		if (count > 2)
-		{
-			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-			CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-		}
-				
-		if (count > 4)
-		{
-			CreateObject<Kinnoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[3]));
-		}
-			
-		count--;
+	{	
 	
 	}
+
+	if (GetNowCount() - StartTime >= 7000 && count == 5)
+	{
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		count--;
+		
+	}
+	else if ((GetNowCount() - StartTime >= 10000 && count == 4))
+	{
+		count--;
+	}
+
+	if (count == 3 && objects[1]->GetLocation() == Location_X[1])
+	{
+		objects.erase(objects.begin() + 1);
+		/*objects.push_back(CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)])));*/
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		count--;
+	}
+	
+	
+	/*else if (GetNowCount() - StartTime >= 13000 && count == 4)
+	{
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+		count--;
+		
+	}
+	else if (GetNowCount() - StartTime >= 23000 && count == 3)
+	{
+
+	}*/
+	
+	
+
+	
+		
+
+
+	
+
+
+	//if (GetNowCount() - StartTime == 10000)
+	//{
+	//	//敵を生成する
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+
+	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));				
+	//
+	//	CreateObject<Kinnoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[3]));
+	//	count--;
+	//}
 
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{

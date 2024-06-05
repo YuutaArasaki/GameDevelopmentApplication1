@@ -12,6 +12,7 @@ private:
 	int count;
 	float Location_X[2];
 	float Location_Y[4];
+	int StartTime;
 	
 
 public:

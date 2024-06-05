@@ -25,7 +25,7 @@ public:
 	//“–‚½‚è”»’è’Ê’mˆ—
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	static Vector2D Enemy_Location(float location_x, float location_y);
+	 Vector2D Location_X();
 
 private:
 	//ˆÚ“®ˆ—

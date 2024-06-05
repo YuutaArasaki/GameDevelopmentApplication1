@@ -123,6 +123,11 @@ void Enemy::AnimationControl()
 
 }
 
+Vector2D Enemy::Location_X()
+{
+	return location.x;
+}
+
 //Vector2D Enemy::Enemy_Location(float location_x, float location_y)
 //{
 //	switch (GetRand(2))
