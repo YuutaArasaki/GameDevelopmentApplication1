@@ -40,7 +40,15 @@ void Enemy::Initialize()
 	image = animation[0];
 
 	//êiçsï˚å¸ÇÃê›íË
-	velocity = Vector2D(1.0f, -0.5f);
+	if (location.x <= 0)
+	{
+		 velocity = Vector2D(1.0f, 0.5f);
+	}
+	else if (location.x >= 640)
+	{
+		velocity = Vector2D(-1.0f, 0.5f);
+	}
+	
 
 }
 
@@ -80,7 +88,7 @@ void Enemy::Finalize()
 
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
-	velocity = 0.0f;
+
 }
 
 void Enemy::Movement()
@@ -88,10 +96,17 @@ void Enemy::Movement()
 	/*if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
 	{
 		velocity *= -1.0f;
+	}
+	if (((location.y + velocity.y) < scale.y) || (480.0f - scale.y) < (location.y + velocity.y))
+	{
+		velocity *= -1.0f;
 	}*/
 
+	/*if (location.x < 0 || location.x > 640)
+	{
+		velocity *= -1.0f;
+	}*/
 	
-
 	location.x += velocity.x;
 }
 

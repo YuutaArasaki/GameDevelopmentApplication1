@@ -134,6 +134,7 @@
     <ClCompile Include="AppMain.cpp" />
     <ClCompile Include="Objects\Enemy\Kinnoteki.cpp" />
     <ClCompile Include="Objects\Enemy\Hakoteki.cpp" />
+    <ClCompile Include="Objects\player\Bakufuu.cpp" />
     <ClCompile Include="Objects\player\Bom.cpp" />
     <ClCompile Include="Objects\Enemy\Hapi.cpp" />
     <ClCompile Include="Objects\Enemy\haneteki.cpp" />

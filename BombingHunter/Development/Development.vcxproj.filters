@@ -48,6 +48,9 @@
     <ClCompile Include="Objects\Enemy\Kinnoteki.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\player\Bakufuu.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Objects\player\Player.h">

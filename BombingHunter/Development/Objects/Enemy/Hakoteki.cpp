@@ -41,7 +41,7 @@ void Hakoteki::Initialize()
 	image = animation[0];
 	
 	//is•ûŒü‚Ìİ’è
-	velocity = Vector2D(0.8f, -0.5f);
+	velocity = Vector2D(1.0f, -0.5f);
 
 }
 

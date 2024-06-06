@@ -101,10 +101,10 @@ void Bom::Movement()
 	location.y += 3.0f;
 }
 
-void Bom::BomHit()
-{
-	
-}
+//void Bom::BomHit()
+//{
+//	
+//}
 
 Vector2D Bom::SetLocation()
 {

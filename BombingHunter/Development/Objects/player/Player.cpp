@@ -86,12 +86,12 @@ void Player::Movement()
 	//ç∂âEà⁄ìÆ
 	if (InputControl::GetKey(KEY_INPUT_LEFT))
 	{
-		velocity.x += -1.0f;
+		velocity.x += -2.0f;
 		filp_flag = TRUE;
 	}
 	else if (InputControl::GetKey(KEY_INPUT_RIGHT))
 	{
-		velocity.x += 1.0f;
+		velocity.x += 2.0f;
 		filp_flag = FALSE;
 	}
 	else
