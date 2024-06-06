@@ -90,11 +90,7 @@ void Enemy::Movement()
 		velocity *= -1.0f;
 	}*/
 
-	if ((location.x < 0) || (location.x > 640))
-	{
-		velocity *= -1.0f;
-	}
-
+	
 
 	location.x += velocity.x;
 }

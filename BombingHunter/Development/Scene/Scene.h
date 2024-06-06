@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include "../Objects/GameObject.h"
+#include "../Utility/Vector2D.h"
 
 class Scene
 {
@@ -13,6 +14,7 @@ private:
 	float Location_X[2];
 	float Location_Y[4];
 	int StartTime;
+	
 	
 
 public:

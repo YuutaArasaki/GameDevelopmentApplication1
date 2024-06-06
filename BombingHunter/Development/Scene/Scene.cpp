@@ -13,8 +13,8 @@
 Scene::Scene() : objects(), back_scene(), count(5), StartTime()
 {
 	//X座標の設定
-	Location_X[0] = 1.0f;
-	Location_X[1] = 639.0f;
+	Location_X[0] = 0.0f;
+	Location_X[1] = 640.0f;
 
 	//Y座標の設定
 	Location_Y[0] = 200.0f;
@@ -22,7 +22,7 @@ Scene::Scene() : objects(), back_scene(), count(5), StartTime()
 	Location_Y[2] = 270.0f;;
 	Location_Y[3] = 440.0f;
 
-
+	
 }
 
 //デストラクタ
@@ -47,6 +47,7 @@ void Scene::Initialize()
 //更新処理
 void Scene::Update()
 {
+	int delete_count = 5;
 	//シーンに存在するオブジェクトの更新処理
 	for (GameObject* obj : objects)
 	{
@@ -75,26 +76,29 @@ void Scene::Update()
 	
 	}
 
-	if (GetNowCount() - StartTime >= 7000 && count == 5)
+	if (GetNowCount() - StartTime >= 3000 && count == 5)
 	{
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
 		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
 		count--;
+	}
+	if (count == 4)
+	{
+		if ((objects[1]->GetLocation().x < 0.0f) || (objects[1]->GetLocation().x > 640.0f))
+				{
+					objects.erase(objects.begin() + 1);
+					/*objects.push_back(CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)])));*/
+					CreateObject<Enemy>(Vector2D(Location_X[1], Location_Y[/*GetRand(1)*/1]));
+				}
+	}
 		
-	}
-	else if ((GetNowCount() - StartTime >= 10000 && count == 4))
-	{
-		count--;
-	}
-
-	if (count == 3 && objects[1]->GetLocation() == Location_X[1])
-	{
-		objects.erase(objects.begin() + 1);
-		/*objects.push_back(CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)])));*/
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-		count--;
-	}
+	//	objects.erase(objects.begin() + 1);
+	//	/*objects.push_back(CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)])));*/
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
+	//	count--;
+	//}
 	
 	
 	/*else if (GetNowCount() - StartTime >= 13000 && count == 4)
