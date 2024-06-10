@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "../../Utility/InputControl.h"
+#include "Bom.h"
 #include "DxLib.h"
 
 //コンストラクタ
@@ -74,6 +75,7 @@ void Player::Finalize()
 //当たり判定通知処理
 void Player::OnHitCollision(GameObject* hit_object)
 {
+	
 	
 }
 

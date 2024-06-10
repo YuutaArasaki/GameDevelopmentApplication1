@@ -45,7 +45,7 @@ void GameObject::Finalize()
 //当たり判定通知処理
 void GameObject::OnHitCollision(GameObject* hit_object)
 {
-	//当たった時に行う処理
+	
 }
 
 //位置所法取得処理

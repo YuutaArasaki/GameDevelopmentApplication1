@@ -10,7 +10,7 @@
 #include "../Objects/Enemy/Kinnoteki.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5), StartTime(), delete_count()
+Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),Hit()
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -55,8 +55,12 @@ void Scene::Update()
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		//当たり判定チェック処理
-		HitCheckObject(objects[0], objects[i]);
+		for (int j = 0; j < objects.size(); j++)
+		{
+			//当たり判定チェック処理
+			HitCheckObject(objects[i], objects[j]);
+		}
+		
 	}
 
 	//for (int i = 1; i < objects.size(); i++)
@@ -74,30 +78,30 @@ void Scene::Update()
 		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
 	}
 
-	//if (GetNowCount() - StartTime >= 2000 && count == 5)
-	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//	count--;
-	//}
-	//else if(GetNowCount() - StartTime >= 10000 && count == 4)
-	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//	count--;
-	//}
-	//else if (GetNowCount() - StartTime >= 18000 && count == 3)
-	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//	count--;
-	//}
+	if (GetNowCount() - StartTime >= 2000 && count == 5)
+	{
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+		count--;
+	}
+	else if(GetNowCount() - StartTime >= 10000 && count == 4)
+	{
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+		count--;
+	}
+	else if (GetNowCount() - StartTime >= 18000 && count == 3)
+	{
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+		count--;
+	}
 
 	
 	
@@ -220,4 +224,10 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 		a->OnHitCollision(b);
 		b->OnHitCollision(a);
 	}
+	
 }
+
+//void Scene::DeleteObject()
+//{
+//
+//}

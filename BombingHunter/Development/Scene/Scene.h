@@ -15,6 +15,7 @@ private:
 	float Location_Y[4];
 	int StartTime;
 	int delete_count;
+	bool Hit;
 	
 	
 
@@ -32,6 +33,8 @@ private:
 	//当たり判定チェック処理
 	void HitCheckObject(GameObject* a, GameObject* b);
 
+	void DeleteObject();
+
 	//オブジェクト生成処理
 	template <class T>
 	T* CreateObject(const Vector2D& location)
@@ -48,10 +51,11 @@ private:
 			throw std::string("ゲームオブジェクトが生成できませんでした");
 		}
 
-		//初期化処理
-		new_object->Initialize();
 		//位置情報の設定
 		new_object->SetLocation(location);
+		//初期化処理
+		new_object->Initialize();
+		
 
 		//オブジェクトリストに追加
 		objects.push_back(new_object);

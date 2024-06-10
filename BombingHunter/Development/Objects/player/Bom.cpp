@@ -45,13 +45,13 @@ void Bom::Update()
 {
 	Movement();
 
-	BomHit();
+	BomHit(0);
 }
 
 void Bom::Draw() const
 {
 	
-		DrawRotaGraph(location.x, location.y, 0.7, radian, image, TRUE);
+		DrawRotaGraphF(location.x, location.y, 0.7, radian, image, TRUE);
 
 	//デバック用
 #if _DEBUG
@@ -73,25 +73,28 @@ void Bom::Finalize()
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
-	animation_count++;
 
-	//画像の切り替え
-	if (animation_count >= 30)
-	{
-		if (count > 4)
-		{
-			count = 0;
-		}
-		//カウントのリセット
-		animation_count = 0;
+	BomHit(1);
 
-		for (count; count < 4;)
-		{
-			image = bom_image[count];
-			break;
-		}
-		count++;
-	}
+	//animation_count++;
+
+	////画像の切り替え
+	//if (animation_count >= 30)
+	//{
+	//	if (count > 4)
+	//	{
+	//		count = 0;
+	//	}
+	//	//カウントのリセット
+	//	animation_count = 0;
+
+	//	for (count; count < 4;)
+	//	{
+	//		image = bom_image[count];
+	//		break;
+	//	}
+	//	count++;
+	//}
 		
 
 }
@@ -109,4 +112,17 @@ void Bom::Movement()
 Vector2D Bom::SetLocation()
 {
 	return location;
+}
+
+bool Bom::BomHit(int hit)
+{
+	if (hit == 1)
+	{
+		return true;
+	}
+
+	if (hit == 0)
+	{
+		return false;
+	}
 }

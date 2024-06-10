@@ -38,7 +38,14 @@ void Kinnoteki::Initialize()
 	image = animation[0];
 
 	//is•ûŒü‚Ìİ’è
-	velocity = Vector2D(1.0f, -0.5f);
+	if (location.x <= 0)
+	{
+		velocity = Vector2D(1.0f, 0.5f);
+	}
+	else if (location.x >= 640)
+	{
+		velocity = Vector2D(-1.0f, 0.5f);
+	}
 }
 
 void Kinnoteki::Update()

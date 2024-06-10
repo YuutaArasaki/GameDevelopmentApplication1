@@ -6,6 +6,11 @@ Hakoteki::Hakoteki() : animation_count(0), velocity(0.0f)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
+
+	for (int i = 0; i < 4; i++)
+	{
+		Bullet[i] = NULL;
+	}
 }
 
 Hakoteki::~Hakoteki()
@@ -21,8 +26,13 @@ void Hakoteki::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
 
+	Bullet[0] = LoadGraph("Resource/Images/teki/hakoteki/Bullet1.png");
+	Bullet[1] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff1.png");
+	Bullet[2] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff2.png");
+	Bullet[3] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff3.png");
+
 	//エラーチェック
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		if (animation[i] == -1)
 		{
@@ -30,18 +40,34 @@ void Hakoteki::Initialize()
 		}
 	}
 
+	for (int j = 0; j < 4; j++)
+	{
+		if (Bullet[j] == -1)
+		{
+			throw ("バレットの画像がありません\n");
+		}
+	}
+
+
 
 	//向きの設定
 	radian = 0.0f;
 
 	//当たり判定の大きさを設定
-	scale = 64.0f;
+	scale = 40.0f;
 
 	//初期画像の設定
 	image = animation[0];
 	
 	//進行方向の設定
-	velocity = Vector2D(1.0f, -0.5f);
+	if (location.x <= 0)
+	{
+		velocity = Vector2D(1.0f, 0.5f);
+	}
+	else if (location.x >= 640)
+	{
+		velocity = Vector2D(-1.0f, 0.5f);
+	}
 
 }
 
@@ -80,7 +106,11 @@ void Hakoteki::Finalize()
 
 void Hakoteki::OnHitCollision(GameObject* hit_object)
 {
-	velocity = 0.0f;
+	/*Bom bom;
+	if (bom.BomHit() == true)
+	{
+		velocity = 0;
+	}*/
 }
 
 void Hakoteki::Movement()
@@ -90,10 +120,10 @@ void Hakoteki::Movement()
 		velocity *= -1.0f;
 	}*/
 
-	if ((location.x < 0) || (location.x > 640))
+	/*if ((location.x < 0) || (location.x > 640))
 	{
 		velocity *= -1.0f;
-	}
+	}*/
 
 	location.x += velocity.x;
 }

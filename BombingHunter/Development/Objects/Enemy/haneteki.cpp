@@ -34,7 +34,7 @@ void Enemy::Initialize()
 	radian = 0.0f;
 
 	//“–‚½‚è”»’è‚Ì‘å‚«‚³‚ğİ’è
-	scale = 64.0f;
+	scale = 50.0f;
 
 	//‰Šú‰æ‘œ‚Ìİ’è
 	image = animation[0];
@@ -88,7 +88,12 @@ void Enemy::Finalize()
 
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
+	/*Bom bom;
 
+	if (bom.BomHit(1) == true)
+	{*/
+		velocity = 0;
+	//}
 }
 
 void Enemy::Movement()

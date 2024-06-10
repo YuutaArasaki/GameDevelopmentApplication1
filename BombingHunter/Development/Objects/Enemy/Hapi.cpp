@@ -34,7 +34,14 @@ void Hapi::Initialize()
 	image = animation[0];
 
 	//êiçsï˚å¸ÇÃê›íË
-	velocity = Vector2D(1.0f, -0.5f);
+	if (location.x <= 0)
+	{
+		velocity = Vector2D(1.0f, 0.5f);
+	}
+	else if (location.x >= 640)
+	{
+		velocity = Vector2D(-1.0f, 0.5f);
+	}
 }
 
 void Hapi::Update()
@@ -73,7 +80,11 @@ void Hapi::Finalize()
 
 void Hapi::OnHitCollision(GameObject* hit_object)
 {
-	velocity = 0.0f;
+	/*Bom bom;
+	if (bom.BomHit() == true)
+	{
+		velocity = 0;
+	}*/
 }
 
 void Hapi::Movement()
@@ -82,11 +93,6 @@ void Hapi::Movement()
 	{
 		velocity *= -1.0f;
 	}*/
-
-	if ((location.x < 0.0f) || (location.x > 640.0f))
-	{
-		velocity *= -1.0f;
-	}
 
 	location.x += velocity.x;
 }
