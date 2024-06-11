@@ -2,6 +2,13 @@
 
 #include "../Utility/Vector2D.h"
 
+#define HANE (0);
+#define HAKO (1);
+#define HAPI (2);
+#define KIN  (3);
+#define Enemy_Type (4);
+
+
 //ゲームオブジェクト基底クラス
 class GameObject
 {
@@ -11,6 +18,8 @@ protected:
 	double radian;			//向き
 	int image;				//描画する画像
 	int sound;				//再生する音源
+	int enemy_type;
+
 
 public:
 	GameObject();
@@ -22,6 +31,8 @@ public:
 
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object);
+
+	virtual int GetType();
 
 	//位置情報取得処理
 	Vector2D GetLocation() const;

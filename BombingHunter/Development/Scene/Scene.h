@@ -15,7 +15,8 @@ private:
 	float Location_Y[4];
 	int StartTime;
 	int delete_count;
-	bool Hit;
+	int enemy_count[3];
+	int enemy_Max;
 	
 	
 

@@ -5,10 +5,12 @@
 
 class Enemy : public GameObject
 {
-private:
+protected:
 	int animation[2];	//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
+	Vector2D Plus_Speed[3];
+	Vector2D Minus_Speed[3];
 
 public:
 	Enemy();
@@ -25,6 +27,8 @@ public:
 
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object) override;
+
+	void HitCheckObject(GameObject* a, GameObject* b);
 
 	 Vector2D Location_X();
 

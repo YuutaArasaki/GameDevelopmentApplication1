@@ -65,3 +65,8 @@ Vector2D GameObject::GetBoxSize() const
 {
 	return scale;
 }
+
+int GameObject::GetType()
+{
+	return enemy_type;
+}

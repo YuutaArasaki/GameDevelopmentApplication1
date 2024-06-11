@@ -40,11 +40,11 @@ void Kinnoteki::Initialize()
 	//is•ûŒü‚Ìİ’è
 	if (location.x <= 0)
 	{
-		velocity = Vector2D(1.0f, 0.5f);
+		velocity = Vector2D(1.5f, 0.5f);
 	}
 	else if (location.x >= 640)
 	{
-		velocity = Vector2D(-1.0f, 0.5f);
+		velocity = Vector2D(-1.5f, 0.5f);
 	}
 }
 

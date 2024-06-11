@@ -10,7 +10,7 @@
 #include "../Objects/Enemy/Kinnoteki.h"
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),Hit()
+Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -22,7 +22,10 @@ Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),H
 	Location_Y[2] = 270.0f;;
 	Location_Y[3] = 440.0f;
 
-	
+	enemy_count[HANE] = 5;
+	enemy_count[1] = HAKO;
+	enemy_count[2] = HAPI;
+
 }
 
 //デストラクタ
@@ -55,7 +58,7 @@ void Scene::Update()
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		for (int j = 0; j < objects.size(); j++)
+		for (int j = 1; j < objects.size(); j++)
 		{
 			//当たり判定チェック処理
 			HitCheckObject(objects[i], objects[j]);
@@ -78,45 +81,91 @@ void Scene::Update()
 		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
 	}
 
-	if (GetNowCount() - StartTime >= 2000 && count == 5)
+	if (enemy_Max > 0)
 	{
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-		count--;
+		switch (GetRand(3))
+		{
+			case 0:
+			if (enemy_count > 0)
+			{
+				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+				enemy_count[0]--;
+				enemy_Max--;
+			}
+			break;
+			
+
+			case 1:
+			if (enemy_count[0] > 0)
+			{
+				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+				enemy_count[0]--;
+				enemy_Max--;
+			}
+			break;
+
+			case 2:
+			if (enemy_count[1] > 0)
+			{
+				CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+				enemy_count[1]--;
+				enemy_Max--;
+			}
+			break;
+
+			case 3:
+			if (enemy_count[2] > 0)
+			{
+				CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+				enemy_count[2]--;
+				enemy_Max--;
+			}
+			break;
+
+		}
 	}
-	else if(GetNowCount() - StartTime >= 10000 && count == 4)
-	{
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-		count--;
-	}
-	else if (GetNowCount() - StartTime >= 18000 && count == 3)
-	{
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-		count--;
-	}
+	//if (GetNowCount() - StartTime >= 2000 && count == 5)
+	//{
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+	//	
+	//	count--;
+	//}
+	//else if(GetNowCount() - StartTime >= 6000 && count == 4)
+	//{
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+	//	count--;
+	//}
+	//else if (GetNowCount() - StartTime >= 10500 && count == 3)
+	//{
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+	//	count--;
+	//}
 
 	
 	
-	if (GetNowCount() - StartTime >= 3000)
-	{
+	/*if (GetNowCount() - StartTime >= 3000)
+	{*/
 		for (int i = 1; i < objects.size(); i++)
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
+				if (objects[i]->GetType() == )
 				objects.erase(objects.begin() + i);
 				delete_count++;
+				enemy_Max++;
 			}
+			
 		}
 		
-	}
+	/*}*/
 		
 	
 		

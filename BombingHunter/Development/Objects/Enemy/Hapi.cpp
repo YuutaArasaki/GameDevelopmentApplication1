@@ -33,14 +33,22 @@ void Hapi::Initialize()
 	//初期画像の設定
 	image = animation[0];
 
+	//スピード設定処理
+	Plus_Speed[0] = Vector2D(1.0f, 0.5f);
+	Plus_Speed[1] = Vector2D(0.4f, 0.5f);
+	Plus_Speed[2] = Vector2D(0.7f, 0.5f);
+	Minus_Speed[0] = Vector2D(-1.0f, 0.5f);
+	Minus_Speed[1] = Vector2D(-0.4f, 0.5f);
+	Minus_Speed[2] = Vector2D(-0.7f, 0.5f);
+
 	//進行方向の設定
 	if (location.x <= 0)
 	{
-		velocity = Vector2D(1.0f, 0.5f);
+		velocity = Vector2D(Plus_Speed[GetRand(2)]);
 	}
 	else if (location.x >= 640)
 	{
-		velocity = Vector2D(-1.0f, 0.5f);
+		velocity = Vector2D(Minus_Speed[GetRand(2)]);
 	}
 }
 
