@@ -159,3 +159,9 @@ void Hakoteki::AnimationControl()
 	}
 
 }
+
+int Hakoteki::GetType()
+{
+	enemy_type = HAKO;
+	return enemy_type;
+}

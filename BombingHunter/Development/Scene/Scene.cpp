@@ -9,8 +9,11 @@
 #include "../Objects/Enemy/Hakoteki.h"
 #include "../Objects/Enemy/Kinnoteki.h"
 
+
+
+
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10)
+Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10),time_count()
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -22,9 +25,9 @@ Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),e
 	Location_Y[2] = 270.0f;;
 	Location_Y[3] = 440.0f;
 
-	enemy_count[HANE] = 5;
-	enemy_count[1] = HAKO;
-	enemy_count[2] = HAPI;
+	enemy_count[0] = 5;
+	enemy_count[1] = 3;
+	enemy_count[2] = 2;
 
 }
 
@@ -81,49 +84,56 @@ void Scene::Update()
 		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
 	}
 
-	if (enemy_Max > 0)
+	time_count++;
+
+	if (time_count >= 60)
 	{
-		switch (GetRand(3))
-		{
-			case 0:
-			if (enemy_count > 0)
+		time_count = 0;
+		if (enemy_Max > 0)
 			{
-				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-				enemy_count[0]--;
-				enemy_Max--;
-			}
-			break;
+				switch (GetRand(3))
+				{
+					case 0:
+					if (enemy_count[0] > 0)
+					{
+						CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+						enemy_count[0] -= 1;
+						enemy_Max--;
+					}
+					break;
 			
 
-			case 1:
-			if (enemy_count[0] > 0)
-			{
-				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-				enemy_count[0]--;
-				enemy_Max--;
-			}
-			break;
+					case 1:
+					if (enemy_count[0] > 0)
+					{
+						CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+						enemy_count[0] -= 1;
+						enemy_Max--;
+					}
+					break;
 
-			case 2:
-			if (enemy_count[1] > 0)
-			{
-				CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-				enemy_count[1]--;
-				enemy_Max--;
-			}
-			break;
+					case 2:
+					if (enemy_count[1] > 0)
+					{
+						CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+						enemy_count[1] -= 1;
+						enemy_Max--;
+					}
+					break;
 
-			case 3:
-			if (enemy_count[2] > 0)
-			{
-				CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-				enemy_count[2]--;
-				enemy_Max--;
-			}
-			break;
+					case 3:
+					if (enemy_count[2] > 0)
+					{
+						CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+						enemy_count[2] -= 1;
+						enemy_Max--;
+					}
+					break;
 
-		}
+				}
+			}
 	}
+	
 	//if (GetNowCount() - StartTime >= 2000 && count == 5)
 	//{
 	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
@@ -157,10 +167,11 @@ void Scene::Update()
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
-				if (objects[i]->GetType() == )
+				if (objects[i]->GetType() < 4)
 				objects.erase(objects.begin() + i);
 				delete_count++;
 				enemy_Max++;
+				enemy_count[objects[i]->GetType()] += 1;
 			}
 			
 		}
@@ -216,7 +227,15 @@ void Scene::Draw() const
 {
 	DrawRotaGraphF(320, 260, 0.73, 0, back_scene, TRUE);
 
-	DrawFormatString(20, 20, GetColor(255, 255, 255), "消した数 : %d", delete_count);
+	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", time_count);
+
+	DrawFormatString(20, 40, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[0]);
+
+	DrawFormatString(20, 60, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[1]);
+
+	DrawFormatString(20, 80, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[2]);
+
+	DrawFormatString(20, 100, GetColor(255, 255, 255), "敵の最大数 ： %d", enemy_Max);
 
 	//シーンに存在するオブジェクトの描画処理
 	for (GameObject* obj : objects)

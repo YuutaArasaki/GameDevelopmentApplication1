@@ -5,6 +5,8 @@
 #include "../Objects/GameObject.h"
 #include "../Utility/Vector2D.h"
 
+
+
 class Scene
 {
 private:
@@ -17,6 +19,7 @@ private:
 	int delete_count;
 	int enemy_count[3];
 	int enemy_Max;
+	int time_count;
 	
 	
 

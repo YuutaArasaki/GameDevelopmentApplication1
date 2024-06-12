@@ -176,3 +176,9 @@ Vector2D Enemy::Location_X()
 //
 //	}
 //}
+
+int Enemy::GetType()
+{
+	enemy_type = HANE;
+	return enemy_type;
+}

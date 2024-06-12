@@ -130,4 +130,10 @@ void Hapi::AnimationControl()
 }
 
 
+int Hapi::GetType()
+{
+	enemy_type = HAPI;
+	return enemy_type;
+}
+
 

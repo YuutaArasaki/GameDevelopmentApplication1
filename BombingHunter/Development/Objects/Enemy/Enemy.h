@@ -11,6 +11,7 @@ protected:
 	Vector2D velocity;		//is•ûŒü
 	Vector2D Plus_Speed[3];
 	Vector2D Minus_Speed[3];
+	
 
 public:
 	Enemy();
@@ -28,7 +29,7 @@ public:
 	//“–‚½‚è”»’è’Ê’mˆ—
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	void HitCheckObject(GameObject* a, GameObject* b);
+	virtual int GetType();
 
 	 Vector2D Location_X();
 

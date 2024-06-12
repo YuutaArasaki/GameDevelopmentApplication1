@@ -8,7 +8,6 @@
 #define KIN  (3);
 #define Enemy_Type (4);
 
-
 //ゲームオブジェクト基底クラス
 class GameObject
 {
