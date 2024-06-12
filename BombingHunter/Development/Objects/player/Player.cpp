@@ -86,20 +86,26 @@ void Player::Movement()
 	Vector2D velocity = 0.0f;
 
 	//¶‰EˆÚ“®
-	if (InputControl::GetKey(KEY_INPUT_LEFT))
-	{
-		velocity.x += -2.0f;
-		filp_flag = TRUE;
-	}
-	else if (InputControl::GetKey(KEY_INPUT_RIGHT))
-	{
-		velocity.x += 2.0f;
-		filp_flag = FALSE;
-	}
-	else
-	{
-		velocity.x = 0.0f;
-	}
+	
+		if (InputControl::GetKey(KEY_INPUT_LEFT))
+		{
+			if (location.x > 0)
+			{
+				velocity.x += -2.0f;
+				filp_flag = TRUE;
+			}
+		}
+	
+	
+		if (InputControl::GetKey(KEY_INPUT_RIGHT))
+		{
+			if (location.x < 640)
+			{
+				velocity.x += 2.0f;
+				filp_flag = FALSE;
+			}
+		}
+	
 
 	//¶‰EˆÚ“®
 	if (InputControl::GetKey(KEY_INPUT_UP))

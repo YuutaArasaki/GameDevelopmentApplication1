@@ -7,8 +7,7 @@ GameObject::GameObject() :
 	scale(0.0),
 	radian(0.0),
 	image(0),
-	sound(0),
-	enemy_type(0)
+	sound(0)
 {
 }
 

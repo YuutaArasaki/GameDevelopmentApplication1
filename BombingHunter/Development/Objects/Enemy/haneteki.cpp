@@ -30,6 +30,8 @@ void Enemy::Initialize()
 			}
 	}
 	
+	//“G‚Ìƒ^ƒCƒvİ’è
+	enemy_type = HANE;
 
 	//Œü‚«‚Ìİ’è
 	radian = 0.0f;
@@ -99,7 +101,7 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 {
 	Bom bom;
 
-	if (bom.BomHit() == true)
+	if (Hit == 1)
 	{
 		velocity = 0;
 	}
@@ -176,9 +178,3 @@ Vector2D Enemy::Location_X()
 //
 //	}
 //}
-
-int Enemy::GetType()
-{
-	enemy_type = HANE;
-	return enemy_type;
-}

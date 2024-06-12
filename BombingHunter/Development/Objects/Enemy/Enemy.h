@@ -29,8 +29,6 @@ public:
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	virtual int GetType();
-
 	 Vector2D Location_X();
 
 private:
@@ -39,7 +37,7 @@ private:
 	//アニメーション制御
 	void AnimationControl();
 
-	void Set_Velocity();
+	
 
 };
 

@@ -9,6 +9,7 @@ private:
 	int animation_count;
 	int count;
 	int Bomcount;
+	Vector2D velocity;
 	
 
 public:

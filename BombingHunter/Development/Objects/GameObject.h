@@ -17,7 +17,8 @@ protected:
 	double radian;			//Œü‚«
 	int image;				//•`‰æ‚·‚é‰æ‘œ
 	int sound;				//Ä¶‚·‚é‰¹Œ¹
-	int enemy_type;
+	int enemy_type;			//“G‚Ìí—Ş
+	int Hit;
 
 
 public:

@@ -39,6 +39,8 @@ void Bom::Initialize()
 
 	//‰Šú‰æ‘œ‚Ìİ’è
 	image = bom_image[0];
+
+	velocity = Vector2D(2.0f, 0.5f);
 }
 
 void Bom::Update()
@@ -72,8 +74,7 @@ void Bom::Finalize()
 void Bom::OnHitCollision(GameObject* hit_object)
 {
 
-	Bomcount = 1;
-	BomHit();
+	
 
 	//animation_count++;
 
@@ -100,7 +101,11 @@ void Bom::OnHitCollision(GameObject* hit_object)
 
 void Bom::Movement()
 {
-	location.y += 3.0f;
+	if (location.y < 445)
+	{
+		location.y += velocity.x;
+	}	
+
 }
 
 //void Bom::BomHit()
@@ -117,10 +122,12 @@ bool Bom::BomHit()
 {
 	if (Bomcount == 1)
 	{
+		Hit = 1;
 		return true;
 	}
 	else
 	{
+		Hit = 0;
 		return false;
 	}
 	

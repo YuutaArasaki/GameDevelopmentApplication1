@@ -48,7 +48,8 @@ void Hakoteki::Initialize()
 		}
 	}
 
-
+	//“G‚Ìƒ^ƒCƒvİ’è
+	enemy_type = HAKO;
 
 	//Œü‚«‚Ìİ’è
 	radian = 0.0f;
@@ -160,8 +161,3 @@ void Hakoteki::AnimationControl()
 
 }
 
-int Hakoteki::GetType()
-{
-	enemy_type = HAKO;
-	return enemy_type;
-}

@@ -24,6 +24,9 @@ void Hapi::Initialize()
 		throw ("ハーピーの画像がありません\n");
 	}
 
+	//敵のタイプ設定
+	enemy_type = HAPI;
+
 	//向きの設定
 	radian = 0.0f;
 
@@ -127,13 +130,6 @@ void Hapi::AnimationControl()
 			image = animation[0];
 		}
 	}
-}
-
-
-int Hapi::GetType()
-{
-	enemy_type = HAPI;
-	return enemy_type;
 }
 
 

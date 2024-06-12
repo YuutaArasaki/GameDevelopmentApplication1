@@ -81,7 +81,13 @@ void Scene::Update()
 
 	if (InputControl::GetKeyDown(KEY_INPUT_Z))
 	{	
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		//if (enemy_count[1] > 0)
+		//{
+		//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+		//	enemy_count[1]--;
+		//	enemy_Max--;
+		//}
+		
 	}
 
 	time_count++;
@@ -90,48 +96,48 @@ void Scene::Update()
 	{
 		time_count = 0;
 		if (enemy_Max > 0)
+		{
+			switch (GetRand(3))
 			{
-				switch (GetRand(3))
+
+			case 0:
+				if (enemy_count[0] > 0)
 				{
-					case 0:
-					if (enemy_count[0] > 0)
-					{
-						CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-						enemy_count[0] -= 1;
-						enemy_Max--;
-					}
-					break;
-			
-
-					case 1:
-					if (enemy_count[0] > 0)
-					{
-						CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-						enemy_count[0] -= 1;
-						enemy_Max--;
-					}
-					break;
-
-					case 2:
-					if (enemy_count[1] > 0)
-					{
-						CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-						enemy_count[1] -= 1;
-						enemy_Max--;
-					}
-					break;
-
-					case 3:
-					if (enemy_count[2] > 0)
-					{
-						CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-						enemy_count[2] -= 1;
-						enemy_Max--;
-					}
-					break;
-
+					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+					enemy_count[0]--;
+					enemy_Max--;
 				}
+				break;
+
+			case 1:
+				if (enemy_count[0] > 0)
+				{
+					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+					enemy_count[0]--;
+					enemy_Max--;
+				}
+				break;
+
+			case 2:
+				if (enemy_count[1] > 0)
+				{
+					CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+					enemy_count[1]--;
+					enemy_Max--;
+				}
+				break;
+
+			case 3:
+				if (enemy_count[2] > 0)
+				{
+					CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+					enemy_count[2]--;;
+					enemy_Max--;
+				}
+				break;
+
 			}
+		}
 	}
 	
 	//if (GetNowCount() - StartTime >= 2000 && count == 5)
@@ -168,10 +174,13 @@ void Scene::Update()
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
 				if (objects[i]->GetType() < 4)
-				objects.erase(objects.begin() + i);
-				delete_count++;
-				enemy_Max++;
-				enemy_count[objects[i]->GetType()] += 1;
+				{
+					delete_count++;
+					enemy_Max++;
+					enemy_count[objects[i]->GetType()]++;
+					objects.erase(objects.begin() + i);
+				}
+				
 			}
 			
 		}

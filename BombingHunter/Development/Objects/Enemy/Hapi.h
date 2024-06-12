@@ -26,8 +26,6 @@ public:
 	//“–‚½‚è”»’è’Ê’mˆ—
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	virtual int GetType();
-
 private:
 	//ˆÚ“®ˆ—
 	void Movement();
