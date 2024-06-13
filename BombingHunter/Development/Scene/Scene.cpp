@@ -179,10 +179,16 @@ void Scene::Update()
 					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 					objects.erase(objects.begin() + i);
-				}
-				
+				}		
+			}	
+		}
+		
+		for (int j = 1; j < objects.size(); j++)
+		{
+			if (objects[j]->DeleteObject() == 1)
+			{
+				objects.erase(objects.begin() + j);
 			}
-			
 		}
 		
 	/*}*/
@@ -295,12 +301,20 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	Vector2D box_size = (a->GetBoxSize() + b->GetBoxSize()) / 2.0f;
 
 	//距離より大きさが大きい場合、Hit判定とする
-	if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
+	if (a->GetType() != PLAYER && b->GetType() != PLAYER)
 	{
-		//当たったことをオブジェクトに通知する
-		a->OnHitCollision(b);
-		b->OnHitCollision(a);
+		if (a->GetType() == Bomb || b->GetType() == Bomb)
+		{
+			if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
+			{
+				//当たったことをオブジェクトに通知する
+				a->OnHitCollision(b);
+				b->OnHitCollision(a);
+			}	
+		}
 	}
+	
+	
 	
 }
 

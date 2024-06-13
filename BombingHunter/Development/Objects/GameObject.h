@@ -2,11 +2,13 @@
 
 #include "../Utility/Vector2D.h"
 
-#define HANE (0);
-#define HAKO (1);
-#define HAPI (2);
-#define KIN  (3);
-#define Enemy_Type (4);
+#define HANE (0)
+#define HAKO (1)
+#define HAPI (2)
+#define KIN  (3)
+#define Enemy_Type (4)
+#define Bomb (5)
+#define PLAYER (6)
 
 //ゲームオブジェクト基底クラス
 class GameObject
@@ -17,9 +19,9 @@ protected:
 	double radian;			//向き
 	int image;				//描画する画像
 	int sound;				//再生する音源
-	int enemy_type;			//敵の種類
-	int Hit;
-
+	int object_type;			//オブジェクトの種類
+	int delete_object;
+	
 
 public:
 	GameObject();
@@ -40,5 +42,7 @@ public:
 	void SetLocation(const Vector2D& location);
 	//当たり判定の大きさ取得処理
 	Vector2D GetBoxSize() const;
+
+	int DeleteObject();
 };
 

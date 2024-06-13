@@ -30,6 +30,8 @@ void Player::Initialize()
 		throw("トリパイロットの画像がありません\n");
 	}
 
+	object_type = PLAYER;
+
 	//向きの設定
 	radian = 0.0f;
 
@@ -91,7 +93,7 @@ void Player::Movement()
 		{
 			if (location.x > 0)
 			{
-				velocity.x += -2.0f;
+				velocity.x += -3.0f;
 				filp_flag = TRUE;
 			}
 		}
@@ -101,23 +103,10 @@ void Player::Movement()
 		{
 			if (location.x < 640)
 			{
-				velocity.x += 2.0f;
+				velocity.x += 3.0f;
 				filp_flag = FALSE;
 			}
 		}
-	
-
-	//左右移動
-	if (InputControl::GetKey(KEY_INPUT_UP))
-	{
-		velocity.y += -1.0f;
-		filp_flag = TRUE;
-	}
-	else if (InputControl::GetKey(KEY_INPUT_DOWN))
-	{
-		velocity.y += 1.0f;
-		filp_flag = FALSE;
-	}
 	
 	//現在の位置座標に速さを加算する
 	location += velocity;
@@ -130,7 +119,7 @@ void Player::AnimeControl()
 	animation_count++;
 
 	//６０フレーム目に到達したら
-	if (animation_count >= 60)
+	if (animation_count >= 40)
 	{
 		//カウントのリセット
 		animation_count = 0;

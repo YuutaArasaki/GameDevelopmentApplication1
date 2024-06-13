@@ -28,6 +28,9 @@ void Kinnoteki::Initialize()
 		throw ("ハーピーの画像がありません\n");
 	}
 
+	//敵のタイプ
+	object_type = KIN;
+
 	//向きの設定
 	radian = 0.0f;
 

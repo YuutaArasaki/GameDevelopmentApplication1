@@ -31,16 +31,18 @@ void Bom::Initialize()
 			}
 	}
 	
+	object_type = Bomb;
+
 	//向きの設定
 	radian = DX_PI_F/2;
 
 	//当たり判定の大きさを設定
-	scale = 64.0f;
+	scale = 54.0f;
 
 	//初期画像の設定
 	image = bom_image[0];
 
-	velocity = Vector2D(2.0f, 0.5f);
+	velocity = Vector2D(0.0f, 3.0f);
 }
 
 void Bom::Update()
@@ -73,28 +75,34 @@ void Bom::Finalize()
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
-
 	
+	velocity.y = 0.0f;
 
-	//animation_count++;
+	animation_count++;
 
-	////画像の切り替え
-	//if (animation_count >= 30)
-	//{
-	//	if (count > 4)
-	//	{
-	//		count = 0;
-	//	}
-	//	//カウントのリセット
-	//	animation_count = 0;
+	//画像の切り替え
+	if (animation_count >= 30)
+	{
+		if (count > 4)
+		{
+			count = 0;
+		}
+		//カウントのリセット
+		animation_count = 0;
 
-	//	for (count; count < 4;)
-	//	{
-	//		image = bom_image[count];
-	//		break;
-	//	}
-	//	count++;
-	//}
+		for (count; count < 4;)
+		{
+			image = bom_image[count];
+			break;
+		}
+		count++;
+		
+		if (count >= 4)
+		{
+			delete_object = 1;
+		}
+		
+	}
 		
 
 }
@@ -103,7 +111,7 @@ void Bom::Movement()
 {
 	if (location.y < 445)
 	{
-		location.y += velocity.x;
+		location.y += velocity.y;
 	}	
 
 }
@@ -118,18 +126,8 @@ Vector2D Bom::SetLocation()
 	return location;
 }
 
-bool Bom::BomHit()
-{
-	if (Bomcount == 1)
-	{
-		Hit = 1;
-		return true;
-	}
-	else
-	{
-		Hit = 0;
-		return false;
-	}
-	
-}
-
+//bool Bom::BomHit()
+//{
+//
+//}
+//

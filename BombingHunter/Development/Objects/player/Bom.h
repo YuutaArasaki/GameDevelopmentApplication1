@@ -24,7 +24,7 @@ public:
 	
 	void Movement();
 	Vector2D SetLocation();
-	bool BomHit();
+	/*bool BomHit();*/
 	
 };
 

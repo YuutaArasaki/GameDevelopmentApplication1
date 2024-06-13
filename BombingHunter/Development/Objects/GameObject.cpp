@@ -7,7 +7,9 @@ GameObject::GameObject() :
 	scale(0.0),
 	radian(0.0),
 	image(0),
-	sound(0)
+	sound(0),
+	object_type(0),
+	delete_object(0)
 {
 }
 
@@ -68,5 +70,10 @@ Vector2D GameObject::GetBoxSize() const
 
 int GameObject::GetType()
 {
-	return enemy_type;
+	return object_type;
+}
+
+int GameObject::DeleteObject()
+{
+	return delete_object;
 }
