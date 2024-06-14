@@ -169,6 +169,9 @@ void Scene::Update()
 	
 	/*if (GetNowCount() - StartTime >= 3000)
 	{*/
+
+	Bom bom;
+
 		for (int i = 1; i < objects.size(); i++)
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
@@ -181,16 +184,21 @@ void Scene::Update()
 					objects.erase(objects.begin() + i);
 				}		
 			}	
-		}
-		
-		for (int j = 1; j < objects.size(); j++)
-		{
-			if (objects[j]->DeleteObject() == 1)
+
+			if (objects[i]->GetType() == Bomb && objects[i]->GetLocation().y == 445)
 			{
-				objects.erase(objects.begin() + j);
+				bom.Animation();
+			}
+
+			if (objects[i]->DeleteObject() >= 1)
+			{
+				objects.erase(objects.begin() + i);
 			}
 		}
 		
+		
+		
+	
 	/*}*/
 		
 	
@@ -301,8 +309,7 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	Vector2D box_size = (a->GetBoxSize() + b->GetBoxSize()) / 2.0f;
 
 	//‹——£‚æ‚è‘å‚«‚³‚ª‘å‚«‚¢ê‡AHit”»’è‚Æ‚·‚é
-	if (a->GetType() != PLAYER && b->GetType() != PLAYER)
-	{
+ 	
 		if (a->GetType() == Bomb || b->GetType() == Bomb)
 		{
 			if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
@@ -312,9 +319,6 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 				b->OnHitCollision(a);
 			}	
 		}
-	}
-	
-	
 	
 }
 

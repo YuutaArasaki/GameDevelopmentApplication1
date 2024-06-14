@@ -23,8 +23,9 @@ public:
 	virtual void OnHitCollision(GameObject* hit_object) override;
 	
 	void Movement();
+	void Animation();
 	Vector2D SetLocation();
-	/*bool BomHit();*/
+	
 	
 };
 

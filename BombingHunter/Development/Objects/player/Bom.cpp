@@ -75,34 +75,26 @@ void Bom::Finalize()
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
-	
-	velocity.y = 0.0f;
+	/*velocity.y = 0.0f;*/
 
-	animation_count++;
+	//animation_count++;
 
-	//画像の切り替え
-	if (animation_count >= 30)
-	{
-		if (count > 4)
-		{
-			count = 0;
-		}
-		//カウントのリセット
-		animation_count = 0;
+	////画像の切り替え
+	//if (animation_count >= 30)
+	//{
+	//	if (count > 4)
+	//	{
+	//		delete_object = 1;
+	//	}
+	//	//カウントのリセット
+	//	animation_count = 0;
 
-		for (count; count < 4;)
-		{
-			image = bom_image[count];
-			break;
-		}
-		count++;
-		
-		if (count >= 4)
-		{
-			delete_object = 1;
-		}
-		
-	}
+	//	if (count < 4)
+	//	{
+	//		image = bom_image[count];
+	//		count++;
+	//	}	
+	//}
 		
 
 }
@@ -113,21 +105,38 @@ void Bom::Movement()
 	{
 		location.y += velocity.y;
 	}	
+	else
+	{
+		velocity = 0.0f;
+		Animation();
+	}
 
 }
 
-//void Bom::BomHit()
+//void Bom::Animation()
 //{
-//	
+//	animation_count++;
+//
+//	//画像の切り替え
+//	if (animation_count >= 30)
+//	{
+//		if (count > 4)
+//		{
+//			delete_object = 1;
+//		}
+//		//カウントのリセット
+//		animation_count = 0;
+//
+//		if (count < 4)
+//		{
+//			image = bom_image[count];
+//			count++;
+//		}
+//
+//	}
 //}
 
 Vector2D Bom::SetLocation()
 {
 	return location;
 }
-
-//bool Bom::BomHit()
-//{
-//
-//}
-//

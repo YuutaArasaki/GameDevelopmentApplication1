@@ -6,9 +6,10 @@
 #define HAKO (1)
 #define HAPI (2)
 #define KIN  (3)
-#define Enemy_Type (4)
-#define Bomb (5)
-#define PLAYER (6)
+#define Bomb (4)
+#define PLAYER (5)
+#define Enemy_Type (6)
+
 
 //ゲームオブジェクト基底クラス
 class GameObject

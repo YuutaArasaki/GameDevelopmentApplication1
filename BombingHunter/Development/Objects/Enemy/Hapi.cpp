@@ -92,6 +92,7 @@ void Hapi::Finalize()
 void Hapi::OnHitCollision(GameObject* hit_object)
 {
 	velocity = 0.0f;
+	delete_object = 1;
 }
 
 void Hapi::Movement()

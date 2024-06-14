@@ -115,11 +115,8 @@ void Hakoteki::Finalize()
 
 void Hakoteki::OnHitCollision(GameObject* hit_object)
 {
-	/*Bom bom;
-	if (bom.BomHit() == true)
-	{
-		velocity = 0;
-	}*/
+	velocity = 0.0f;
+	delete_object = 1;
 }
 
 void Hakoteki::Movement()
