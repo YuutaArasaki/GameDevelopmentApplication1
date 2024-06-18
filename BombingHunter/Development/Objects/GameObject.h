@@ -2,13 +2,18 @@
 
 #include "../Utility/Vector2D.h"
 
-#define HANE (0)
-#define HAKO (1)
-#define HAPI (2)
-#define KIN  (3)
-#define Bomb (4)
-#define PLAYER (5)
-#define Object_Type (6)
+typedef enum
+{
+	HANE,
+	HAKO,
+	HAPI,
+	KIN,
+	Bomb,
+	PLAYER,
+	BLAST,
+	Object_Type, 
+}TYPE;
+ 
 
 
 //ゲームオブジェクト基底クラス

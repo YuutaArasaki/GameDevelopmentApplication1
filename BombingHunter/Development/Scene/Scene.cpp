@@ -3,6 +3,7 @@
 
 #include "../Objects/player/Player.h"
 #include "../Objects/player/Bom.h"
+#include "../Objects/player/Blast.h"
 #include "../Objects/Enemy/Enemy.h"
 #include "../Utility/InputControl.h"
 #include "../Objects/Enemy/Hapi.h"
@@ -10,6 +11,7 @@
 #include "../Objects/Enemy/Kinnoteki.h"
 
 
+Blast* blast;
 
 
 //コンストラクタ
@@ -46,8 +48,6 @@ void Scene::Initialize()
 	
 	back_scene = LoadGraph("Resource/images/backscene.png");
 
-	StartTime = GetNowCount();
-
 }
 
 //更新処理
@@ -59,15 +59,7 @@ void Scene::Update()
 		obj->Update();
 	}
 
-	for (int i = 0; i < objects.size(); i++)
-	{
-		for (int j = 1; j < objects.size(); j++)
-		{
-			//当たり判定チェック処理
-			HitCheckObject(objects[i], objects[j]);
-		}
-		
-	}
+	
 
 	//for (int i = 1; i < objects.size(); i++)
 	//{
@@ -77,6 +69,15 @@ void Scene::Update()
 	//		HitCheckObject(objects[i], objects[j]);
 	//	}
 	//}
+
+	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
+	{
+		if (bom_count < 1)
+		{
+			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
+			bom_count++;
+		}
+	}
 	
 
 	if (InputControl::GetKeyDown(KEY_INPUT_Z))
@@ -90,56 +91,65 @@ void Scene::Update()
 		
 	}
 
-	//time_count++;
+	time_count++;
 
-	//if (time_count >= 60)
-	//{
-	//	time_count = 0;
-	//	if (enemy_Max > 0)
-	//	{
-	//		switch (GetRand(3))
-	//		{
+	if (time_count >= 60)
+	{
+		time_count = 0;
+		if (enemy_Max > 0)
+		{
+			switch (GetRand(3))
+			{
 
-	//		case 0:
-	//			if (enemy_count[HANE] > 0)
-	//			{
-	//				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//				enemy_count[0]--;
-	//				enemy_Max--;
-	//			}
-	//			break;
+			case 0:
+				if (enemy_count[HANE] > 0)
+				{
+					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+					enemy_count[0]--;
+					enemy_Max--;
+				}
+				break;
 
-	//		case 1:
-	//			if (enemy_count[HANE] > 0)
-	//			{
-	//				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//				enemy_count[0]--;
-	//				enemy_Max--;
-	//			}
-	//			break;
+			case 1:
+				if (enemy_count[HANE] > 0)
+				{
+					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+					enemy_count[0]--;
+					enemy_Max--;
+				}
+				break;
 
-	//		case 2:
-	//			if (enemy_count[HAKO] > 0)
-	//			{
-	//				CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//				enemy_count[1]--;
-	//				enemy_Max--;
-	//			}
-	//			break;
+			case 2:
+				if (enemy_count[HAKO] > 0)
+				{
+					CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+					enemy_count[1]--;
+					enemy_Max--;
+				}
+				break;
 
-	//		case 3:
-	//			if (enemy_count[HAPI] > 0)
-	//			{
-	//				CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//				enemy_count[2]--;;
-	//				enemy_Max--;
-	//			}
-	//			break;
+			case 3:
+				if (enemy_count[HAPI] > 0)
+				{
+					CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+					enemy_count[2]--;;
+					enemy_Max--;
+				}
+				break;
 
-	//		}
-	//	}
-	//}
+			}
+		}
+	}
 	
+	for (int i = 0; i < objects.size(); i++)
+	{
+		for (int j = i+ 1; j < objects.size(); j++)
+		{
+			//当たり判定チェック処理
+			HitCheckObject(objects[i], objects[j]);
+		}
+
+	}
 
 		for (int i = 1; i < objects.size(); i++)
 		{
@@ -148,36 +158,33 @@ void Scene::Update()
 				if (objects[i]->GetType() < Object_Type && objects[i]->GetType() != Bomb)
 				{
 					delete_count++;
-					//enemy_Max++;
+					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 					objects.erase(objects.begin() + i);
 				}		
-			}	
+			}
 
 			if (objects[i]->DeleteObject() == 1)
 			{
 				if (objects[i]->GetType() != Bomb)
 				{
 					enemy_Max++;
+					enemy_count[objects[i]->GetType()]++;
 				}
 				else if (objects[i]->GetType() == Bomb)
 				{
+					CreateObject<Blast>(objects[i]->GetLocation());
 					bom_count--;
 				}
-				
+
 				objects.erase(objects.begin() + i);	
 			}
 		}
 		
+		
+		
 
-	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
-	{
-		if (bom_count < 1)
-		{
-			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
-			bom_count++;
-		}
-	}
+	
 	
 }
 
@@ -195,6 +202,7 @@ void Scene::Draw() const
 	DrawFormatString(20, 80, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[2]);
 
 	DrawFormatString(20, 100, GetColor(255, 255, 255), "敵の最大数 ： %d", enemy_Max);
+
 
 	//シーンに存在するオブジェクトの描画処理
 	for (GameObject* obj : objects)
@@ -246,6 +254,11 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 
 	//距離より大きさが大きい場合、Hit判定とする
  	
+	int t = a->GetType();
+	int u = b->GetType();
+
+	if (a->GetType() != PLAYER && b->GetType() != PLAYER)
+	{
 		if (a->GetType() == Bomb || b->GetType() == Bomb)
 		{
 			if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
@@ -255,6 +268,8 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 				b->OnHitCollision(a);
 			}
 		}
+	}
+		
 	
 }
 

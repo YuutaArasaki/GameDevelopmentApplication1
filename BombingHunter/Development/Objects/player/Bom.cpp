@@ -1,5 +1,6 @@
 #include "Bom.h"
 #include "../../Utility/InputControl.h"
+#include "Blast.h"
 #include "Player.h"
 #include "DxLib.h"
 
@@ -30,7 +31,7 @@ void Bom::Initialize()
 	radian = DX_PI_F/2;
 
 	//ìñÇΩÇËîªíËÇÃëÂÇ´Ç≥Çê›íË
-	scale = 54.0f;
+	scale = Vector2D(50.0f);
 
 	velocity = Vector2D(0.0f, 3.0f);
 }
@@ -60,11 +61,12 @@ void Bom::Finalize()
 	DeleteGraph(image);
 }
 
+Blast blast;
+
 void Bom::OnHitCollision(GameObject* hit_object)
 {
+	velocity.y = 0.0f;
 	delete_object = 1;
-	/*Animation();*/
-	/*velocity.y = 0.0f;*/
 
 	/*animation_count++;*/
 
@@ -96,8 +98,11 @@ void Bom::Movement()
 	}	
 	else
 	{
+		blast.Animation();
 		velocity = 0.0f;
-		/*Animation();*/
+		delete_object = 1;
+		/*blast.Draw(SetLocation().x, SetLocation().y);*/
+		
 	}
 
 }

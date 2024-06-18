@@ -30,11 +30,18 @@ void Blast::Initialize()
 	}
 
 	image = blast_image[0];
+
+	object_type = BLAST;
 }
 
-void Blast::Draw(float location_x, float location_y) const
+void Blast::Update()
 {
-	  DrawRotaGraphF(location_x, location_y, 0.7, DX_PI_F / 2, image, TRUE);
+	Animation();
+}
+
+void Blast::Draw() const
+{
+	  DrawRotaGraphF(location.x, location.y, 0.7, DX_PI_F / 2, image, TRUE,FALSE);
 }
 
 void Blast::Finalize()
@@ -46,19 +53,16 @@ void Blast::Finalize()
 
 void Blast::Animation()
 {
-	int i = 0;
-
 	//画像の切り替え
-	for (count = 1; count < 4; count++)
+	for (count = 0; count < 4; count++)
 	{
 		animation_count++;
 		if (animation_count >= 50)
 		{
-			i++;
 			//カウントのリセット
 			animation_count = 0;
 
-			if (count < 4)
+			if(count < 2)
 			{
 				if (image == blast_image[0])
 				{
@@ -68,8 +72,9 @@ void Blast::Animation()
 				{
 					image = blast_image[2];
 				}
-				
 			}
+			
 		}
+			
 	}
 }
