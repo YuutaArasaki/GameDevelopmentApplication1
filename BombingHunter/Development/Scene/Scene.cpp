@@ -13,7 +13,7 @@
 
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10),time_count()
+Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10),time_count(),bom_count(0)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -25,9 +25,9 @@ Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),e
 	Location_Y[2] = 270.0f;;
 	Location_Y[3] = 440.0f;
 
-	enemy_count[0] = 5;
-	enemy_count[1] = 3;
-	enemy_count[2] = 2;
+	enemy_count[HANE] = 5;
+	enemy_count[HAKO] = 3;
+	enemy_count[HAPI] = 2;
 
 }
 
@@ -81,166 +81,102 @@ void Scene::Update()
 
 	if (InputControl::GetKeyDown(KEY_INPUT_Z))
 	{	
-		//if (enemy_count[1] > 0)
-		//{
-		//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-		//	enemy_count[1]--;
-		//	enemy_Max--;
-		//}
+		if (enemy_count[HANE] > 0)
+		{
+			CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+			enemy_count[HANE]--;
+			enemy_Max--;
+		}
 		
 	}
 
-	time_count++;
+	//time_count++;
 
-	if (time_count >= 60)
-	{
-		time_count = 0;
-		if (enemy_Max > 0)
-		{
-			switch (GetRand(3))
-			{
-
-			case 0:
-				if (enemy_count[0] > 0)
-				{
-					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-					enemy_count[0]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 1:
-				if (enemy_count[0] > 0)
-				{
-					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-					enemy_count[0]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 2:
-				if (enemy_count[1] > 0)
-				{
-					CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-					enemy_count[1]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 3:
-				if (enemy_count[2] > 0)
-				{
-					CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-					enemy_count[2]--;;
-					enemy_Max--;
-				}
-				break;
-
-			}
-		}
-	}
-	
-	//if (GetNowCount() - StartTime >= 2000 && count == 5)
+	//if (time_count >= 60)
 	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	
-	//	count--;
-	//}
-	//else if(GetNowCount() - StartTime >= 6000 && count == 4)
-	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//	count--;
-	//}
-	//else if (GetNowCount() - StartTime >= 10500 && count == 3)
-	//{
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-	//	count--;
-	//}
+	//	time_count = 0;
+	//	if (enemy_Max > 0)
+	//	{
+	//		switch (GetRand(3))
+	//		{
 
-	
-	
-	/*if (GetNowCount() - StartTime >= 3000)
-	{*/
+	//		case 0:
+	//			if (enemy_count[HANE] > 0)
+	//			{
+	//				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
+	//				enemy_count[0]--;
+	//				enemy_Max--;
+	//			}
+	//			break;
 
-	Bom bom;
+	//		case 1:
+	//			if (enemy_count[HANE] > 0)
+	//			{
+	//				CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
+	//				enemy_count[0]--;
+	//				enemy_Max--;
+	//			}
+	//			break;
+
+	//		case 2:
+	//			if (enemy_count[HAKO] > 0)
+	//			{
+	//				CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+	//				enemy_count[1]--;
+	//				enemy_Max--;
+	//			}
+	//			break;
+
+	//		case 3:
+	//			if (enemy_count[HAPI] > 0)
+	//			{
+	//				CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
+	//				enemy_count[2]--;;
+	//				enemy_Max--;
+	//			}
+	//			break;
+
+	//		}
+	//	}
+	//}
+	
 
 		for (int i = 1; i < objects.size(); i++)
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
-				if (objects[i]->GetType() < 4)
+				if (objects[i]->GetType() < Object_Type && objects[i]->GetType() != Bomb)
 				{
 					delete_count++;
-					enemy_Max++;
+					//enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 					objects.erase(objects.begin() + i);
 				}		
 			}	
 
-			if (objects[i]->GetType() == Bomb && objects[i]->GetLocation().y == 445)
+			if (objects[i]->DeleteObject() == 1)
 			{
-				bom.Animation();
-			}
-
-			if (objects[i]->DeleteObject() >= 1)
-			{
-				objects.erase(objects.begin() + i);
+				if (objects[i]->GetType() != Bomb)
+				{
+					enemy_Max++;
+				}
+				else if (objects[i]->GetType() == Bomb)
+				{
+					bom_count--;
+				}
+				
+				objects.erase(objects.begin() + i);	
 			}
 		}
 		
-		
-		
-	
-	/*}*/
-		
-	
-		
-	//	objects.erase(objects.begin() + 1);
-	//	/*objects.push_back(CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)])));*/
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-	//	count--;
-	//}
-	
-	
-	/*else if (GetNowCount() - StartTime >= 13000 && count == 4)
-	{
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-		CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-		CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-		CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
-		count--;
-		
-	}
-	else if (GetNowCount() - StartTime >= 23000 && count == 3)
-	{
-
-	}*/
-
-	//if (GetNowCount() - StartTime == 10000)
-	//{
-	//	//敵を生成する
-	//	CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(1)]));
-
-	//	CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-	//	CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));				
-	//
-	//	CreateObject<Kinnoteki>(Vector2D(Location_X[GetRand(1)], Location_Y[3]));
-	//	count--;
-	//}
-
-	
 
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{
-		CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
+		if (bom_count < 1)
+		{
+			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
+			bom_count++;
+		}
 	}
 	
 }
@@ -317,7 +253,7 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 				//当たったことをオブジェクトに通知する
 				a->OnHitCollision(b);
 				b->OnHitCollision(a);
-			}	
+			}
 		}
 	
 }

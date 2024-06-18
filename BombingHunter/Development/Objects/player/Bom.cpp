@@ -3,12 +3,9 @@
 #include "Player.h"
 #include "DxLib.h"
 
-Bom::Bom() : animation_count(0), count(0), Bomcount(0)
+Bom::Bom() : animation_count(0), count(0), Bomcount(0), bom_image()
 {
-	for (int i = 0; i < 4; i++)
-	{
-		bom_image[i] = NULL;
-	}
+	
 }
 
 Bom::~Bom()
@@ -18,18 +15,14 @@ Bom::~Bom()
 
 void Bom::Initialize()
 {
-	bom_image[0] = LoadGraph("Resource/Images/bom/bom.png");
-	bom_image[1] = LoadGraph("Resource/Images/bom/bakufuu1.png");
-	bom_image[2] = LoadGraph("Resource/Images/bom/bakufuu2.png");
-	bom_image[3] = LoadGraph("Resource/Images/bom/bakufuu3.png");
+	image = LoadGraph("Resource/Images/bom/bom.png");
 
-	for (int i = 0; i < 4; i++)
-	{
-		if (bom_image[i] == -1)
+
+		if (image == -1)
 			{
 				throw("爆弾の画像がありません\n");
 			}
-	}
+
 	
 	object_type = Bomb;
 
@@ -38,9 +31,6 @@ void Bom::Initialize()
 
 	//当たり判定の大きさを設定
 	scale = 54.0f;
-
-	//初期画像の設定
-	image = bom_image[0];
 
 	velocity = Vector2D(0.0f, 3.0f);
 }
@@ -53,7 +43,7 @@ void Bom::Update()
 void Bom::Draw() const
 {
 	
-		DrawRotaGraphF(location.x, location.y, 0.7, radian, image, TRUE);
+	DrawRotaGraphF(location.x, location.y, 0.7, radian, image, TRUE);
 
 	//デバック用
 #if _DEBUG
@@ -67,17 +57,16 @@ void Bom::Draw() const
 void Bom::Finalize()
 {
 	//使用した画像を開放する
-	DeleteGraph(bom_image[0]);
-	DeleteGraph(bom_image[1]);
-	DeleteGraph(bom_image[2]);
-	DeleteGraph(bom_image[3]);
+	DeleteGraph(image);
 }
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
+	delete_object = 1;
+	/*Animation();*/
 	/*velocity.y = 0.0f;*/
 
-	//animation_count++;
+	/*animation_count++;*/
 
 	////画像の切り替え
 	//if (animation_count >= 30)
@@ -108,7 +97,7 @@ void Bom::Movement()
 	else
 	{
 		velocity = 0.0f;
-		Animation();
+		/*Animation();*/
 	}
 
 }

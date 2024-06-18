@@ -5,7 +5,7 @@
 class Bom : public GameObject
 {
 private:
-	int bom_image[4];
+	int bom_image;
 	int animation_count;
 	int count;
 	int Bomcount;
@@ -23,7 +23,7 @@ public:
 	virtual void OnHitCollision(GameObject* hit_object) override;
 	
 	void Movement();
-	void Animation();
+	/*void Animation();*/
 	Vector2D SetLocation();
 	
 	

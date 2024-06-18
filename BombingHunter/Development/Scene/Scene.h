@@ -20,6 +20,7 @@ private:
 	int enemy_count[3];
 	int enemy_Max;
 	int time_count;
+	int bom_count;
 	
 	
 

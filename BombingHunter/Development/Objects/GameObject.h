@@ -8,7 +8,7 @@
 #define KIN  (3)
 #define Bomb (4)
 #define PLAYER (5)
-#define Enemy_Type (6)
+#define Object_Type (6)
 
 
 //ゲームオブジェクト基底クラス
