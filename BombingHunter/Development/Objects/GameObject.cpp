@@ -81,3 +81,7 @@ int GameObject::DeleteObject()
 	return delete_object;
 }
 
+bool GameObject::GetHit()
+{
+	return Hit;
+}

@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "../../Scene/Scene.h"
 
-Enemy::Enemy() : animation_count(0), velocity(0.0f)
+Enemy::Enemy() : animation_count(0), velocity(0.0f),alpha(255),count(0)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
@@ -70,11 +70,29 @@ void Enemy::Update()
 	AnimationControl();
 
 	DeleteMovement();
+
+	if (Hit == TRUE)
+	{
+		scale = 0.0f;
+
+		count++;
+		if (count >= 30)
+		{
+			alpha -= 51;
+			count = 0;
+		}
+		
+	}
+	if (alpha < 0)
+	{
+		delete_object = 1;
+	}
 }
 
 void Enemy::Draw() const
 {
 	int flip_flag = TRUE;
+
 
 	if (velocity.x > 0.0f)
 	{
@@ -84,8 +102,20 @@ void Enemy::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
-	/*DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);*/
+
+	if (Hit == TRUE)
+	{
+		
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+	}
+	
+	
 	__super::Draw();
 	
 	Vector2D ul = location - (scale / 2.0f);
@@ -103,25 +133,10 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 {
 	Hit = TRUE;
 	velocity = 0.0f;
-	/*delete_object = 1;*/
 }
 
 void Enemy::Movement()
 {
-	/*if (((location.x + velocity.x) < scale.x)||(640.0f - scale.x)< (location.x + velocity.x))
-	{
-		velocity *= -1.0f;
-	}
-	if (((location.y + velocity.y) < scale.y) || (480.0f - scale.y) < (location.y + velocity.y))
-	{
-		velocity *= -1.0f;
-	}*/
-
-	/*if (location.x < 0 || location.x > 640)
-	{
-		velocity *= -1.0f;
-	}*/
-	
 	location.x += velocity.x;
 
 }
@@ -150,21 +165,22 @@ void Enemy::AnimationControl()
 
 	if (Hit == TRUE)
 	{
-		if(animation_count >= 240)
-		{
-
-			if (animation_count == 120)
+	
+			if (animation_count == 15 || animation_count == 45)
 			{
-				location.x += 1;
+				location.x += 4;
+				location.y += 0.5;
 			}
-			else if (animation_count == 240)
+
+			if (animation_count == 30 || animation_count == 60)
 			{
-				location.x += -1;
+				location.x += -4;
+				location.y += 0.5;
 				animation_count = 0;
 			}
-		
-		}
+
 	}
+	
 }
 
 Vector2D Enemy::Location_X()
@@ -175,18 +191,4 @@ Vector2D Enemy::Location_X()
 void Enemy::DeleteMovement()
 {
 
-	if (Hit == TRUE)
-	{
-		count++;
-		if (count % 2 == 1)
-		{
-			location.x += 8;
-		}
-		else
-		{
-			location.x += -8;
-		}
-		
-		location.y += 1;
-	}
 }

@@ -8,6 +8,7 @@ typedef enum
 	HAKO,
 	HAPI,
 	KIN,
+	EnemyType,
 	Bomb,
 	PLAYER,
 	BLAST,
@@ -42,7 +43,11 @@ public:
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object);
 
+	//オブジェクトのタイプ取得
 	virtual int GetType();
+
+	//オブジェクトのヒット取得
+	virtual bool GetHit();
 
 	//位置情報取得処理
 	Vector2D GetLocation() const;

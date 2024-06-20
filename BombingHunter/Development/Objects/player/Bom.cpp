@@ -4,7 +4,7 @@
 #include "Player.h"
 #include "DxLib.h"
 
-Bom::Bom() : animation_count(0), count(0), Bomcount(0), bom_image()
+Bom::Bom() : animation_count(0), bom_image(),left(false),right(false)
 {
 	
 }
@@ -33,7 +33,17 @@ void Bom::Initialize()
 	//ìñÇΩÇËîªíËÇÃëÂÇ´Ç≥Çê›íË
 	scale = Vector2D(50.0f);
 
-	velocity = Vector2D(0.0f, 3.0f);
+	velocity = Vector2D(2.5f, 2.0f);
+
+	if (InputControl::GetKeyDown(KEY_INPUT_SPACE) && (InputControl::GetKey(KEY_INPUT_LEFT)))
+	{
+		left = true;
+	}
+	else if (InputControl::GetKeyDown(KEY_INPUT_SPACE) && (InputControl::GetKey(KEY_INPUT_RIGHT)))
+	{
+		right = true;
+	}
+
 }
 
 void Bom::Update()
@@ -92,6 +102,8 @@ void Bom::OnHitCollision(GameObject* hit_object)
 
 void Bom::Movement()
 {
+	radian = DX_PI_F / 2;
+
 	if (location.y < 445)
 	{
 		location.y += velocity.y;
@@ -101,9 +113,19 @@ void Bom::Movement()
 		blast.Animation();
 		velocity = 0.0f;
 		delete_object = 1;
-		/*blast.Draw(SetLocation().x, SetLocation().y);*/
-		
 	}
+	
+	if (left == true && location.x > 0)
+	{
+		radian = DX_PI_F / 1.5;
+		location.x -= velocity.x;
+	}
+	else if (right == true && location.x < 640)
+	{
+		radian = DX_PI_F / 3;
+		location.x += velocity.x;
+	}
+	
 
 }
 
