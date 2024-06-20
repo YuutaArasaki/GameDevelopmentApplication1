@@ -25,9 +25,11 @@ protected:
 	double radian;			//向き
 	int image;				//描画する画像
 	int sound;				//再生する音源
-	int object_type;			//オブジェクトの種類
-	int delete_object;
-	
+	int object_type;		//オブジェクトの種類
+	int delete_object;		//オブジェクトの消去
+	bool Hit;				//オブジェクトがHitしたかどうか
+	int count;
+	int delete_count;
 
 public:
 	GameObject();
@@ -48,7 +50,8 @@ public:
 	void SetLocation(const Vector2D& location);
 	//当たり判定の大きさ取得処理
 	Vector2D GetBoxSize() const;
-
+	//オブジェクトを消すか消さないかの判定処理
 	int DeleteObject();
+	
 };
 

@@ -36,7 +36,8 @@ private:
 	void Movement();
 	//アニメーション制御
 	void AnimationControl();
-
+	//オブジェクトを消すときのモーション処理
+	void DeleteMovement();
 	
 
 };

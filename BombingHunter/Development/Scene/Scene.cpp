@@ -155,7 +155,7 @@ void Scene::Update()
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
-				if (objects[i]->GetType() < Object_Type && objects[i]->GetType() != Bomb)
+				if (objects[i]->GetType() < Object_Type && objects[i]->GetType() != Bomb && objects[i]->GetType() != BLAST)
 				{
 					delete_count++;
 					enemy_Max++;
@@ -166,12 +166,13 @@ void Scene::Update()
 
 			if (objects[i]->DeleteObject() == 1)
 			{
-				if (objects[i]->GetType() != Bomb)
+				int type = objects[i]->GetType();
+				if (type != Bomb && type != BLAST)
 				{
 					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 				}
-				else if (objects[i]->GetType() == Bomb)
+				else if (type == Bomb)
 				{
 					CreateObject<Blast>(objects[i]->GetLocation());
 					bom_count--;

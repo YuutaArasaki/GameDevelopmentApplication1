@@ -53,28 +53,31 @@ void Blast::Finalize()
 
 void Blast::Animation()
 {
-	//画像の切り替え
-	for (count = 0; count < 4; count++)
-	{
-		animation_count++;
-		if (animation_count >= 50)
-		{
-			//カウントのリセット
-			animation_count = 0;
 
-			if(count < 2)
-			{
-				if (image == blast_image[0])
-				{
-					image = blast_image[1];
-				}
-				else if (image == blast_image[1])
-				{
-					image = blast_image[2];
-				}
-			}
-			
+	animation_count++;
+	
+	//画像の切り替え
+	if (animation_count >= 20)
+	{
+		
+		//カウントのリセット	
+		animation_count = 0;
+		
+		if (image == blast_image[0])
+		{
+			image = blast_image[1];
+		}
+		else if (image == blast_image[1])
+		{
+			image = blast_image[2];
+		}
+		else if (image == blast_image[2])
+		{
+			delete_object = 1;
 		}
 			
+		
 	}
+			
 }
+		

@@ -68,6 +68,8 @@ void Enemy::Update()
 	Movement();
 
 	AnimationControl();
+
+	DeleteMovement();
 }
 
 void Enemy::Draw() const
@@ -99,8 +101,9 @@ void Enemy::Finalize()
 
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
+	Hit = TRUE;
 	velocity = 0.0f;
-	delete_object = 1;
+	/*delete_object = 1;*/
 }
 
 void Enemy::Movement()
@@ -120,6 +123,7 @@ void Enemy::Movement()
 	}*/
 	
 	location.x += velocity.x;
+
 }
 
 void Enemy::AnimationControl()
@@ -128,7 +132,7 @@ void Enemy::AnimationControl()
 	animation_count++;
 
 	//６０フレーム目に到達したら
-	if (animation_count >= 40)
+	if (animation_count >= 60 && Hit != TRUE)
 	{
 		//カウントのリセット
 		animation_count = 0;
@@ -144,6 +148,23 @@ void Enemy::AnimationControl()
 		}
 	}
 
+	if (Hit == TRUE)
+	{
+		if(animation_count >= 240)
+		{
+
+			if (animation_count == 120)
+			{
+				location.x += 1;
+			}
+			else if (animation_count == 240)
+			{
+				location.x += -1;
+				animation_count = 0;
+			}
+		
+		}
+	}
 }
 
 Vector2D Enemy::Location_X()
@@ -151,24 +172,21 @@ Vector2D Enemy::Location_X()
 	return location.x;
 }
 
-//Vector2D Enemy::Enemy_Location(float location_x, float location_y)
-//{
-//	switch (GetRand(2))
-//	{
-//	case 0:
-//		return location_x = 0.0f,location_y = 200.0f;
-//		
-//		break;
-//
-//	case 1:
-//		return location_x = 0.0f,location_y = 270.0f;
-//		
-//		break;
-//
-//	case 2:
-//		return location_x = 0.0f,location_y = 350.0f;
-//		
-//		break;
-//
-//	}
-//}
+void Enemy::DeleteMovement()
+{
+
+	if (Hit == TRUE)
+	{
+		count++;
+		if (count % 2 == 1)
+		{
+			location.x += 8;
+		}
+		else
+		{
+			location.x += -8;
+		}
+		
+		location.y += 1;
+	}
+}

@@ -9,7 +9,10 @@ GameObject::GameObject() :
 	image(0),
 	sound(0),
 	object_type(0),
-	delete_object(0)
+	delete_object(0),
+	Hit(FALSE),
+	count(0),
+	delete_count(0)
 {
 }
 
@@ -77,3 +80,4 @@ int GameObject::DeleteObject()
 {
 	return delete_object;
 }
+
