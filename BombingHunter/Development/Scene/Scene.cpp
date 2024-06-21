@@ -7,8 +7,8 @@
 #include "../Objects/Enemy/Enemy.h"
 #include "../Utility/InputControl.h"
 #include "../Objects/Enemy/Hapi.h"
-#include "../Objects/Enemy/Hakoteki.h"
-#include "../Objects/Enemy/Kinnoteki.h"
+#include "../Objects/Enemy/Hako.h"
+#include "../Objects/Enemy/Kinteki.h"
 
 
 Blast* blast;
@@ -122,7 +122,7 @@ void Scene::Update()
 			case 2:
 				if (enemy_count[HAKO] > 0)
 				{
-					CreateObject<Hakoteki>(Vector2D(Location_X[GetRand(1)], 430.0f));
+					CreateObject<Hako>(Vector2D(Location_X[GetRand(1)], 430.0f));
 					enemy_count[1]--;
 					enemy_Max--;
 				}
@@ -145,8 +145,8 @@ void Scene::Update()
 	{
 		for (int j = i+ 1; j < objects.size(); j++)
 		{
-			//当たり判定チェック処理
-			HitCheckObject(objects[i], objects[j]);
+				//当たり判定チェック処理
+				HitCheckObject(objects[i], objects[j]);
 		}
 
 	}
@@ -265,8 +265,8 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 			if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
 			{
 				//当たったことをオブジェクトに通知する
-				a->OnHitCollision(b);
-				b->OnHitCollision(a);
+					a->OnHitCollision(b);
+ 					b->OnHitCollision(a);
 			}
 		}
 	}

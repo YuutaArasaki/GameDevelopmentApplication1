@@ -93,7 +93,6 @@ void Enemy::Draw() const
 {
 	int flip_flag = TRUE;
 
-
 	if (velocity.x > 0.0f)
 	{
 		flip_flag = FALSE;
@@ -102,10 +101,10 @@ void Enemy::Draw() const
 	{
 		flip_flag = TRUE;
 	}
+	
 
 	if (Hit == TRUE)
 	{
-		
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -132,6 +131,7 @@ void Enemy::Finalize()
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
 	Hit = TRUE;
+	object_type = EnemyDelete;
 	velocity = 0.0f;
 }
 

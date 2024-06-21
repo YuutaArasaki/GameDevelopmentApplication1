@@ -77,27 +77,6 @@ void Bom::OnHitCollision(GameObject* hit_object)
 {
 	velocity.y = 0.0f;
 	delete_object = 1;
-
-	/*animation_count++;*/
-
-	////画像の切り替え
-	//if (animation_count >= 30)
-	//{
-	//	if (count > 4)
-	//	{
-	//		delete_object = 1;
-	//	}
-	//	//カウントのリセット
-	//	animation_count = 0;
-
-	//	if (count < 4)
-	//	{
-	//		image = bom_image[count];
-	//		count++;
-	//	}	
-	//}
-		
-
 }
 
 void Bom::Movement()
@@ -126,31 +105,8 @@ void Bom::Movement()
 		location.x += velocity.x;
 	}
 	
-
 }
 
-//void Bom::Animation()
-//{
-//	animation_count++;
-//
-//	//画像の切り替え
-//	if (animation_count >= 30)
-//	{
-//		if (count > 4)
-//		{
-//			delete_object = 1;
-//		}
-//		//カウントのリセット
-//		animation_count = 0;
-//
-//		if (count < 4)
-//		{
-//			image = bom_image[count];
-//			count++;
-//		}
-//
-//	}
-//}
 
 Vector2D Bom::SetLocation()
 {

@@ -1,18 +1,18 @@
-#include "Kinnoteki.h"
+#include "Kinteki.h"
 #include "DxLib.h"
 
-Kinnoteki::Kinnoteki() : animation_count(0), velocity(0.0f), animation_image_count()
+Kinteki::Kinteki() : animation_count(0), velocity(0.0f), animation_image_count()
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
 }
 
-Kinnoteki::~Kinnoteki()
+Kinteki::~Kinteki()
 {
 
 }
 
-void Kinnoteki::Initialize()
+void Kinteki::Initialize()
 {
 	//画像の読み込み
 	//金のテキの画像
@@ -51,14 +51,14 @@ void Kinnoteki::Initialize()
 	}
 }
 
-void Kinnoteki::Update()
+void Kinteki::Update()
 {
 	Movement();
 
 	AnimationControl();
 }
 
-void Kinnoteki::Draw() const
+void Kinteki::Draw() const
 {
 	int flip_flag = TRUE;
 
@@ -78,18 +78,18 @@ void Kinnoteki::Draw() const
 }
 
 
-void Kinnoteki::Finalize()
+void Kinteki::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
-void Kinnoteki::OnHitCollision(GameObject* hit_object)
+void Kinteki::OnHitCollision(GameObject* hit_object)
 {
 	velocity = 0.0f;
 }
 
-void Kinnoteki::Movement()
+void Kinteki::Movement()
 {
 	/*if (((location.x + velocity.x) < scale.x) || (640.0f - scale.x) < (location.x + velocity.x))
 	{
@@ -105,7 +105,7 @@ void Kinnoteki::Movement()
 }
 
 
-void Kinnoteki::AnimationControl()
+void Kinteki::AnimationControl()
 {
 	//フレームカウントを加算する
 	animation_count++;

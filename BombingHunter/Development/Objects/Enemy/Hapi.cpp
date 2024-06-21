@@ -60,6 +60,23 @@ void Hapi::Update()
 	Movement();
 
 	AnimationControl();
+
+	if (Hit == TRUE)
+	{
+		scale = 0.0f;
+
+		count++;
+		if (count >= 30)
+		{
+			alpha -= 51;
+			count = 0;
+		}
+
+	}
+	if (alpha < 0)
+	{
+		delete_object = 1;
+	}
 }
 
 void Hapi::Draw() const
@@ -74,7 +91,18 @@ void Hapi::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+	
+	if (Hit == TRUE)
+	{
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+	}
 
 
 	Vector2D ul = location - (scale / 2.0f);
@@ -91,8 +119,8 @@ void Hapi::Finalize()
 
 void Hapi::OnHitCollision(GameObject* hit_object)
 {
+	Hit = TRUE;
 	velocity = 0.0f;
-	delete_object = 1;
 }
 
 void Hapi::Movement()
@@ -126,6 +154,25 @@ void Hapi::AnimationControl()
 		{
 			image = animation[0];
 		}
+	}
+
+	//Hitした時のアニメーション
+	if (Hit == TRUE)
+	{
+
+		if (animation_count == 15 || animation_count == 45)
+		{
+			location.x += 4;
+			location.y += 0.5;
+		}
+
+		if (animation_count == 30 || animation_count == 60)
+		{
+			location.x += -4;
+			location.y += 0.5;
+			animation_count = 0;
+		}
+
 	}
 }
 

@@ -1,8 +1,8 @@
-#include "Hakoteki.h"
+#include "Hako.h"
 #include "DxLib.h"
 
 
-Hakoteki::Hakoteki() : animation_count(0), velocity(0.0f)
+Hako::Hako() : animation_count(0), velocity(0.0f)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
@@ -13,13 +13,13 @@ Hakoteki::Hakoteki() : animation_count(0), velocity(0.0f)
 	}
 }
 
-Hakoteki::~Hakoteki()
+Hako::~Hako()
 {
 
 }
 
 //初期化処理
-void Hakoteki::Initialize()
+void Hako::Initialize()
 {
 	//画像の読み込み
 	//ハコテキの画像
@@ -80,14 +80,31 @@ void Hakoteki::Initialize()
 
 }
 
-void Hakoteki::Update()
+void Hako::Update()
 {
 	Movement();
 
 	AnimationControl();
+
+	if (Hit == TRUE)
+	{
+		scale = 0.0f;
+
+		count++;
+		if (count >= 30)
+		{
+			alpha -= 51;
+			count = 0;
+		}
+
+	}
+	if (alpha < 0)
+	{
+		delete_object = 1;
+	}
 }
 
-void Hakoteki::Draw() const
+void Hako::Draw() const
 {
 	int flip_flag = TRUE;
 
@@ -99,42 +116,42 @@ void Hakoteki::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
-	/*DrawRotaGraphF(location.x, location.y, 0.6, radian, enemy_image[1], TRUE, flip_flag);*/
+	
+	if (Hit == TRUE)
+	{
+
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+	}
 
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 }
 
-void Hakoteki::Finalize()
+void Hako::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
-void Hakoteki::OnHitCollision(GameObject* hit_object)
+void Hako::OnHitCollision(GameObject* hit_object)
 {
+	Hit = TRUE;
 	velocity = 0.0f;
-	delete_object = 1;
 }
 
-void Hakoteki::Movement()
+void Hako::Movement()
 {
-	/*if (((location.x + velocity.x) < scale.x) || (640.0f - scale.x) < (location.x + velocity.x))
-	{
-		velocity *= -1.0f;
-	}*/
-
-	/*if ((location.x < 0) || (location.x > 640))
-	{
-		velocity *= -1.0f;
-	}*/
-
 	location.x += velocity.x;
 }
 
-void Hakoteki::AnimationControl()
+void Hako::AnimationControl()
 {
 	//フレームカウントを加算する
 	animation_count++;
@@ -154,6 +171,25 @@ void Hakoteki::AnimationControl()
 		{
 			image = animation[0];
 		}
+	}
+
+	//Hitした時のアニメーション
+	if (Hit == TRUE)
+	{
+
+		if (animation_count == 15 || animation_count == 45)
+		{
+			location.x += 4;
+			location.y += 0.5;
+		}
+
+		if (animation_count == 30 || animation_count == 60)
+		{
+			location.x += -4;
+			location.y += 0.5;
+			animation_count = 0;
+		}
+
 	}
 
 }

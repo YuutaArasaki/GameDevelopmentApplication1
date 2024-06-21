@@ -1,6 +1,6 @@
 #include "Enemy.h"
 
-class Hakoteki : public Enemy
+class Hako : public Enemy
 {
 private:
 	int animation[2];	//アニメーション画像
@@ -10,8 +10,8 @@ private:
 
 
 public:
-	Hakoteki();
-	~Hakoteki();
+	Hako();
+	~Hako();
 
 	//初期化処理
 	virtual void Initialize() override;

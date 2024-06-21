@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 
-class Kinnoteki : public Enemy
+class Kinteki : public Enemy
 {
 	private:
 		int animation_image_count; //アニメーション画像カウント
@@ -10,8 +10,8 @@ class Kinnoteki : public Enemy
 		Vector2D velocity;		//進行方向
 
 	public:
-		Kinnoteki();
-		~Kinnoteki();
+		Kinteki();
+		~Kinteki();
 
 		//初期化処理
 		virtual void Initialize() override;
