@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "DxLib.h"
+#include "math.h"
 
 //コンストラクタ
 GameObject::GameObject() :
@@ -62,7 +63,7 @@ Vector2D GameObject::GetLocation() const
 //位置情報設定処理
 void GameObject::SetLocation(const Vector2D& location)
 {
-	this->location = location;
+	this->location += location;
 }
 
 //当たり判定大きさ取得処理
@@ -84,4 +85,21 @@ int GameObject::DeleteObject()
 bool GameObject::GetHit()
 {
 	return Hit;
+}
+
+Vector2D GameObject::GetDirection(Vector2D location_p, Vector2D location_b)
+{
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	Vector2D direction;
+
+	x = ((location_p.x - location_b.x) * (location_p.x - location_b.x));
+	y = ((location_p.y - location_b.y) * (location_p.y - location_b.y));
+	z = sqrt(x + y);
+	x = (location_p.x - location_b.x) / z;
+	y = (location_p.y - location_b.y) / z;
+
+	direction = Vector2D(x, y);
+	return direction;
 }

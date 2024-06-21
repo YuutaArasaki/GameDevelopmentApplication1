@@ -72,9 +72,14 @@ void Kinteki::Draw() const
 	}
 	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 
+	//デバック用
+#if _DEBUG
+	//当たり判定の可視化
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+#endif
+
 }
 
 
@@ -86,7 +91,11 @@ void Kinteki::Finalize()
 
 void Kinteki::OnHitCollision(GameObject* hit_object)
 {
-	velocity = 0.0f;
+	if (hit_object->GetType() == BOM)
+	{
+		Hit = TRUE;
+		velocity = 0.0f;
+	}
 }
 
 void Kinteki::Movement()

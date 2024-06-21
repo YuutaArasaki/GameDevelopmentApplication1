@@ -117,9 +117,14 @@ void Enemy::Draw() const
 	
 	__super::Draw();
 	
+	//デバック用
+#if _DEBUG
+	//当たり判定の可視化
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+#endif
+
 }
 
 void Enemy::Finalize()
@@ -130,9 +135,11 @@ void Enemy::Finalize()
 
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
-	Hit = TRUE;
-	object_type = EnemyDelete;
-	velocity = 0.0f;
+	if (hit_object->GetType() == BOM)
+	{
+		Hit = TRUE;
+		velocity = 0.0f;
+	}
 }
 
 void Enemy::Movement()

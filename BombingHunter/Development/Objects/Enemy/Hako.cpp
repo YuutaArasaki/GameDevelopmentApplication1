@@ -6,11 +6,6 @@ Hako::Hako() : animation_count(0), velocity(0.0f)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
-
-	for (int i = 0; i < 4; i++)
-	{
-		Bullet[i] = NULL;
-	}
 }
 
 Hako::~Hako()
@@ -26,10 +21,7 @@ void Hako::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
 
-	Bullet[0] = LoadGraph("Resource/Images/teki/hakoteki/Bullet1.png");
-	Bullet[1] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff1.png");
-	Bullet[2] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff2.png");
-	Bullet[3] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff3.png");
+	
 
 	//エラーチェック
 	for (int i = 0; i < 2; i++)
@@ -37,14 +29,6 @@ void Hako::Initialize()
 		if (animation[i] == -1)
 		{
 			throw ("ハコテキの画像がありません\n");
-		}
-	}
-
-	for (int j = 0; j < 4; j++)
-	{
-		if (Bullet[j] == -1)
-		{
-			throw ("バレットの画像がありません\n");
 		}
 	}
 
@@ -129,9 +113,14 @@ void Hako::Draw() const
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 	}
 
+	//デバック用
+#if _DEBUG
+	//当たり判定の可視化
 	Vector2D ul = location - (scale / 2.0f);
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+#endif
+
 }
 
 void Hako::Finalize()
@@ -142,8 +131,12 @@ void Hako::Finalize()
 
 void Hako::OnHitCollision(GameObject* hit_object)
 {
-	Hit = TRUE;
+	if (hit_object->GetType() == BOM)
+	{
+		Hit = TRUE;
 	velocity = 0.0f;
+	}
+	
 }
 
 void Hako::Movement()

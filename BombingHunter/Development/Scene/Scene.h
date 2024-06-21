@@ -10,17 +10,18 @@
 class Scene
 {
 private:
-	std::vector<GameObject*> objects;
-	int back_scene;
-	int count;
-	float Location_X[2];
-	float Location_Y[4];
-	int StartTime;
-	int delete_count;
-	int enemy_count[3];
-	int enemy_Max;
-	int time_count;
-	int bom_count;
+	std::vector<GameObject*> objects;	
+	int back_scene;						//背景画像
+	int count;							//
+	float Location_X[2];				//X座標
+	float Location_Y[4];				//Y座標
+	int enemy_count[3];					//各敵ごとの最大出現数
+	int enemy_Max;						//敵の最大出現数
+	int enemy_timecount;				//敵の出現する感覚の秒数カウント
+	int bom_Max;						//爆弾の出せる数
+	int bullet;
+	int bullet_count;
+	Vector2D player_location;
 	
 	
 
@@ -37,8 +38,6 @@ private:
 
 	//当たり判定チェック処理
 	void HitCheckObject(GameObject* a, GameObject* b);
-
-	void DeleteObject();
 
 	//オブジェクト生成処理
 	template <class T>

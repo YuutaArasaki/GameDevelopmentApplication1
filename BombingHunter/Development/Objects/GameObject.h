@@ -9,9 +9,10 @@ typedef enum
 	HAPI,
 	KIN,
 	EnemyType,
-	Bomb,
+	BOM,
 	PLAYER,
 	BLAST,
+	BULLET,
 	Object_Type, 
 }TYPE;
  
@@ -57,6 +58,8 @@ public:
 	Vector2D GetBoxSize() const;
 	//オブジェクトを消すか消さないかの判定処理
 	int DeleteObject();
+
+	Vector2D GetDirection(Vector2D location_p,Vector2D location_b);
 	
 };
 

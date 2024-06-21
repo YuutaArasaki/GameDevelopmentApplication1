@@ -49,6 +49,8 @@ void Player::Update()
 	Movement();
 	//アニメーション制御
 	AnimeControl();
+
+	GetLocation();
 }
 
 //描画処理

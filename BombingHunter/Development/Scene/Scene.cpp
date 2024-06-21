@@ -9,13 +9,14 @@
 #include "../Objects/Enemy/Hapi.h"
 #include "../Objects/Enemy/Hako.h"
 #include "../Objects/Enemy/Kinteki.h"
+#include "../Objects/Enemy/Bullet.h"
 
 
-Blast* blast;
-
+Player* p;
+Bullet* b;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5), StartTime(),delete_count(),enemy_Max(10),time_count(),bom_count(0)
+Scene::Scene() : objects(), back_scene(), count(5),enemy_Max(10),enemy_timecount(),bom_Max(1),bullet(1)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -44,7 +45,7 @@ Scene::~Scene()
 void Scene::Initialize()
 {
 	//プレイヤーを生成する
-	CreateObject<Player>(Vector2D(320.0f, 100.0f));
+	p=CreateObject<Player>(Vector2D(320.0f, 50.0f));
 	
 	back_scene = LoadGraph("Resource/images/backscene.png");
 
@@ -72,30 +73,65 @@ void Scene::Update()
 
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{
-		if (bom_count < 1)
+		if (bom_Max > 0)
 		{
 			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
-			bom_count++;
+			bom_Max--;
 		}
 	}
 	
+	
 
-	if (InputControl::GetKeyDown(KEY_INPUT_Z))
-	{	
-		if (enemy_count[HANE] > 0)
+	/*if (InputControl::GetKeyDown(KEY_INPUT_Z))
+	{*/	
+		
+		for (int i = 0; i < objects.size(); i++)
 		{
-			CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-			enemy_count[HANE]--;
-			enemy_Max--;
+			
+			if (objects[i]->GetType() == HAKO)
+			{
+				if (GetRand(100) > 99)
+				{
+					b = CreateObject<Bullet>(Vector2D(objects[i]->GetLocation()));
+					b->SetPlayer(p);
+					b->Initialize();
+
+					/*bullet = 1;*/
+				}
+				
+
+			}
+			
+			
 		}
 		
-	}
+	/*}*/
 
-	time_count++;
-
-	if (time_count >= 60)
+	/*if (bullet == 1)
 	{
-		time_count = 0;
+		bullet_count++;
+
+		if (bullet_count >= 1)
+		{
+			bullet_count = 0;
+			for (int i = 0; i < objects.size(); i++)
+			{
+				if (objects[i]->GetType() == BULLET)
+				{
+					objects[i]->SetLocation(objects[i]->GetDirection(player_location, objects[i]->GetLocation()));
+				}
+
+			}
+		}
+	}*/
+
+
+
+	enemy_timecount++;
+
+	if (enemy_timecount >= 60)
+	{
+		enemy_timecount = 0;
 		if (enemy_Max > 0)
 		{
 			switch (GetRand(3))
@@ -144,9 +180,13 @@ void Scene::Update()
 	for (int i = 0; i < objects.size(); i++)
 	{
 		for (int j = i+ 1; j < objects.size(); j++)
-		{
-				//当たり判定チェック処理
-				HitCheckObject(objects[i], objects[j]);
+		{	
+			if (objects[i]->GetHit() != TRUE && objects[j]->GetHit() != TRUE)
+			{
+					//当たり判定チェック処理
+					HitCheckObject(objects[i], objects[j]);	
+			}
+				
 		}
 
 	}
@@ -155,9 +195,9 @@ void Scene::Update()
 		{
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
-				if (objects[i]->GetType() < Object_Type && objects[i]->GetType() != Bomb && objects[i]->GetType() != BLAST)
+				int type = objects[i]->GetType();
+				if (type < Object_Type && type != BOM && type != BLAST && type != BULLET)
 				{
-					delete_count++;
 					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 					objects.erase(objects.begin() + i);
@@ -167,15 +207,15 @@ void Scene::Update()
 			if (objects[i]->DeleteObject() == 1)
 			{
 				int type = objects[i]->GetType();
-				if (type != Bomb && type != BLAST)
+				if (type != BOM && type != BLAST && type != BULLET)
 				{
 					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
 				}
-				else if (type == Bomb)
+				else if (type == BOM)
 				{
 					CreateObject<Blast>(objects[i]->GetLocation());
-					bom_count--;
+					bom_Max++;
 				}
 
 				objects.erase(objects.begin() + i);	
@@ -194,7 +234,7 @@ void Scene::Draw() const
 {
 	DrawRotaGraphF(320, 260, 0.73, 0, back_scene, TRUE);
 
-	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", time_count);
+	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", enemy_timecount);
 
 	DrawFormatString(20, 40, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[0]);
 
@@ -235,18 +275,6 @@ void Scene::Finalize()
 
 void Scene::HitCheckObject(GameObject* a, GameObject* b)
 {
-	//	//オブジェクトの距離を取得
-	//	Vector2D Hitlocation = a->GetLocation() - b->GetLocation();
-	//	
-	//	//オブジェクトの当たり判定の大きさを取得
-	//	Vector2D HitBoxSize = a->GetBoxSize() + b->GetBoxSize();
-	//
-	//	if ((fabs(Hitlocation.x) < HitBoxSize.x) && (fabs(Hitlocation.y) < HitBoxSize.y))
-	//	{
-	//		a->OnHitCollision(b);
-	//		b->OnHitCollision(a);jd
-	//	}
-
 	//２つのオブジェクトの距離を取得
 	Vector2D diff = a->GetLocation() - b->GetLocation();
 
@@ -254,23 +282,14 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	Vector2D box_size = (a->GetBoxSize() + b->GetBoxSize()) / 2.0f;
 
 	//距離より大きさが大きい場合、Hit判定とする
- 	
-	int t = a->GetType();
-	int u = b->GetType();
-
-	if (a->GetType() != PLAYER && b->GetType() != PLAYER)
+	if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
 	{
-		if (a->GetType() == Bomb || b->GetType() == Bomb)
-		{
-			if ((fabsf(diff.x) < box_size.x) && (fabsf(diff.y) < box_size.y))
-			{
-				//当たったことをオブジェクトに通知する
-					a->OnHitCollision(b);
- 					b->OnHitCollision(a);
-			}
-		}
+		//当たったことをオブジェクトに通知する
+		a->OnHitCollision(b);
+		b->OnHitCollision(a);
 	}
 		
+	
 	
 }
 

@@ -6,8 +6,7 @@ private:
 	int animation[2];	//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
-	int Bullet[4];
-
+	
 
 public:
 	Hako();

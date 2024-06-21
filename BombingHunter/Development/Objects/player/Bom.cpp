@@ -25,7 +25,7 @@ void Bom::Initialize()
 			}
 
 	
-	object_type = Bomb;
+	object_type = BOM;
 
 	//Œü‚«‚ÌÝ’è
 	radian = DX_PI_F/2;
@@ -75,8 +75,12 @@ Blast blast;
 
 void Bom::OnHitCollision(GameObject* hit_object)
 {
-	velocity.y = 0.0f;
-	delete_object = 1;
+	if (hit_object->GetType() < EnemyType)
+	{
+		velocity.y = 0.0f;
+		delete_object = 1;
+	}
+	
 }
 
 void Bom::Movement()

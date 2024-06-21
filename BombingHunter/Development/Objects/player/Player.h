@@ -23,6 +23,8 @@ public:
 
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object) override;
+	
+	Vector2D GetLocation();
 
 private:
 	//移動処理
@@ -30,7 +32,7 @@ private:
 	//アニメーション制御
 	void AnimeControl();
 
-	Vector2D GetLocation();
+	
 
 	/*void PlayerBoom();*/
 };
