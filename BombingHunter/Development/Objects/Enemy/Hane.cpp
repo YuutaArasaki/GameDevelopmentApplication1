@@ -154,7 +154,7 @@ void Enemy::AnimationControl()
 	animation_count++;
 
 	//６０フレーム目に到達したら
-	if (animation_count >= 60 && Hit != TRUE)
+	if (animation_count >= 30 && Hit != TRUE)
 	{
 		//カウントのリセット
 		animation_count = 0;

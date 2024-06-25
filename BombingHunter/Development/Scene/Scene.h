@@ -12,27 +12,24 @@ class Scene
 private:
 	std::vector<GameObject*> objects;	
 	int back_scene;						//背景画像
-	int count;							//
+	int count;							//ゲームのフレームカウント
 	float Location_X[2];				//X座標
-	float Location_Y[4];				//Y座標
+	float Location_Y[5];				//Y座標
 	int enemy_count[3];					//各敵ごとの最大出現数
 	int enemy_Max;						//敵の最大出現数
 	int enemy_timecount;				//敵の出現する感覚の秒数カウント
 	int bom_Max;						//爆弾の出せる数
-	int bullet;
-	int bullet_count;
-	Vector2D player_location;
-	
+	int GameTime;						//ゲームの制限時間
 	
 
 public:
-	Scene();
-	~Scene();
+	Scene();		//コンストラクタ
+	~Scene();		//デストラクタ
 
-	void Initialize();
-	void Update();
-	void Draw() const;
-	void Finalize();
+	void Initialize();	//初期化処理
+	void Update();		//更新処理
+	void Draw() const;	//描画処理
+	void Finalize();	//終了処理
 
 private:
 

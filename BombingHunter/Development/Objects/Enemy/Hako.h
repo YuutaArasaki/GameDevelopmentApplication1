@@ -9,8 +9,8 @@ private:
 	
 
 public:
-	Hako();
-	~Hako();
+	Hako();		//コンストラクタ
+	~Hako();	//デストラクタ
 
 	//初期化処理
 	virtual void Initialize() override;

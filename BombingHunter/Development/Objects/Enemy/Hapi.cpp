@@ -147,7 +147,7 @@ void Hapi::AnimationControl()
 	animation_count++;
 
 	//６０フレーム目に到達したら
-	if (animation_count >= 40)
+	if (animation_count >= 30)
 	{
 		//カウントのリセット
 		animation_count = 0;

@@ -52,11 +52,14 @@ public:
 
 	//位置情報取得処理
 	Vector2D GetLocation() const;
+
 	//位置情報変更処理
 	void SetLocation(const Vector2D& location);
+
 	//当たり判定の大きさ取得処理
 	Vector2D GetBoxSize() const;
-	//オブジェクトを消すか消さないかの判定処理
+
+	//消すオブジェクトかどうかの判定処理
 	int DeleteObject();
 
 	Vector2D GetDirection(Vector2D location_p,Vector2D location_b);

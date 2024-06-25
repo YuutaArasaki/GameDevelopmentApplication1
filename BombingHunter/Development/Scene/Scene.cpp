@@ -16,20 +16,21 @@ Player* p;
 Bullet* b;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(5),enemy_Max(10),enemy_timecount(),bom_Max(1),bullet(1)
+Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(0)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
 	Location_X[1] = 640.0f;
 
 	//Y座標の設定
-	Location_Y[0] = 200.0f;
-	Location_Y[1] = 350.0f;
-	Location_Y[2] = 270.0f;;
-	Location_Y[3] = 440.0f;
+	Location_Y[0] = 340.0f;
+	Location_Y[1] = 280.0f;
+	Location_Y[2] = 220.0f;
+	Location_Y[3] = 140.0f;
+	Location_Y[4] = 400.0f;
 
 	enemy_count[HANE] = 5;
-	enemy_count[HAKO] = 3;
+	enemy_count[HAKO] = 2;
 	enemy_count[HAPI] = 2;
 
 }
@@ -60,17 +61,7 @@ void Scene::Update()
 		obj->Update();
 	}
 
-	
-
-	//for (int i = 1; i < objects.size(); i++)
-	//{
-	//	for (int j = i + 1; j < objects.size(); j++)
-	//	{
-	//		//当たり判定チェック処理
-	//		HitCheckObject(objects[i], objects[j]);
-	//	}
-	//}
-
+	//爆弾生成処理
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{
 		if (bom_Max > 0)
@@ -79,103 +70,52 @@ void Scene::Update()
 			bom_Max--;
 		}
 	}
-	
-	
-
-	/*if (InputControl::GetKeyDown(KEY_INPUT_Z))
-	{*/	
 		
-		for (int i = 0; i < objects.size(); i++)
-		{
-			
-			if (objects[i]->GetType() == HAKO)
-			{
-				if (GetRand(100) > 99)
-				{
-					b = CreateObject<Bullet>(Vector2D(objects[i]->GetLocation()));
-					b->SetPlayer(p);
-					b->Initialize();
-
-					/*bullet = 1;*/
-				}
-				
-
-			}
-			
-			
-		}
 		
-	/*}*/
-
-	/*if (bullet == 1)
+	//敵の弾生成処理
+	for (int i = 0; i < objects.size(); i++)
 	{
-		bullet_count++;
-
-		if (bullet_count >= 1)
+		if (objects[i]->GetType() == HAKO)
 		{
-			bullet_count = 0;
-			for (int i = 0; i < objects.size(); i++)
+			if (GetRand(100) > 99)
 			{
-				if (objects[i]->GetType() == BULLET)
-				{
-					objects[i]->SetLocation(objects[i]->GetDirection(player_location, objects[i]->GetLocation()));
-				}
-
-			}
-		}
-	}*/
-
-
-
-	enemy_timecount++;
-
-	if (enemy_timecount >= 60)
-	{
-		enemy_timecount = 0;
-		if (enemy_Max > 0)
-		{
-			switch (GetRand(3))
-			{
-
-			case 0:
-				if (enemy_count[HANE] > 0)
-				{
-					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/0]));
-					enemy_count[0]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 1:
-				if (enemy_count[HANE] > 0)
-				{
-					CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[/*GetRand(1)*/1]));
-					enemy_count[0]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 2:
-				if (enemy_count[HAKO] > 0)
-				{
-					CreateObject<Hako>(Vector2D(Location_X[GetRand(1)], 430.0f));
-					enemy_count[1]--;
-					enemy_Max--;
-				}
-				break;
-
-			case 3:
-				if (enemy_count[HAPI] > 0)
-				{
-					CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[2]));
-					enemy_count[2]--;;
-					enemy_Max--;
-				}
-				break;
-
+				b = CreateObject<Bullet>(Vector2D(objects[i]->GetLocation()));
+				b->SetPlayer(p);
+				b->Initialize();
 			}
 		}
 	}
+		
+
+
+	//敵の生成処理
+	if (enemy_Max > 0 && GameTime < 60)
+	{
+		
+		if (enemy_count[HANE] > 0 && GetRand(100) < 50)
+		{
+			CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(3)]));
+			enemy_count[HANE]--;
+			enemy_Max--;
+		}
+			
+		if (enemy_count[HAKO] > 0 && GetRand(100) < 20)
+		{
+			CreateObject<Hako>(Vector2D(Location_X[GetRand(1)], Location_Y[4]));
+			enemy_count[HAKO]--;
+			enemy_Max--;
+		}
+				
+			if (enemy_count[HAPI] > 0 && GetRand(100) < 40)
+		{
+			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
+			enemy_count[HAPI]--;;
+			enemy_Max--;
+		}
+	
+	}
+
+	
 	
 	for (int i = 0; i < objects.size(); i++)
 	{
@@ -223,7 +163,18 @@ void Scene::Update()
 		}
 		
 		
-		
+		count++;
+
+		if (count >= 60)
+		{
+			count = 0;
+			GameTime++;
+		}
+
+		if (GameTime == 60)
+		{
+			Finalize();
+		}
 
 	
 	
@@ -232,9 +183,9 @@ void Scene::Update()
 //描画処理
 void Scene::Draw() const
 {
-	DrawRotaGraphF(320, 260, 0.73, 0, back_scene, TRUE);
+	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
 
-	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", enemy_timecount);
+	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", GameTime);
 
 	DrawFormatString(20, 40, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[0]);
 

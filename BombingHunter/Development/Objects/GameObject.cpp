@@ -72,21 +72,25 @@ Vector2D GameObject::GetBoxSize() const
 	return scale;
 }
 
+//オブジェクトのタイプ取得処理
 int GameObject::GetType()
 {
 	return object_type;
 }
 
+//消すオブジェクトかどうかの判定処理
 int GameObject::DeleteObject()
 {
 	return delete_object;
 }
 
+//Hit取得処理
 bool GameObject::GetHit()
 {
 	return Hit;
 }
 
+//敵の弾をPlayerまで飛ばすための処理
 Vector2D GameObject::GetDirection(Vector2D location_p, Vector2D location_b)
 {
 	float x = 0;

@@ -64,6 +64,7 @@ void Hako::Initialize()
 
 }
 
+//更新処理
 void Hako::Update()
 {
 	Movement();
@@ -88,6 +89,7 @@ void Hako::Update()
 	}
 }
 
+//描画処理
 void Hako::Draw() const
 {
 	int flip_flag = TRUE;
@@ -150,7 +152,7 @@ void Hako::AnimationControl()
 	animation_count++;
 
 	//６０フレーム目に到達したら
-	if (animation_count >= 40)
+	if (animation_count >= 30)
 	{
 		//カウントのリセット
 		animation_count = 0;

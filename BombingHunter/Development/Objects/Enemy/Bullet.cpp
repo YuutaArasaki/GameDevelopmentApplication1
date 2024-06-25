@@ -1,7 +1,7 @@
 #include "Bullet.h"
 #include "DxLib.h"
 
-Bullet::Bullet() : animation_count(0)
+Bullet::Bullet() : animation_count(0),player(0)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -15,6 +15,7 @@ Bullet::~Bullet()
 
 }
 
+//初期化処理
 void Bullet::Initialize()
 {
 	Bullet_image[0] = LoadGraph("Resource/Images/teki/hakoteki/Bullet1.png");
@@ -45,15 +46,17 @@ void Bullet::Initialize()
 
 	//移動量の設定
 	velocity = 0.0f;
-
+	
 	if (player!=nullptr)
 	{
+		/*player_location = player->GetLocation();*/
 		player_location = player->GetLocation();
-
+		velocity = GetDirection(player_location, this->location);
 	}
-		
+
 }
 
+//更新処理
 void Bullet::Update()
 {
 	Movement();
@@ -64,6 +67,7 @@ void Bullet::Update()
 	}
 }
 
+//描画処理
 void Bullet::Draw() const
 {
 	DrawRotaGraph(location.x, location.y, 0.6, radian, image, TRUE);
@@ -75,8 +79,11 @@ void Bullet::Draw() const
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 #endif
+
+	DrawCircle(ul.x + 10, ul.y + 10, 5, GetColor(255, 0, 0), TRUE);
 }
 
+//終了処理
 void Bullet::Finalize()
 {
 	DeleteGraph(Bullet_image[0]);
@@ -85,6 +92,7 @@ void Bullet::Finalize()
 	DeleteGraph(Bullet_image[3]);
 }
 
+//当たり判定通知処理
 void Bullet::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetType() == PLAYER)
@@ -94,27 +102,27 @@ void Bullet::OnHitCollision(GameObject* hit_object)
 	
 }
 
-
+//移動処理
 void Bullet::Movement()
 {
-	location += velocity;
-
 	if (location.y < 0)
 	{
 		delete_object = 1;
 	}
+
 	if (Hit != TRUE)
 	{
-		location += GetDirection(player_location, this->location);
+		location += velocity;
 	}
 	
 }
 
+//アニメーション処理
 void Bullet::Animation()
 {
 	animation_count++;
 
-	if (animation_count >= 20)
+	if (animation_count >= 5)
 	{
 		animation_count = 0;
 
@@ -137,7 +145,8 @@ void Bullet::Animation()
 	}
 }
 
+//プレイヤーのポインタ取得処理
 void Bullet::SetPlayer(Player* p)
 {
-	player=p;
+	player = p;
 }

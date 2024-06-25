@@ -6,13 +6,13 @@
 class Enemy : public GameObject
 {
 protected:
-	int animation[2];	//アニメーション画像
+	int animation[2];		//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
-	Vector2D Plus_Speed[3];
-	Vector2D Minus_Speed[3];
-	int alpha;
-	int count;
+	Vector2D Plus_Speed[3];	//右方向への移動速度
+	Vector2D Minus_Speed[3];//左方向への移動速度
+	int alpha;				//敵の透明度
+	int count;				//フレームカウント
 
 public:
 	Enemy();
