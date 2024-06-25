@@ -20,6 +20,7 @@ private:
 	int enemy_timecount;				//敵の出現する感覚の秒数カウント
 	int bom_Max;						//爆弾の出せる数
 	int GameTime;						//ゲームの制限時間
+	int Font[10];
 	
 
 public:

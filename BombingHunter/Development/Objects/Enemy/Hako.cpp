@@ -62,6 +62,15 @@ void Hako::Initialize()
 		velocity = Vector2D(Minus_Speed[GetRand(2)]);
 	}
 
+	//描画する敵の向き
+	if (velocity.x > 0.0f)
+	{
+		flip_flag = FALSE;
+	}
+	else
+	{
+		flip_flag = TRUE;
+	}
 }
 
 //更新処理
@@ -71,6 +80,7 @@ void Hako::Update()
 
 	AnimationControl();
 
+	//Bomに当たった時に透過させる為の値変更処理
 	if (Hit == TRUE)
 	{
 		scale = 0.0f;
@@ -92,17 +102,7 @@ void Hako::Update()
 //描画処理
 void Hako::Draw() const
 {
-	int flip_flag = TRUE;
-
-	if (velocity.x > 0.0f)
-	{
-		flip_flag = FALSE;
-	}
-	else
-	{
-		flip_flag = TRUE;
-	}
-	
+	//Bomに当たった時の描画処理
 	if (Hit == TRUE)
 	{
 
@@ -125,12 +125,14 @@ void Hako::Draw() const
 
 }
 
+//終了処理
 void Hako::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
+//当たり判定通知処理
 void Hako::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetType() == BOM)
@@ -141,11 +143,13 @@ void Hako::OnHitCollision(GameObject* hit_object)
 	
 }
 
+//移動処理
 void Hako::Movement()
 {
 	location.x += velocity.x;
 }
 
+//アニメーション処理
 void Hako::AnimationControl()
 {
 	//フレームカウントを加算する

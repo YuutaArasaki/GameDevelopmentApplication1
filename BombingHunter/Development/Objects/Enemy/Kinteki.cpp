@@ -35,7 +35,7 @@ void Kinteki::Initialize()
 	radian = 0.0f;
 
 	//当たり判定の大きさを設定
-	scale = 64.0f;
+	scale = 30.0f;
 
 	//初期画像の設定
 	image = animation[0];
@@ -49,19 +49,8 @@ void Kinteki::Initialize()
 	{
 		velocity = Vector2D(-1.5f, 0.5f);
 	}
-}
-
-void Kinteki::Update()
-{
-	Movement();
-
-	AnimationControl();
-}
-
-void Kinteki::Draw() const
-{
-	int flip_flag = TRUE;
-
+	
+	//描画する敵の向き
 	if (velocity.x > 0.0f)
 	{
 		flip_flag = FALSE;
@@ -70,7 +59,47 @@ void Kinteki::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+}
+
+//更新処理
+void Kinteki::Update()
+{
+	Movement();
+
+	AnimationControl();
+
+	//Bomに当たった時に透過させる為の値変更処理
+	if (Hit == TRUE)
+	{
+		count++;
+		if (count >= 30)
+		{
+			alpha -= 51;
+			count = 0;
+		}
+
+	}
+	if (alpha < 0)
+	{
+		delete_object = 1;
+	}
+}
+
+//描画処理
+void Kinteki::Draw() const
+{
+	
+	//Bomに当たった時の描画処理
+	if (Hit == TRUE)
+	{
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	}
+	else
+	{
+		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+	}
 
 	//デバック用
 #if _DEBUG
@@ -82,13 +111,14 @@ void Kinteki::Draw() const
 
 }
 
-
+//終了処理
 void Kinteki::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
+//
 void Kinteki::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetType() == BOM)
@@ -98,22 +128,13 @@ void Kinteki::OnHitCollision(GameObject* hit_object)
 	}
 }
 
+//移動処理
 void Kinteki::Movement()
 {
-	/*if (((location.x + velocity.x) < scale.x) || (640.0f - scale.x) < (location.x + velocity.x))
-	{
-		velocity *= -1.0f;
-	}*/
-
-	if ((location.x < 0) || (location.x > 640))
-	{
-		velocity *= -1.0f;
-	}
-
 	location.x += velocity.x;
 }
 
-
+//アニメーション処理
 void Kinteki::AnimationControl()
 {
 	//フレームカウントを加算する
@@ -137,5 +158,21 @@ void Kinteki::AnimationControl()
 		animation_image_count++;
 	}
 
+	//Bomに当たった時のアニメーション
+	if (Hit == TRUE)
+	{
+		if (animation_count == 15 || animation_count == 45)
+		{
+			location.x += 4;
+			location.y += 0.5;
+		}
+
+		if (animation_count == 30 || animation_count == 60)
+		{
+			location.x += -4;
+			location.y += 0.5;
+			animation_count = 0;
+		}
+	}
 	
 }

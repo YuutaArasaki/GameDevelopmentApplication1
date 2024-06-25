@@ -6,6 +6,7 @@
 class Enemy : public GameObject
 {
 protected:
+	bool flip_flag;
 	int animation[2];		//アニメーション画像
 	int animation_count;	//アニメーション時間
 	Vector2D velocity;		//進行方向
@@ -30,16 +31,12 @@ public:
 	//当たり判定通知処理
 	virtual void OnHitCollision(GameObject* hit_object) override;
 
-	 Vector2D Location_X();
 
 private:
 	//移動処理
 	void Movement();
 	//アニメーション制御
 	void AnimationControl();
-	//オブジェクトを消すときのモーション処理
-	void DeleteMovement();
-	
 
 };
 

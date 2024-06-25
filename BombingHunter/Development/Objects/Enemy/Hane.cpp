@@ -2,7 +2,7 @@
 #include "DxLib.h"
 #include "../../Scene/Scene.h"
 
-Enemy::Enemy() : animation_count(0), velocity(0.0f),alpha(255),count(0)
+Enemy::Enemy() : animation_count(0), velocity(0.0f),alpha(255),count(0), flip_flag(0)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
@@ -53,46 +53,14 @@ void Enemy::Initialize()
 	//進行方向の設定
 	if (location.x <= 0)
 	{
-		 velocity = Vector2D(Plus_Speed[GetRand(2)]);
+		velocity = Vector2D(Plus_Speed[GetRand(2)]);
 	}
 	else if (location.x >= 640)
 	{
 		velocity = Vector2D(Minus_Speed[GetRand(2)]);
 	}
-	
 
-}
-
-void Enemy::Update()
-{
-	Movement();
-
-	AnimationControl();
-
-	DeleteMovement();
-
-	if (Hit == TRUE)
-	{
-		scale = 0.0f;
-
-		count++;
-		if (count >= 30)
-		{
-			alpha -= 51;
-			count = 0;
-		}
-		
-	}
-	if (alpha < 0)
-	{
-		delete_object = 1;
-	}
-}
-
-void Enemy::Draw() const
-{
-	int flip_flag = TRUE;
-
+	//描画する敵の向き
 	if (velocity.x > 0.0f)
 	{
 		flip_flag = FALSE;
@@ -101,8 +69,36 @@ void Enemy::Draw() const
 	{
 		flip_flag = TRUE;
 	}
-	
+}
 
+//更新処理
+void Enemy::Update()
+{
+	Movement();
+
+	AnimationControl();
+
+	//Bomに当たった時に透過させる為の値変更処理
+	if (Hit == TRUE)
+	{
+		count++;
+		if (count >= 30)
+		{
+			alpha -= 51;
+			count = 0;
+		}
+
+	}
+	if (alpha < 0)
+	{
+		delete_object = 1;
+	}
+}
+
+//描画処理
+void Enemy::Draw() const
+{
+	//Bomに当たった時の描画処理
 	if (Hit == TRUE)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
@@ -113,10 +109,10 @@ void Enemy::Draw() const
 	{
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 	}
-	
-	
+
+
 	__super::Draw();
-	
+
 	//デバック用
 #if _DEBUG
 	//当たり判定の可視化
@@ -127,12 +123,14 @@ void Enemy::Draw() const
 
 }
 
+//終了処理
 void Enemy::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
+//当たり判定通知処理
 void Enemy::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetType() == BOM)
@@ -142,12 +140,14 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 	}
 }
 
+//移動処理
 void Enemy::Movement()
 {
 	location.x += velocity.x;
 
 }
 
+//アニメーション処理
 void Enemy::AnimationControl()
 {
 	//フレームカウントを加算する
@@ -170,32 +170,22 @@ void Enemy::AnimationControl()
 		}
 	}
 
+	//Bomに当たった時のアニメーション
 	if (Hit == TRUE)
 	{
-	
-			if (animation_count == 15 || animation_count == 45)
-			{
-				location.x += 4;
-				location.y += 0.5;
-			}
+		if (animation_count == 15 || animation_count == 45)
+		{
+			location.x += 4;
+			location.y += 0.5;
+		}
 
-			if (animation_count == 30 || animation_count == 60)
-			{
-				location.x += -4;
-				location.y += 0.5;
-				animation_count = 0;
-			}
-
+		if (animation_count == 30 || animation_count == 60)
+		{
+			location.x += -4;
+			location.y += 0.5;
+			animation_count = 0;
+		}
 	}
 	
 }
 
-Vector2D Enemy::Location_X()
-{
-	return location.x;
-}
-
-void Enemy::DeleteMovement()
-{
-
-}

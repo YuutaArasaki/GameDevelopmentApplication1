@@ -53,6 +53,16 @@ void Hapi::Initialize()
 	{
 		velocity = Vector2D(Minus_Speed[GetRand(2)]);
 	}
+
+	//描画する敵の向き
+	if (velocity.x > 0.0f)
+	{
+		flip_flag = FALSE;
+	}
+	else
+	{
+		flip_flag = TRUE;
+	}
 }
 
 void Hapi::Update()
@@ -61,6 +71,7 @@ void Hapi::Update()
 
 	AnimationControl();
 
+	//Bomに当たった時に画像透過させる為の値変更処理
 	if (Hit == TRUE)
 	{
 		scale = 0.0f;
@@ -81,20 +92,10 @@ void Hapi::Update()
 
 void Hapi::Draw() const
 {
-	int flip_flag = TRUE;
-
-	if (velocity.x > 0.0f)
-	{
-		flip_flag = FALSE;
-	}
-	else
-	{
-		flip_flag = TRUE;
-	}
 	
+	//Bomに当たった時の描画処理
 	if (Hit == TRUE)
 	{
-
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
@@ -114,13 +115,14 @@ void Hapi::Draw() const
 #endif
 }
 
-
+//終了処理
 void Hapi::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
 }
 
+//当たり判定通知処理
 void Hapi::OnHitCollision(GameObject* hit_object)
 {
 	if (hit_object->GetType() == BOM)
@@ -130,17 +132,13 @@ void Hapi::OnHitCollision(GameObject* hit_object)
 	}
 }
 
+//移動処理
 void Hapi::Movement()
 {
-	/*if (((location.x + velocity.x) < scale.x) || (640.0f - scale.x) < (location.x + velocity.x))
-	{
-		velocity *= -1.0f;
-	}*/
-
 	location.x += velocity.x;
 }
 
-
+//アニメーション処理
 void Hapi::AnimationControl()
 {
 	//フレームカウントを加算する

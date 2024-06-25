@@ -16,7 +16,7 @@ Player* p;
 Bullet* b;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(0)
+Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(60)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -29,6 +29,7 @@ Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount
 	Location_Y[3] = 140.0f;
 	Location_Y[4] = 400.0f;
 
+	//各敵の最大出現数
 	enemy_count[HANE] = 5;
 	enemy_count[HAKO] = 2;
 	enemy_count[HAPI] = 2;
@@ -48,6 +49,7 @@ void Scene::Initialize()
 	//プレイヤーを生成する
 	p=CreateObject<Player>(Vector2D(320.0f, 50.0f));
 	
+	//背景画像
 	back_scene = LoadGraph("Resource/images/backscene.png");
 
 }
@@ -92,21 +94,24 @@ void Scene::Update()
 	if (enemy_Max > 0 && GameTime < 60)
 	{
 		
+		//ハネテキを生成する処理
 		if (enemy_count[HANE] > 0 && GetRand(100) < 50)
 		{
 			CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(3)]));
 			enemy_count[HANE]--;
 			enemy_Max--;
 		}
-			
+		
+		//ハコテキを生成する処理
 		if (enemy_count[HAKO] > 0 && GetRand(100) < 20)
 		{
 			CreateObject<Hako>(Vector2D(Location_X[GetRand(1)], Location_Y[4]));
 			enemy_count[HAKO]--;
 			enemy_Max--;
 		}
-				
-			if (enemy_count[HAPI] > 0 && GetRand(100) < 40)
+		
+		//ハーピーを生成する処理
+		if (enemy_count[HAPI] > 0 && GetRand(100) < 40)
 		{
 			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
 			enemy_count[HAPI]--;;
@@ -117,14 +122,14 @@ void Scene::Update()
 
 	
 	
+	//オブジェクトの当たり判定チェック処理
 	for (int i = 0; i < objects.size(); i++)
 	{
 		for (int j = i+ 1; j < objects.size(); j++)
 		{	
 			if (objects[i]->GetHit() != TRUE && objects[j]->GetHit() != TRUE)
 			{
-					//当たり判定チェック処理
-					HitCheckObject(objects[i], objects[j]);	
+				HitCheckObject(objects[i], objects[j]);	
 			}
 				
 		}
@@ -133,6 +138,7 @@ void Scene::Update()
 
 		for (int i = 1; i < objects.size(); i++)
 		{
+			//テキが画面端に当たると消す処理
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
 				int type = objects[i]->GetType();
@@ -144,34 +150,38 @@ void Scene::Update()
 				}		
 			}
 
+			//オブジェクトを消す処理
 			if (objects[i]->DeleteObject() == 1)
 			{
 				int type = objects[i]->GetType();
+
+				//テキを消す処理
 				if (type != BOM && type != BLAST && type != BULLET)
 				{
 					enemy_Max++;
-					enemy_count[objects[i]->GetType()]++;
+					enemy_count[type]++;
 				}
-				else if (type == BOM)
+				else if (type == BOM)	//爆弾がテキや画面下に触れたとき、その場所に爆風を生成する処理
 				{
 					CreateObject<Blast>(objects[i]->GetLocation());
 					bom_Max++;
 				}
-
-				objects.erase(objects.begin() + i);	
+	
+				objects.erase(objects.begin() + i);
 			}
 		}
 		
-		
+		//制限時間カウント処理
 		count++;
 
 		if (count >= 60)
 		{
 			count = 0;
-			GameTime++;
+			GameTime--;
 		}
 
-		if (GameTime == 60)
+		//制限時間が０秒になったら終了
+		if (GameTime < 0)
 		{
 			Finalize();
 		}
@@ -183,6 +193,7 @@ void Scene::Update()
 //描画処理
 void Scene::Draw() const
 {
+	//背景画像描画処理
 	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
 
 	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", GameTime);
@@ -224,6 +235,7 @@ void Scene::Finalize()
 	objects.clear();
 }
 
+//当たり判定チェック処理
 void Scene::HitCheckObject(GameObject* a, GameObject* b)
 {
 	//２つのオブジェクトの距離を取得
@@ -244,7 +256,3 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	
 }
 
-//void Scene::DeleteObject()
-//{
-//
-//}
