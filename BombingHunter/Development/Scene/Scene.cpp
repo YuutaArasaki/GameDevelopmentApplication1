@@ -16,7 +16,7 @@ Player* p;
 Bullet* b;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(60)
+Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(60),ones_place(0),tens_place(6)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -33,6 +33,18 @@ Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount
 	enemy_count[HANE] = 5;
 	enemy_count[HAKO] = 2;
 	enemy_count[HAPI] = 2;
+
+	time_image = NULL;
+
+	for (int i = 0; i < 10; i++)
+	{
+		Font[i] = NULL;
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		Font_Sentence[i] = NULL;
+	}
 
 }
 
@@ -52,11 +64,44 @@ void Scene::Initialize()
 	//背景画像
 	back_scene = LoadGraph("Resource/images/backscene.png");
 
+	//タイマー画像
+	time_image = LoadGraph("Resource/images/Score/timer-03.png");
+
+	LoadDivGraph("Resource/images/Score/Font_Score.png", 10, 5, 2, 160, 214, Font);
+
+	LoadDivGraph("Resource/images/Score/Font_Sentence.png", 4, 1, 4, 800, 307, Font_Sentence);
+	if (Font_Sentence[0] == -1)
+	{
+		throw ("フォント画像がありません\n");
+	}
 }
 
 //更新処理
 void Scene::Update()
 {
+	
+	//制限時間カウント処理
+		
+		count++;
+		if (count >= 60)
+		{
+			if (GameTime > 0)
+			{
+				count = 0;
+				GameTime--;
+				tens_place = GameTime / 10;
+				ones_place = GameTime % 10;
+			}
+			
+		}
+
+		//制限時間が０秒になったら終了
+		if (GameTime <= 0)
+		{
+			Finalize();
+		}
+
+
 	//シーンに存在するオブジェクトの更新処理
 	for (GameObject* obj : objects)
 	{
@@ -142,7 +187,7 @@ void Scene::Update()
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
 				int type = objects[i]->GetType();
-				if (type < Object_Type && type != BOM && type != BLAST && type != BULLET)
+				if (type < EnemyType /*&& type != BOM && type != BLAST && type != BULLET*/)
 				{
 					enemy_Max++;
 					enemy_count[objects[i]->GetType()]++;
@@ -170,24 +215,6 @@ void Scene::Update()
 				objects.erase(objects.begin() + i);
 			}
 		}
-		
-		//制限時間カウント処理
-		count++;
-
-		if (count >= 60)
-		{
-			count = 0;
-			GameTime--;
-		}
-
-		//制限時間が０秒になったら終了
-		if (GameTime < 0)
-		{
-			Finalize();
-		}
-
-	
-	
 }
 
 //描画処理
@@ -195,16 +222,11 @@ void Scene::Draw() const
 {
 	//背景画像描画処理
 	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
+	DrawRotaGraphF(50, 462, 0.7, 0, time_image, TRUE);
+	DrawExtendGraph(100,445,130, 480, Font[ones_place], TRUE);
+	DrawExtendGraph(75, 445, 105, 480, Font[tens_place], TRUE);
 
-	DrawFormatString(20, 20, GetColor(255, 255, 255), "時間 : %d", GameTime);
-
-	DrawFormatString(20, 40, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[0]);
-
-	DrawFormatString(20, 60, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[1]);
-
-	DrawFormatString(20, 80, GetColor(255, 255, 255), "敵の数 ： %d", enemy_count[2]);
-
-	DrawFormatString(20, 100, GetColor(255, 255, 255), "敵の最大数 ： %d", enemy_Max);
+	DrawExtendGraph(320, 240, 500, 320, Font_Sentence[2], TRUE);
 
 
 	//シーンに存在するオブジェクトの描画処理

@@ -49,7 +49,6 @@ void Bullet::Initialize()
 	
 	if (player!=nullptr)
 	{
-		/*player_location = player->GetLocation();*/
 		player_location = player->GetLocation();
 		velocity = GetDirection(player_location, this->location);
 	}
@@ -79,8 +78,6 @@ void Bullet::Draw() const
 	Vector2D br = location + (scale / 2.0f);
 	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
 #endif
-
-	DrawCircle(ul.x + 10, ul.y + 10, 5, GetColor(255, 0, 0), TRUE);
 }
 
 //èIóπèàóù
