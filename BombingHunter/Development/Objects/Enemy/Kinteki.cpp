@@ -59,6 +59,8 @@ void Kinteki::Initialize()
 	{
 		flip_flag = TRUE;
 	}
+
+	Score_Point = 1500;
 }
 
 //XVˆ—
@@ -72,7 +74,7 @@ void Kinteki::Update()
 	if (Hit == TRUE)
 	{
 		count++;
-		if (count >= 30)
+		if (count >= 10)
 		{
 			alpha -= 51;
 			count = 0;

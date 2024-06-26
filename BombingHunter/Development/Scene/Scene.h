@@ -17,14 +17,18 @@ private:
 	float Location_Y[5];				//Y座標
 	int enemy_count[3];					//各敵ごとの最大出現数
 	int enemy_Max;						//敵の最大出現数
-	int enemy_timecount;				//敵の出現する感覚の秒数カウント
 	int bom_Max;						//爆弾の出せる数
 	int GameTime;						//ゲームの制限時間
 	int Font[10];						//時間やスコアのフォント画像
-	int ones_place;						//フォントの一の位
-	int tens_place;						//フォントの十の位
-	int time_image;						//タイマー画像
+	int ones_place;						//制限時間(一の位)
+	int tens_place;						//制限時間(十の位)
+	int UI_image[3];					//UI画像
 	int Font_Sentence[4];				//スコア評価文のフォント
+	int Score;
+	int S_ones_place;					//スコア(一の位)
+	int S_tens_place;					//スコア(十の位)
+	int S_hundreds_place;				//スコア(百の位)
+	int S_thousands_place;				//スコア(千の位)
 	
 
 public:

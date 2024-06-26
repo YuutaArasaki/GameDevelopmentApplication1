@@ -63,6 +63,8 @@ void Hapi::Initialize()
 	{
 		flip_flag = TRUE;
 	}
+
+	Score_Point = -100;
 }
 
 void Hapi::Update()
@@ -77,7 +79,7 @@ void Hapi::Update()
 		scale = 0.0f;
 
 		count++;
-		if (count >= 30)
+		if (count >= 10)
 		{
 			alpha -= 51;
 			count = 0;

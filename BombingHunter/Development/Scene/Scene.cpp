@@ -16,7 +16,9 @@ Player* p;
 Bullet* b;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount(),bom_Max(1),GameTime(60),ones_place(0),tens_place(6)
+Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),
+bom_Max(1),GameTime(60),ones_place(0),tens_place(6),Score(0),
+S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -34,8 +36,6 @@ Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount
 	enemy_count[HAKO] = 2;
 	enemy_count[HAPI] = 2;
 
-	time_image = NULL;
-
 	for (int i = 0; i < 10; i++)
 	{
 		Font[i] = NULL;
@@ -46,6 +46,10 @@ Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),enemy_timecount
 		Font_Sentence[i] = NULL;
 	}
 
+	for (int i = 0; i < 3; i++)
+	{
+		UI_image[i] = NULL;
+	}
 }
 
 //デストラクタ
@@ -65,15 +69,23 @@ void Scene::Initialize()
 	back_scene = LoadGraph("Resource/images/backscene.png");
 
 	//タイマー画像
-	time_image = LoadGraph("Resource/images/Score/timer-03.png");
+	UI_image[0] = LoadGraph("Resource/images/Score/timer-03.png");
 
-	LoadDivGraph("Resource/images/Score/Font_Score.png", 10, 5, 2, 160, 214, Font);
+	//スコアフォント画像
+	UI_image[1] = LoadGraph("Resource/images/Score/font-Score.png");
 
-	LoadDivGraph("Resource/images/Score/Font_Sentence.png", 4, 1, 4, 800, 307, Font_Sentence);
-	if (Font_Sentence[0] == -1)
-	{
-		throw ("フォント画像がありません\n");
-	}
+	//ハイスコアフォント画像
+	UI_image[2] = LoadGraph("Resource/images/Score/font-HighScore.png");
+
+	//０～９のフォント画像
+	LoadDivGraph("Resource/images/Score/Font_numbers.png", 10, 5, 2, 160, 214, Font);
+
+	//スコア評価のフォント画像
+	Font_Sentence[0] = LoadGraph("Resource/images/Score/BAD.png");
+	Font_Sentence[1] = LoadGraph("Resource/images/Score/OK.png");
+	Font_Sentence[2] = LoadGraph("Resource/images/Score/GOOD.png");
+	Font_Sentence[3] = LoadGraph("Resource/images/Score/Perfect.png");
+
 }
 
 //更新処理
@@ -81,25 +93,24 @@ void Scene::Update()
 {
 	
 	//制限時間カウント処理
+	count++;
+	if (count >= 60)
+	{
+		if (GameTime > 0)
+		{
+			count = 0;
+			GameTime--;
+			tens_place = GameTime / 10;
+			ones_place = GameTime % 10;
+		}
 		
-		count++;
-		if (count >= 60)
-		{
-			if (GameTime > 0)
-			{
-				count = 0;
-				GameTime--;
-				tens_place = GameTime / 10;
-				ones_place = GameTime % 10;
-			}
-			
-		}
+	}
 
-		//制限時間が０秒になったら終了
-		if (GameTime <= 0)
-		{
-			Finalize();
-		}
+	//制限時間が０秒になったら終了
+	if (GameTime <= 0)
+	{
+		Finalize();
+	}
 
 
 	//シーンに存在するオブジェクトの更新処理
@@ -136,7 +147,7 @@ void Scene::Update()
 
 
 	//敵の生成処理
-	if (enemy_Max > 0 && GameTime < 60)
+	if (enemy_Max > 0 && GameTime <= 60)
 	{
 		
 		//ハネテキを生成する処理
@@ -203,6 +214,11 @@ void Scene::Update()
 				//テキを消す処理
 				if (type != BOM && type != BLAST && type != BULLET)
 				{
+					Score += objects[i]->GetScorePoint();
+					if (Score <= 0)
+					{
+						Score = 0;
+					}
 					enemy_Max++;
 					enemy_count[type]++;
 				}
@@ -215,6 +231,13 @@ void Scene::Update()
 				objects.erase(objects.begin() + i);
 			}
 		}
+
+		//スコアに沿ってフォントを変える為の処理
+		S_ones_place = Score % 10;
+		S_tens_place = Score % 100 / 10;
+		S_hundreds_place = Score % 1000 / 100;
+		S_thousands_place = Score % 10000 / 1000;
+	
 }
 
 //描画処理
@@ -222,11 +245,49 @@ void Scene::Draw() const
 {
 	//背景画像描画処理
 	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
-	DrawRotaGraphF(50, 462, 0.7, 0, time_image, TRUE);
-	DrawExtendGraph(100,445,130, 480, Font[ones_place], TRUE);
-	DrawExtendGraph(75, 445, 105, 480, Font[tens_place], TRUE);
 
-	DrawExtendGraph(320, 240, 500, 320, Font_Sentence[2], TRUE);
+	//タイマー画像描画処理
+	DrawRotaGraphF(30, 462, 0.7, 0, UI_image[0], TRUE);
+
+	//制限時間描画処理
+	//一の位
+	DrawExtendGraph(85, 445, 115, 480, Font[ones_place], TRUE);
+	//十の位
+	DrawExtendGraph(55, 445, 85, 480, Font[tens_place], TRUE);
+
+	//スコア描画処理
+	DrawRotaGraphF(190, 460, 1.7, 0, UI_image[1], TRUE);
+	//一の位
+	DrawExtendGraph(325, 445, 355, 480, Font[S_ones_place], TRUE);
+	//十の位
+	DrawExtendGraph(295, 445, 325, 480, Font[S_tens_place], TRUE);
+	//百の位
+	DrawExtendGraph(265, 445, 295, 480, Font[S_hundreds_place], TRUE);
+	//千の位
+	DrawExtendGraph(235, 445, 265, 480, Font[S_thousands_place], TRUE);
+
+	
+	//終了時のスコアによって評価フォントを描画する処理
+	if (GameTime <= 0)
+	{
+		if (3000 <= Score)
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[3], TRUE);
+		}
+		else if (1500 <= Score)
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[2], TRUE);
+		}
+		else if (1000 <= Score)
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[1], TRUE);
+		}
+		else if (1000 > Score)
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[0], TRUE);
+		}
+	}
+	
 
 
 	//シーンに存在するオブジェクトの描画処理
@@ -251,6 +312,23 @@ void Scene::Finalize()
 	{
 		obj->Finalize();
 		delete obj;
+	}
+
+	if (3000 <= Score)
+	{
+		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[3], TRUE);
+	}
+	else if (1500 <= Score)
+	{
+		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[2], TRUE);
+	}
+	else if (1000 <= Score)
+	{
+		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[1], TRUE);
+	}
+	else if (1000 > Score)
+	{
+		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[0], TRUE);
 	}
 
 	//動的配列の解放

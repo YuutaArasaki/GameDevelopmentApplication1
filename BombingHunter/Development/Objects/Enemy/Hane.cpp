@@ -21,6 +21,8 @@ void Enemy::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
 
+	Score_image = LoadGraph("Resource/Images/Score/Score_Hane.png");
+
 	//エラーチェック
 	for (int i = 0; i < 10; i++)
 	{
@@ -69,6 +71,8 @@ void Enemy::Initialize()
 	{
 		flip_flag = TRUE;
 	}
+
+	Score_Point = 100;
 }
 
 //更新処理
@@ -82,7 +86,7 @@ void Enemy::Update()
 	if (Hit == TRUE)
 	{
 		count++;
-		if (count >= 30)
+		if (count >= 10)
 		{
 			alpha -= 51;
 			count = 0;
@@ -103,6 +107,7 @@ void Enemy::Draw() const
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		DrawRotaGraphF(location.x + 40, location.y - 40, 0.1, radian, Score_image, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else

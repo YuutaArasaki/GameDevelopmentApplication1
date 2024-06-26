@@ -41,7 +41,7 @@ void Blast::Update()
 
 void Blast::Draw() const
 {
-	  DrawRotaGraphF(location.x, location.y, 0.7, DX_PI_F / 2, image, TRUE,FALSE);
+	  DrawRotaGraphF(location.x, location.y, 0.6, DX_PI_F / 2, image, TRUE,FALSE);
 }
 
 void Blast::Finalize()

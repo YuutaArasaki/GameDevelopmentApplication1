@@ -30,8 +30,9 @@ protected:
 	int object_type;		//オブジェクトの種類
 	int delete_object;		//オブジェクトの消去
 	bool Hit;				//オブジェクトがHitしたかどうか
-	int count;
-	int delete_count;
+	int count;				//フレームカウント
+	int Score_Point;		//各敵のスコア
+	int Score_image;		//敵を倒したときに表示するスコア画像
 
 public:
 	GameObject();
@@ -62,7 +63,10 @@ public:
 	//消すオブジェクトかどうかの判定処理
 	int DeleteObject();
 
+	//テキの弾をトリパイロットの方向に飛ばす処理
 	Vector2D GetDirection(Vector2D location_p,Vector2D location_b);
+
+	int GetScorePoint();
 	
 };
 

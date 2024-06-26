@@ -87,7 +87,7 @@ void Bom::Movement()
 {
 	radian = DX_PI_F / 2;
 
-	if (location.y < 445)
+	if (location.y < 410)
 	{
 		location.y += velocity.y;
 	}	

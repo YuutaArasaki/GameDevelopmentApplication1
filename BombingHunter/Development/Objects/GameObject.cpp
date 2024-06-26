@@ -13,7 +13,7 @@ GameObject::GameObject() :
 	delete_object(0),
 	Hit(FALSE),
 	count(0),
-	delete_count(0)
+	Score_Point(0)
 {
 }
 
@@ -106,4 +106,9 @@ Vector2D GameObject::GetDirection(Vector2D location_p, Vector2D location_b)
 
 	direction = Vector2D(x, y);
 	return direction;
+}
+
+int GameObject::GetScorePoint()
+{
+	return Score_Point;
 }
