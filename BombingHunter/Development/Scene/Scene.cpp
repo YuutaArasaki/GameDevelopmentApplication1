@@ -81,10 +81,8 @@ void Scene::Initialize()
 	LoadDivGraph("Resource/images/Score/Font_numbers.png", 10, 5, 2, 160, 214, Font);
 
 	//スコア評価のフォント画像
-	Font_Sentence[0] = LoadGraph("Resource/images/Score/BAD.png");
-	Font_Sentence[1] = LoadGraph("Resource/images/Score/OK.png");
-	Font_Sentence[2] = LoadGraph("Resource/images/Score/GOOD.png");
-	Font_Sentence[3] = LoadGraph("Resource/images/Score/Perfect.png");
+	LoadDivGraph("Resource/images/Score/Font_Sentence.png", 4, 1, 4, 800, 330, Font_Sentence);
+	
 
 }
 
