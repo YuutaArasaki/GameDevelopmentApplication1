@@ -38,19 +38,23 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 			//入力機能の更新
 			InputControl::Update();
 
+			
+
 			//シーンの更新処理
 			scene->Update();
-
-
+			
 
 			//画面の初期化
 			ClearDrawScreen();
-
+	
 			//シーンの描画処理
 			scene->Draw();
-
+			
 			//裏画面の内容を表画面に反映する
 			ScreenFlip();
+
+			
+
 		}
 	}
 	catch (const char* error_log)

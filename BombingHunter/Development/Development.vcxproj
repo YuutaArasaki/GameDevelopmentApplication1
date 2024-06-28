@@ -141,6 +141,7 @@
     <ClCompile Include="Objects\Enemy\Hane.cpp" />
     <ClCompile Include="Objects\GameObject.cpp" />
     <ClCompile Include="Objects\player\Player.cpp" />
+    <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Utility\InputControl.cpp" />
     <ClCompile Include="Utility\Vector2D.cpp" />
@@ -155,6 +156,7 @@
     <ClInclude Include="Objects\Enemy\Hapi.h" />
     <ClInclude Include="Objects\GameObject.h" />
     <ClInclude Include="Objects\player\Player.h" />
+    <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Utility\InputControl.h" />
     <ClInclude Include="Utility\Vector2D.h" />

@@ -13,6 +13,7 @@ private:
 	std::vector<GameObject*> objects;	
 	int back_scene;						//背景画像
 	int count;							//ゲームのフレームカウント
+	int result_count;		
 	float Location_X[2];				//X座標
 	float Location_Y[5];				//Y座標
 	int enemy_count[4];					//各敵ごとの最大出現数
@@ -23,7 +24,7 @@ private:
 	int ones_place;						//制限時間(一の位)
 	int tens_place;						//制限時間(十の位)
 	int UI_image[3];					//UI画像
-	int Result_image[4];				//リザルトのフォント
+	int Result_image[5];				//リザルトのフォント
 	int Score;							//スコア
 	int S_ones_place;					//スコア(一の位)
 	int S_tens_place;					//スコア(十の位)
@@ -40,6 +41,9 @@ public:
 	void Update();		//更新処理
 	void Draw() const;	//描画処理
 	void Finalize();	//終了処理
+
+	void ResultDraw(int count);
+	int Result_Count();
 
 private:
 
