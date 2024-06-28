@@ -35,6 +35,7 @@ S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0)
 	enemy_count[HANE] = 5;
 	enemy_count[HAKO] = 2;
 	enemy_count[HAPI] = 2;
+	enemy_count[KIN] = 1;
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -168,7 +169,14 @@ void Scene::Update()
 		if (enemy_count[HAPI] > 0 && GetRand(100) < 40)
 		{
 			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
-			enemy_count[HAPI]--;;
+			enemy_count[HAPI]--;
+			enemy_Max--;
+		}
+
+		if (enemy_count[KIN] > 0 && GameTime < 30 - GetRand(10))
+		{
+			CreateObject<Kinteki>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
+			enemy_count[KIN]--;
 			enemy_Max--;
 		}
 	

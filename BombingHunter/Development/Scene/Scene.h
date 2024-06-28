@@ -15,7 +15,7 @@ private:
 	int count;							//ゲームのフレームカウント
 	float Location_X[2];				//X座標
 	float Location_Y[5];				//Y座標
-	int enemy_count[3];					//各敵ごとの最大出現数
+	int enemy_count[4];					//各敵ごとの最大出現数
 	int enemy_Max;						//敵の最大出現数
 	int bom_Max;						//爆弾の出せる数
 	int GameTime;						//ゲームの制限時間
