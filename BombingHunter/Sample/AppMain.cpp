@@ -41,8 +41,6 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 			//シーンの更新処理
 			scene->Update();
 
-
-
 			//画面の初期化
 			ClearDrawScreen();
 

@@ -13,7 +13,8 @@ GameObject::GameObject() :
 	delete_object(0),
 	Hit(FALSE),
 	count(0),
-	Score_Point(0)
+	Score_Point(0),
+	SE(NULL)
 {
 }
 
@@ -112,3 +113,4 @@ int GameObject::GetScorePoint()
 {
 	return Score_Point;
 }
+

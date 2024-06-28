@@ -17,9 +17,15 @@ Blast::~Blast()
 
 void Blast::Initialize()
 {
+	//”š•—‚Ì‰æ‘œ“Ç‚İ‚İ
 	blast_image[0] = LoadGraph("Resource/Images/bom/bakufuu1.png");
 	blast_image[1] = LoadGraph("Resource/Images/bom/bakufuu2.png");
 	blast_image[2] = LoadGraph("Resource/Images/bom/bakufuu3.png");
+
+	//SE“Ç‚İ‚İ
+	SE = LoadSoundMem("Resource/Sound/SE/explosion.wav");
+
+	PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 
 	for (int i = 0; i < 3; i++)
 	{

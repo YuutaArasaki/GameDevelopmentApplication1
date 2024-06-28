@@ -17,7 +17,7 @@ Bullet* b;
 
 //コンストラクタ
 Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),
-bom_Max(1),GameTime(60),ones_place(0),tens_place(6),Score(0),
+bom_Max(1),GameTime(5),ones_place(0),tens_place(6),Score(0),
 S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0)
 {
 	//X座標の設定
@@ -37,19 +37,34 @@ S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0)
 	enemy_count[HAPI] = 2;
 	enemy_count[KIN] = 1;
 
+	//フォント用変数の初期化
 	for (int i = 0; i < 10; i++)
 	{
 		Font[i] = NULL;
 	}
 
+	//リザルト画像用の変数の初期化
 	for (int i = 0; i < 4; i++)
 	{
-		Font_Sentence[i] = NULL;
+		Result_image[i] = NULL;
 	}
 
+	//UI画像用変数の初期化
 	for (int i = 0; i < 3; i++)
 	{
 		UI_image[i] = NULL;
+	}
+
+	//BGM用変数の初期化
+	for (int i = 0; i < 2; i++)
+	{
+		BGM[i] = NULL;
+	}
+
+	//SE用の初期化
+	for (int i = 0; i < 4; i++)
+	{
+		SE[i] = NULL;
 	}
 }
 
@@ -82,8 +97,20 @@ void Scene::Initialize()
 	LoadDivGraph("Resource/images/Score/Font_numbers.png", 10, 5, 2, 160, 214, Font);
 
 	//スコア評価のフォント画像
-	LoadDivGraph("Resource/images/Score/Font_Sentence.png", 4, 1, 4, 800, 330, Font_Sentence);
+	LoadDivGraph("Resource/images/Score/Font_Sentence.png", 4, 1, 4, 800, 330, Result_image);
 	
+	//BGM読み込み
+	BGM[0] = LoadSoundMem("Resource/Sound/BGM/BGM_arrows.wav");
+	BGM[1] = LoadSoundMem("Resource/Sound/BGM/BGM_timeup.wav");
+
+	//BGMの再生
+	PlaySoundMem(BGM[0], DX_PLAYTYPE_LOOP, TRUE);
+
+	//リザルトSE読み込み
+	SE[0] = LoadSoundMem("Resource/Sound/ResultSE/SE_bad.wav");
+	SE[1] = LoadSoundMem("Resource/Sound/ResultSE/SE_ok.wav");
+	SE[2] = LoadSoundMem("Resource/Sound/ResultSE/SE_good.wav");
+	SE[3] = LoadSoundMem("Resource/Sound/ResultSE/SE_perfect.wav");
 
 }
 
@@ -105,6 +132,8 @@ void Scene::Update()
 		
 	}
 
+	
+
 	//制限時間が０秒になったら終了
 	if (GameTime <= 0)
 	{
@@ -121,24 +150,31 @@ void Scene::Update()
 	//爆弾生成処理
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{
-		if (bom_Max > 0)
+		if (bom_Max > 0 && GameTime > 0)
 		{
 			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
 			bom_Max--;
 		}
 	}
-		
-		
+	
+	//弾の生成確率
+	float probability;
+
 	//敵の弾生成処理
 	for (int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->GetType() == HAKO)
 		{
-			if (GetRand(100) > 99)
+			probability = GameTime / 20;
+
+			if (count >= 59)
 			{
-				b = CreateObject<Bullet>(Vector2D(objects[i]->GetLocation()));
-				b->SetPlayer(p);
-				b->Initialize();
+				if (GetRand(10) < probability)
+				{
+					b = CreateObject<Bullet>(Vector2D(objects[i]->GetLocation()));
+					b->SetPlayer(p);
+					b->Initialize();
+				}
 			}
 		}
 	}
@@ -148,7 +184,6 @@ void Scene::Update()
 	//敵の生成処理
 	if (enemy_Max > 0 && GameTime <= 60)
 	{
-		
 		//ハネテキを生成する処理
 		if (enemy_count[HANE] > 0 && GetRand(100) < 50)
 		{
@@ -173,6 +208,7 @@ void Scene::Update()
 			enemy_Max--;
 		}
 
+		//金のテキを生成する処理
 		if (enemy_count[KIN] > 0 && GameTime < 30 - GetRand(10))
 		{
 			CreateObject<Kinteki>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
@@ -207,7 +243,11 @@ void Scene::Update()
 				if (type < EnemyType /*&& type != BOM && type != BLAST && type != BULLET*/)
 				{
 					enemy_Max++;
-					enemy_count[objects[i]->GetType()]++;
+					if (type != KIN)
+					{
+						enemy_count[type]++;
+					}
+					
 					objects.erase(objects.begin() + i);
 				}		
 			}
@@ -278,20 +318,24 @@ void Scene::Draw() const
 	{
 		if (3000 <= Score)
 		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[3], TRUE);
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
+			PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (1500 <= Score)
 		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[2], TRUE);
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
+			PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (1000 <= Score)
 		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[1], TRUE);
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
+			PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);
 		}
 		else if (1000 > Score)
 		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[0], TRUE);
-		}
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[0], TRUE);
+			PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);
+		}	
 	}
 	
 
@@ -307,6 +351,9 @@ void Scene::Draw() const
 //終了時処理
 void Scene::Finalize()
 {
+
+	StopSoundMem(BGM[0]);
+
 	//動的配列が空なら処理を終了する
 	if (objects.empty())
 	{
@@ -320,23 +367,7 @@ void Scene::Finalize()
 		delete obj;
 	}
 
-	if (3000 <= Score)
-	{
-		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[3], TRUE);
-	}
-	else if (1500 <= Score)
-	{
-		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[2], TRUE);
-	}
-	else if (1000 <= Score)
-	{
-		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[1], TRUE);
-	}
-	else if (1000 > Score)
-	{
-		DrawRotaGraphF(320, 220, 0.6, 0, Font_Sentence[0], TRUE);
-	}
-
+	PlaySoundMem(BGM[1], DX_PLAYTYPE_LOOP, TRUE);
 	//動的配列の解放
 	objects.clear();
 }
@@ -357,8 +388,4 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 		a->OnHitCollision(b);
 		b->OnHitCollision(a);
 	}
-		
-	
-	
 }
-

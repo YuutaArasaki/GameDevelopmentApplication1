@@ -21,7 +21,8 @@ void Hako::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
 
-	
+	//SE読み込み
+	SE = LoadSoundMem("Resource/Sound/SE/hakoteki.wav");
 
 	//エラーチェック
 	for (int i = 0; i < 2; i++)
@@ -140,7 +141,8 @@ void Hako::OnHitCollision(GameObject* hit_object)
 	if (hit_object->GetType() == BOM)
 	{
 		Hit = TRUE;
-	velocity = 0.0f;
+		velocity = 0.0f;
+		PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	
 }

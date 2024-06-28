@@ -18,6 +18,8 @@ void Hapi::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-2.png");
 
+	SE = LoadSoundMem("Resource/Sound/SE/ha-pi-.wav");
+
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
 	{
@@ -100,6 +102,7 @@ void Hapi::Draw() const
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		DrawRotaGraphF(location.x + 30, location.y - 30, 0.1, radian, Score_image, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else
@@ -131,6 +134,7 @@ void Hapi::OnHitCollision(GameObject* hit_object)
 	{
 		Hit = TRUE;
 		velocity = 0.0f;
+		PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 	}
 }
 

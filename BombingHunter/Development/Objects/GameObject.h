@@ -33,6 +33,7 @@ protected:
 	int count;				//フレームカウント
 	int Score_Point;		//各敵のスコア
 	int Score_image;		//敵を倒したときに表示するスコア画像
+	int SE;					//SE
 
 public:
 	GameObject();
@@ -66,6 +67,7 @@ public:
 	//テキの弾をトリパイロットの方向に飛ばす処理
 	Vector2D GetDirection(Vector2D location_p,Vector2D location_b);
 
+	//各敵のスコアを取得する処理
 	int GetScorePoint();
 	
 };

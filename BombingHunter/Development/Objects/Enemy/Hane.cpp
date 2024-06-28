@@ -21,7 +21,10 @@ void Enemy::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/haneteki/haneteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/haneteki/haneteki2.png");
 
+	
 	Score_image = LoadGraph("Resource/Images/Score/Score_Hane.png");
+
+	SE = LoadSoundMem("Resource/Sound/SE/haneteki.wav");
 
 	//エラーチェック
 	for (int i = 0; i < 10; i++)
@@ -72,7 +75,7 @@ void Enemy::Initialize()
 		flip_flag = TRUE;
 	}
 
-	Score_Point = 100;
+	Score_Point = 30;
 }
 
 //更新処理
@@ -107,7 +110,7 @@ void Enemy::Draw() const
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
-		DrawRotaGraphF(location.x + 40, location.y - 40, 0.1, radian, Score_image, TRUE);
+		/*DrawRotaGraphF(location.x + 30, location.y - 30, 0.1, radian, Score_image, TRUE);*/
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else
@@ -119,12 +122,12 @@ void Enemy::Draw() const
 	__super::Draw();
 
 	//デバック用
-#if _DEBUG
-	//当たり判定の可視化
-	Vector2D ul = location - (scale / 2.0f);
-	Vector2D br = location + (scale / 2.0f);
-	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
-#endif
+//#if _DEBUG
+//	//当たり判定の可視化
+//	Vector2D ul = location - (scale / 2.0f);
+//	Vector2D br = location + (scale / 2.0f);
+//	DrawBoxAA(ul.x, ul.y, br.x, br.y, GetColor(255, 0, 0), FALSE);
+//#endif
 
 }
 
@@ -133,6 +136,7 @@ void Enemy::Finalize()
 {
 	DeleteGraph(animation[0]);
 	DeleteGraph(animation[1]);
+	DeleteSoundMem(SE);
 }
 
 //当たり判定通知処理
@@ -142,6 +146,7 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 	{
 		Hit = TRUE;
 		velocity = 0.0f;
+		PlaySoundMem(SE,DX_PLAYTYPE_BACK, TRUE);
 	}
 }
 
@@ -149,7 +154,6 @@ void Enemy::OnHitCollision(GameObject* hit_object)
 void Enemy::Movement()
 {
 	location.x += velocity.x;
-
 }
 
 //アニメーション処理

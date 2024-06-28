@@ -23,13 +23,14 @@ private:
 	int ones_place;						//制限時間(一の位)
 	int tens_place;						//制限時間(十の位)
 	int UI_image[3];					//UI画像
-	int Font_Sentence[4];				//スコア評価文のフォント
-	int Score;
+	int Result_image[4];				//リザルトのフォント
+	int Score;							//スコア
 	int S_ones_place;					//スコア(一の位)
 	int S_tens_place;					//スコア(十の位)
 	int S_hundreds_place;				//スコア(百の位)
 	int S_thousands_place;				//スコア(千の位)
-	
+	int BGM[2];							//BGM
+	int SE[4];							//リザルトのSE
 
 public:
 	Scene();		//コンストラクタ
@@ -44,6 +45,8 @@ private:
 
 	//当たり判定チェック処理
 	void HitCheckObject(GameObject* a, GameObject* b);
+
+	/*void SoundBGM();*/
 
 	//オブジェクト生成処理
 	template <class T>

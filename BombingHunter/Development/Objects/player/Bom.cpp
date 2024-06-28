@@ -16,13 +16,19 @@ Bom::~Bom()
 
 void Bom::Initialize()
 {
+	//ƒ{ƒ€‚Ì‰æ‘œ“Ç‚İ‚İ
 	image = LoadGraph("Resource/Images/bom/bom.png");
 
+	//SE“Ç‚İ‚İ
+	SE = LoadSoundMem("Resource/Sound/SE/pan.wav");
+	
 
-		if (image == -1)
-			{
-				throw("”š’e‚Ì‰æ‘œ‚ª‚ ‚è‚Ü‚¹‚ñ\n");
-			}
+	PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
+
+	if (image == -1)
+	{
+		throw("”š’e‚Ì‰æ‘œ‚ª‚ ‚è‚Ü‚¹‚ñ\n");
+	}
 
 	
 	object_type = BOM;
@@ -109,10 +115,4 @@ void Bom::Movement()
 		location.x += velocity.x;
 	}
 	
-}
-
-
-Vector2D Bom::SetLocation()
-{
-	return location;
 }

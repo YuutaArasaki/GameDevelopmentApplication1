@@ -22,6 +22,9 @@ void Kinteki::Initialize()
 	animation[3] = LoadGraph("Resource/Images/teki/kinnoteki/kinnoteki4.png");
 	animation[4] = LoadGraph("Resource/Images/teki/kinnoteki/kinnoteki5.png");
 
+	//SE読み込み
+	SE = LoadSoundMem("Resource/Sound/SE/kinteki.wav");
+
 	//エラーチェック
 	if (animation[0] == -1 || animation[1] == -1)
 	{
@@ -127,6 +130,7 @@ void Kinteki::OnHitCollision(GameObject* hit_object)
 	{
 		Hit = TRUE;
 		velocity = 0.0f;
+		PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 	}
 }
 

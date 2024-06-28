@@ -53,6 +53,7 @@ void Bullet::Initialize()
 		velocity = GetDirection(player_location, this->location);
 	}
 
+	SE = LoadSoundMem("Resource/Sound/SE/bullet.wav");
 }
 
 //XVˆ—
@@ -95,6 +96,7 @@ void Bullet::OnHitCollision(GameObject* hit_object)
 	if (hit_object->GetType() == PLAYER)
 	{
 		Hit = TRUE;
+		PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 	}
 	
 }
