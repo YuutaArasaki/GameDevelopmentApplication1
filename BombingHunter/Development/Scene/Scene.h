@@ -24,15 +24,15 @@ private:
 	int UI_image[3];					//UI画像
 	int Result_image[5];				//リザルトのフォント
 	int Score;							//スコア
+	int hight_Score;					//ハイスコア
 	int S_ones_place[2];					//スコア(一の位)
 	int S_tens_place[2];					//スコア(十の位)
 	int S_hundreds_place[2];				//スコア(百の位)
 	int S_thousands_place[2];				//スコア(千の位)
 	int BGM[2];							//BGM
 	int SE[4];							//リザルトのSE
-	int Result_flag;					//
-	int hight_Score;
-	bool restart;
+	int Result_flag;					//リザルトでの条件判定フラグ
+	bool restart;						//リスタートの判定
 
 public:
 	Scene();		//コンストラクタ
@@ -44,9 +44,7 @@ public:
 	void Finalize();	//終了処理
 
 	void ResultDraw();	//リザルトシーンでの画像描画とSE再生
-	void Hight_Score();
-	bool Restart();
-
+	
 private:
 
 	//当たり判定チェック処理

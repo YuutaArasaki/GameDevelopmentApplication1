@@ -34,7 +34,7 @@ protected:
 	int Score_Point;		//各敵のスコア
 	int Score_image;		//敵を倒したときに表示するスコア画像
 	int SE;					//SE
-	bool Time_minus;
+	bool Time_minus;		//時間を減らすかどうかの判定
 
 public:
 	GameObject();
@@ -71,6 +71,7 @@ public:
 	//各敵のスコアを取得する処理
 	int GetScorePoint();
 	
+	//時間を減らすかどうかの判定取得
 	bool TimeMinus();
 };
 

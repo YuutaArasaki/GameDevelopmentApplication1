@@ -18,6 +18,9 @@ void Hapi::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/ha-pi-/ha-pi-2.png");
 
+	//スコア画像の描画
+	Score_image = LoadGraph("Resource/Images/Score/Score_Hapi.png");
+
 	SE = LoadSoundMem("Resource/Sound/SE/ha-pi-.wav");
 
 	//エラーチェック
@@ -33,7 +36,7 @@ void Hapi::Initialize()
 	radian = 0.0f;
 
 	//当たり判定の大きさを設定
-	scale = 64.0f;
+	scale = 60.0f;
 
 	//初期画像の設定
 	image = animation[0];
@@ -66,6 +69,7 @@ void Hapi::Initialize()
 		flip_flag = TRUE;
 	}
 
+	//ハーピーのスコア
 	Score_Point = -100;
 }
 
@@ -171,13 +175,13 @@ void Hapi::AnimationControl()
 	if (Hit == TRUE)
 	{
 
-		if (animation_count == 15 || animation_count == 45)
+		if (animation_count == 10 || animation_count == 30 || animation_count == 50)
 		{
 			location.x += 4;
 			location.y += 0.5;
 		}
 
-		if (animation_count == 30 || animation_count == 60)
+		if (animation_count == 20 || animation_count == 40 || animation_count == 60)
 		{
 			location.x += -4;
 			location.y += 0.5;

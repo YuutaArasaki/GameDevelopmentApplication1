@@ -15,7 +15,8 @@ GameObject::GameObject() :
 	count(0),
 	Score_Point(0),
 	SE(NULL),
-	Time_minus(FALSE)
+	Time_minus(FALSE),
+	Score_image(NULL)
 {
 }
 

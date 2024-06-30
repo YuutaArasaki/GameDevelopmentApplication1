@@ -21,6 +21,9 @@ void Hako::Initialize()
 	animation[0] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki1.png");
 	animation[1] = LoadGraph("Resource/Images/teki/hakoteki/hakoteki2.png");
 
+	//スコア画像描画
+	Score_image = LoadGraph("Resource/Images/Score/Score_Hako.png");
+
 	//SE読み込み
 	SE = LoadSoundMem("Resource/Sound/SE/hakoteki.wav");
 
@@ -40,7 +43,7 @@ void Hako::Initialize()
 	radian = 0.0f;
 
 	//当たり判定の大きさを設定
-	scale = 40.0f;
+	scale = 50.0f;
 
 	//初期画像の設定
 	image = animation[0];
@@ -73,6 +76,7 @@ void Hako::Initialize()
 		flip_flag = TRUE;
 	}
 
+	//ハコテキのスコア
 	Score_Point = 200;
 }
 
@@ -111,6 +115,7 @@ void Hako::Draw() const
 
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		DrawRotaGraphF(location.x + 20, location.y - 20, 0.1, radian, Score_image, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else
@@ -180,13 +185,13 @@ void Hako::AnimationControl()
 	if (Hit == TRUE)
 	{
 
-		if (animation_count == 15 || animation_count == 45)
+		if (animation_count == 10 || animation_count == 30 || animation_count == 50)
 		{
 			location.x += 4;
 			location.y += 0.5;
 		}
 
-		if (animation_count == 30 || animation_count == 60)
+		if (animation_count == 20 || animation_count == 40 || animation_count == 60)
 		{
 			location.x += -4;
 			location.y += 0.5;

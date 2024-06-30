@@ -22,6 +22,8 @@ void Kinteki::Initialize()
 	animation[3] = LoadGraph("Resource/Images/teki/kinnoteki/kinnoteki4.png");
 	animation[4] = LoadGraph("Resource/Images/teki/kinnoteki/kinnoteki5.png");
 
+	//スコア画像読み込み
+	Score_image = LoadGraph("Resource/Images/Score/Score_Kin.png");
 	//SE読み込み
 	SE = LoadSoundMem("Resource/Sound/SE/kinteki.wav");
 
@@ -63,6 +65,7 @@ void Kinteki::Initialize()
 		flip_flag = TRUE;
 	}
 
+	//金のテキのスコア
 	Score_Point = 1500;
 }
 
@@ -99,6 +102,7 @@ void Kinteki::Draw() const
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, alpha);
 		DrawRotaGraphF(location.x, location.y, 0.6, radian, image, TRUE, flip_flag);
+		DrawRotaGraphF(location.x + 30, location.y - 30, 0.1, radian, Score_image, TRUE);
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 	else
@@ -167,13 +171,13 @@ void Kinteki::AnimationControl()
 	//Bomに当たった時のアニメーション
 	if (Hit == TRUE)
 	{
-		if (animation_count == 15 || animation_count == 45)
+		if (animation_count == 10 || animation_count == 30 || animation_count == 50)
 		{
 			location.x += 4;
 			location.y += 0.5;
 		}
 
-		if (animation_count == 30 || animation_count == 60)
+		if (animation_count == 20 || animation_count == 40 || animation_count == 60)
 		{
 			location.x += -4;
 			location.y += 0.5;

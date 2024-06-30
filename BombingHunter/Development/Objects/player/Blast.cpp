@@ -25,8 +25,10 @@ void Blast::Initialize()
 	//SE読み込み
 	SE = LoadSoundMem("Resource/Sound/SE/explosion.wav");
 
+	//爆風のSE再生
 	PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 
+	//エラーチェック
 	for (int i = 0; i < 3; i++)
 	{
 		if (blast_image[i] == -1)
@@ -35,8 +37,10 @@ void Blast::Initialize()
 		}
 	}
 
+	//爆風の初期画像設定
 	image = blast_image[0];
 
+	//タイプ
 	object_type = BLAST;
 }
 

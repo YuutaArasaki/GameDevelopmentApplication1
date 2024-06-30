@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "DxLib.h"
 
+//コンストラクタ
 Bullet::Bullet() : animation_count(0),player(0)
 {
 	for (int i = 0; i < 4; i++)
@@ -9,7 +10,7 @@ Bullet::Bullet() : animation_count(0),player(0)
 	}
 }
 
-
+//デストラクタ
 Bullet::~Bullet()
 {
 
@@ -18,6 +19,7 @@ Bullet::~Bullet()
 //初期化処理
 void Bullet::Initialize()
 {
+	//弾の画像読み込み
 	Bullet_image[0] = LoadGraph("Resource/Images/teki/hakoteki/Bullet1.png");
 	Bullet_image[1] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff1.png");
 	Bullet_image[2] = LoadGraph("Resource/Images/teki/hakoteki/Bulleteff2.png");

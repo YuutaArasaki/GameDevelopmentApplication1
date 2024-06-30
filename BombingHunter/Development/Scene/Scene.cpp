@@ -14,9 +14,9 @@
 
 
 
+
 Player* p;
 Bullet* b;
-Scene* s;
 
 //コンストラクタ
 Scene::Scene() : objects(), back_scene(),count(0),enemy_max(10),
@@ -88,7 +88,7 @@ Scene::~Scene()
 //初期化処理
 void Scene::Initialize()
 {
-	GameTime = 10;
+	GameTime = 60;
 
 	//プレイヤーを生成する
 	p=CreateObject<Player>(Vector2D(320.0f, 50.0f));
@@ -137,7 +137,7 @@ void Scene::Initialize()
 	SE[3] = LoadSoundMem("Resource/Sound/ResultSE/SE_perfect.wav");
 
 
-	//スコアに沿ってフォントを変える為の処理
+	//ハイスコアに沿ってフォントを変える為の処理
 	S_ones_place[1] = hight_Score % 10;
 	S_tens_place[1] = hight_Score % 100 / 10;
 	S_hundreds_place[1] = hight_Score % 1000 / 100;
@@ -190,7 +190,7 @@ void Scene::Update()
 	}
 	
 	//弾の生成確率
-	float probability;
+	int  probability;
 
 	//敵の弾生成処理
 	for (int i = 0; i < objects.size(); i++)
@@ -212,6 +212,7 @@ void Scene::Update()
 			}
 		}
 
+		//敵の弾に当たったら時間を減らす処理
 		if (objects[i]->TimeMinus() == TRUE && type == BULLET)
 		{
 			GameTime += GameTime / 12 * -1;
@@ -248,7 +249,7 @@ void Scene::Update()
 		}
 
 		//金のテキを生成する処理
-		if (enemy_count[KIN] > 0 && GameTime < 30 - GetRand(10))
+		if (enemy_count[KIN] > 0 && GameTime < 30 - GetRand(15))
 		{
 			CreateObject<Kinteki>(Vector2D(Location_X[GetRand(1)],400.0f));
 			enemy_count[KIN]--;
@@ -297,7 +298,7 @@ void Scene::Update()
 				int type = objects[i]->GetType();
 
 				//テキを消す処理
-				if (type < EnemyType/*!= BOM && type != BLAST && type != BULLET*/)
+				if (type < EnemyType)
 				{
 					Score += objects[i]->GetScorePoint();
 					if (Score <= 0)
@@ -393,8 +394,10 @@ void Scene::Finalize()
 		delete obj;
 	}
 
+	//終了時のBGM
 	PlaySoundMem(BGM[1], DX_PLAYTYPE_BACK, TRUE);
 	
+	//ハイスコア更新時の値代入
 	if (Score > hight_Score)
 	{
 		hight_Score = Score;
@@ -422,6 +425,7 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	}
 }
 
+//リザルトシーンでの画像描画とSE再生
 void Scene::ResultDraw()
 {
 	
@@ -481,6 +485,7 @@ void Scene::ResultDraw()
 			
 		}	
 
+		//リスタート処理
 		if (Result_flag == 2)
 		{
 			SetFontSize(40);
@@ -494,28 +499,5 @@ void Scene::ResultDraw()
 				Initialize();
 			}
 		}
-		
-
 	}
-}
-
-void Scene::Hight_Score()
-{
-	
-
-	//ハイスコア描画
-	DrawRotaGraphF(385, 460, 1.5, 0, UI_image[2], TRUE);
-	//一の位
-	DrawExtendGraph(520, 450, 540, 475, Font[S_ones_place[1]], TRUE);
-	//十の位
-	DrawExtendGraph(495, 450, 515, 475, Font[S_tens_place[1]], TRUE);
-	//百の位
-	DrawExtendGraph(470, 450, 490, 475, Font[S_hundreds_place[1]], TRUE);
-	//千の位
-	DrawExtendGraph(445, 450, 465, 475, Font[S_thousands_place[1]], TRUE);
-}
-
-bool Scene::Restart()
-{
-	return restart;
 }

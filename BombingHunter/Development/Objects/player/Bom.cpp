@@ -22,7 +22,7 @@ void Bom::Initialize()
 	//SE“Ç‚İ‚İ
 	SE = LoadSoundMem("Resource/Sound/SE/pan.wav");
 	
-
+	//ƒ{ƒ€”­Ë‚ÌSEÄ¶
 	PlaySoundMem(SE, DX_PLAYTYPE_BACK, TRUE);
 
 	if (image == -1)
