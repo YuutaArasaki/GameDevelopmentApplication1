@@ -15,12 +15,13 @@
 
 Player* p;
 Bullet* b;
+ResultScene r;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(0),enemy_Max(10),
+Scene::Scene() : objects(), back_scene(), count(0),enemy_max(10),
 bom_Max(1),GameTime(5),ones_place(0),tens_place(6),Score(0),
 S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0),
-result_count()
+Soundflag(0)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
@@ -187,14 +188,14 @@ void Scene::Update()
 
 
 	//敵の生成処理
-	if (enemy_Max > 0 && GameTime <= 60)
+	if (enemy_max > 0 && GameTime <= 60)
 	{
 		//ハネテキを生成する処理
 		if (enemy_count[HANE] > 0 && GetRand(100) < 50)
 		{
 			CreateObject<Enemy>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(3)]));
 			enemy_count[HANE]--;
-			enemy_Max--;
+			enemy_max--;
 		}
 		
 		//ハコテキを生成する処理
@@ -202,7 +203,7 @@ void Scene::Update()
 		{
 			CreateObject<Hako>(Vector2D(Location_X[GetRand(1)], Location_Y[4]));
 			enemy_count[HAKO]--;
-			enemy_Max--;
+			enemy_max--;
 		}
 		
 		//ハーピーを生成する処理
@@ -210,7 +211,7 @@ void Scene::Update()
 		{
 			CreateObject<Hapi>(Vector2D(Location_X[GetRand(1)], Location_Y[GetRand(2)]));
 			enemy_count[HAPI]--;
-			enemy_Max--;
+			enemy_max--;
 		}
 
 		//金のテキを生成する処理
@@ -218,7 +219,7 @@ void Scene::Update()
 		{
 			CreateObject<Kinteki>(Vector2D(Location_X[GetRand(1)],400.0f));
 			enemy_count[KIN]--;
-			enemy_Max--;
+			enemy_max--;
 		}
 	
 	}
@@ -247,7 +248,7 @@ void Scene::Update()
 				int type = objects[i]->GetType();
 				if (type < EnemyType /*&& type != BOM && type != BLAST && type != BULLET*/)
 				{
-					enemy_Max++;
+					enemy_max++;
 					if (type != KIN)
 					{
 						enemy_count[type]++;
@@ -270,7 +271,7 @@ void Scene::Update()
 					{
 						Score = 0;
 					}
-					enemy_Max++;
+					enemy_max++;
 					enemy_count[type]++;
 				}
 				else if (type == BOM)	//爆弾がテキや画面下に触れたとき、その場所に爆風を生成する処理
@@ -295,6 +296,8 @@ void Scene::Update()
 //描画処理
 void Scene::Draw() const
 {
+	int f;
+
 	//背景画像描画処理
 	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
 
@@ -318,38 +321,39 @@ void Scene::Draw() const
 	//千の位
 	DrawExtendGraph(235, 445, 265, 480, Font[S_thousands_place], TRUE);	
 
-
-
-	if (GameTime <= 0)
-	{
-		if (3000 <= Score)
-		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[4], TRUE);
-			/*PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);*/
-		}
-		else if (1500 <= Score)
-		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
-			/*PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);*/
-		}
-		else if (1000 <= Score)
-		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
-			/*PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);*/
-		}
-		else if (1000 > Score)
-		{
-			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
-			/*PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);*/
-		}
-	}
-
+	//if (GameTime <= 0)
+	//{
+	//	/*f++;*/
+	//	if (3000 <= Score)
+	//	{
+	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[4], TRUE);
+	//		/*PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);*/
+	//	}
+	//	else if (1500 <= Score)
+	//	{
+	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
+	//		/*PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);*/
+	//	}
+	//	else if (1000 <= Score)
+	//	{
+	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
+	//		/*PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);*/
+	//	}
+	//	else if (1000 > Score)
+	//	{
+	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
+	//		PlaySoundMem(SE[0], DX_PLAYTYPE_BACK, TRUE);
+	//		
+	//	}
+	//}
 
 	//シーンに存在するオブジェクトの描画処理
 	for (GameObject* obj : objects)
 	{
 		obj->Draw();
 	}
+
+	
 }
 
 
@@ -372,7 +376,7 @@ void Scene::Finalize()
 		delete obj;
 	}
 
-	PlaySoundMem(BGM[1], DX_PLAYTYPE_LOOP, TRUE);
+	PlaySoundMem(BGM[1], DX_PLAYTYPE_BACK, TRUE);
 
 	//動的配列の解放
 	objects.clear();
@@ -432,8 +436,7 @@ void Scene::ResultDraw(int count)
 	/*}*/
 }
 
-int Scene::Result_Count()
+int Scene::GetTime()
 {
-	result_count++;
-	return result_count;
+	return GameTime;
 }

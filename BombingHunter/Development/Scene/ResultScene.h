@@ -1,5 +1,6 @@
 #pragma once
 #include "../Objects/GameObject.h"
+#include "Scene.h"
 
 typedef enum {
 	BAD,
@@ -12,6 +13,7 @@ typedef enum {
 class ResultScene : public GameObject
 {
 public:
+	Scene* scene;
 	int Result_image[5];
 	int SE[4];
 	int Sound_flag;

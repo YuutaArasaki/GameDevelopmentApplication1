@@ -27,13 +27,19 @@ void ResultScene::Initialize()
 	SE[1] = LoadSoundMem("Resource/Sound/ResultSE/SE_ok.wav");
 	SE[2] = LoadSoundMem("Resource/Sound/ResultSE/SE_good.wav");
 	SE[3] = LoadSoundMem("Resource/Sound/ResultSE/SE_perfect.wav");
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (SE[i] == -1)
+		{
+			throw ("‰¹Œ¹‚ª‚ ‚è‚Ü‚¹‚ñ\n");
+		}
+	}
 }
 
 void ResultScene::Draw()
 {
-	if (object_type = BAD)
-	{
-		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
-		PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);
-	}
+	DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
+	PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);
+
 }

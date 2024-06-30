@@ -6,18 +6,16 @@
 #include "../Utility/Vector2D.h"
 
 
-
 class Scene
 {
 private:
 	std::vector<GameObject*> objects;	
 	int back_scene;						//背景画像
 	int count;							//ゲームのフレームカウント
-	int result_count;		
 	float Location_X[2];				//X座標
 	float Location_Y[5];				//Y座標
 	int enemy_count[4];					//各敵ごとの最大出現数
-	int enemy_Max;						//敵の最大出現数
+	int enemy_max;						//敵の最大出現数
 	int bom_Max;						//爆弾の出せる数
 	int GameTime;						//ゲームの制限時間
 	int Font[10];						//時間やスコアのフォント画像
@@ -32,6 +30,7 @@ private:
 	int S_thousands_place;				//スコア(千の位)
 	int BGM[2];							//BGM
 	int SE[4];							//リザルトのSE
+	int Soundflag;
 
 public:
 	Scene();		//コンストラクタ
@@ -43,7 +42,7 @@ public:
 	void Finalize();	//終了処理
 
 	void ResultDraw(int count);
-	int Result_Count();
+	int GetTime();
 
 private:
 

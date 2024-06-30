@@ -13,7 +13,7 @@ typedef enum
 	PLAYER,
 	BLAST,
 	BULLET,
-	Object_Type, 
+	Object_Type,
 }TYPE;
  
 
