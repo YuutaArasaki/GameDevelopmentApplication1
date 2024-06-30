@@ -10,6 +10,7 @@ class Bullet : public GameObject
 	int animation_count;		//弾のアニメーションフレームカウント
 	Vector2D velocity;			//弾の移動量
 	Vector2D player_location;	//プレイヤー（トリパイロット）の位置座標
+	
 
 
 public:

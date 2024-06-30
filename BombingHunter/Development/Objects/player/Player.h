@@ -1,14 +1,16 @@
 #pragma once
 
 #include "../GameObject.h"
+#include "../../Scene/Scene.h"
 
 class Player  :  public GameObject
 {
 private:
+	Scene* scene;
 	int animation[2];		//アニメーション画像
 	int animation_count;	//アニメーション時間
 	int filp_flag;			//反転フラグ
-	int boomimage;
+	int time;
 	
 
 
@@ -25,6 +27,7 @@ public:
 	virtual void OnHitCollision(GameObject* hit_object) override;
 	
 	Vector2D GetLocation();
+	
 
 private:
 	//移動処理
@@ -34,6 +37,6 @@ private:
 
 	
 
-	/*void PlayerBoom();*/
+	
 };
 

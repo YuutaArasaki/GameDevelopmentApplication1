@@ -51,6 +51,8 @@ _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 	
 			//ƒV[ƒ“‚Ì•`‰æˆ—
 			scene->Draw();
+
+			scene->ResultDraw();
 			
 			//— ‰æ–Ê‚Ì“à—e‚ð•\‰æ–Ê‚É”½‰f‚·‚é
 			ScreenFlip();

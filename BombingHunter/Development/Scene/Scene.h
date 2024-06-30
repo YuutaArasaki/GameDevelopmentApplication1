@@ -16,7 +16,7 @@ private:
 	float Location_Y[5];				//Y座標
 	int enemy_count[4];					//各敵ごとの最大出現数
 	int enemy_max;						//敵の最大出現数
-	int bom_Max;						//爆弾の出せる数
+	int bom_max;						//爆弾の出せる数
 	int GameTime;						//ゲームの制限時間
 	int Font[10];						//時間やスコアのフォント画像
 	int ones_place;						//制限時間(一の位)
@@ -24,13 +24,15 @@ private:
 	int UI_image[3];					//UI画像
 	int Result_image[5];				//リザルトのフォント
 	int Score;							//スコア
-	int S_ones_place;					//スコア(一の位)
-	int S_tens_place;					//スコア(十の位)
-	int S_hundreds_place;				//スコア(百の位)
-	int S_thousands_place;				//スコア(千の位)
+	int S_ones_place[2];					//スコア(一の位)
+	int S_tens_place[2];					//スコア(十の位)
+	int S_hundreds_place[2];				//スコア(百の位)
+	int S_thousands_place[2];				//スコア(千の位)
 	int BGM[2];							//BGM
 	int SE[4];							//リザルトのSE
-	int Soundflag;
+	int Result_flag;					//
+	int hight_Score;
+	bool restart;
 
 public:
 	Scene();		//コンストラクタ
@@ -41,16 +43,16 @@ public:
 	void Draw() const;	//描画処理
 	void Finalize();	//終了処理
 
-	void ResultDraw(int count);
-	int GetTime();
+	void ResultDraw();	//リザルトシーンでの画像描画とSE再生
+	void Hight_Score();
+	bool Restart();
 
 private:
 
 	//当たり判定チェック処理
 	void HitCheckObject(GameObject* a, GameObject* b);
 
-	/*void SoundBGM();*/
-
+	
 	//オブジェクト生成処理
 	template <class T>
 	T* CreateObject(const Vector2D& location)

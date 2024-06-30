@@ -40,6 +40,6 @@ void ResultScene::Initialize()
 void ResultScene::Draw()
 {
 	DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
-	PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);
+	/*PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);*/
 
 }

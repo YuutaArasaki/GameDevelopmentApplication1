@@ -140,6 +140,7 @@ void Bullet::Animation()
 		else if (image == Bullet_image[3])
 		{
 			delete_object = 1;
+			Time_minus = TRUE;
 		}
 	}
 }

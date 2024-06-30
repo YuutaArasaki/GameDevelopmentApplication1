@@ -4,7 +4,7 @@
 #include "DxLib.h"
 
 //コンストラクタ
-Player::Player() : animation_count(0), filp_flag(FALSE), boomimage()
+Player::Player() : animation_count(0), filp_flag(FALSE)
 {
 	animation[0] = NULL;
 	animation[1] = NULL;
@@ -22,10 +22,9 @@ void Player::Initialize()
 	//画像の読み込み
 	animation[0] = LoadGraph("Resource/Images/Tri_pilot1.png");
 	animation[1] = LoadGraph("Resource/Images/Tri_pilot2.png");
-	boomimage = LoadGraph("Resource/Images/bom/bom.png");
 
 	//エラーチェック
-	if (animation[0] == -1 || animation[1] == -1 || boomimage == -1)
+	if (animation[0] == -1 || animation[1] == -1)
 	{
 		throw("トリパイロットの画像がありません\n");
 	}
@@ -40,6 +39,7 @@ void Player::Initialize()
 
 	//初期画像の設定
 	image = animation[0];
+	
 }
 
 //更新処理
@@ -49,8 +49,6 @@ void Player::Update()
 	Movement();
 	//アニメーション制御
 	AnimeControl();
-
-	GetLocation();
 }
 
 //描画処理
@@ -143,16 +141,3 @@ Vector2D Player::GetLocation()
 	return location;
 }
 
-//void Player::PlayerBoom()
-//{
-//	int Boomlocation = location.y;
-//
-//	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
-//	{
-//		DrawFormatString(320, 240, GetColor(255, 255, 255), "ボムの座標%d\n", Boomlocation, TRUE);
-//		DrawRotaGraph(location.x, Boomlocation, 1.0, radian, boomimage, TRUE, filp_flag);
-//	}
-//
-//	Boomlocation += -1.0f;
-//
-//}

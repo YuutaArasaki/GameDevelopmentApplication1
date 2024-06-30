@@ -14,7 +14,8 @@ GameObject::GameObject() :
 	Hit(FALSE),
 	count(0),
 	Score_Point(0),
-	SE(NULL)
+	SE(NULL),
+	Time_minus(FALSE)
 {
 }
 
@@ -114,3 +115,7 @@ int GameObject::GetScorePoint()
 	return Score_Point;
 }
 
+bool GameObject::TimeMinus()
+{
+	return Time_minus;
+}

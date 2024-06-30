@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "DxLib.h"
 
+
 #include "../Objects/player/Player.h"
 #include "../Objects/player/Bom.h"
 #include "../Objects/player/Blast.h"
@@ -10,35 +11,33 @@
 #include "../Objects/Enemy/Hako.h"
 #include "../Objects/Enemy/Kinteki.h"
 #include "../Objects/Enemy/Bullet.h"
-#include "ResultScene.h"
+
 
 
 Player* p;
 Bullet* b;
-ResultScene r;
+Scene* s;
 
 //コンストラクタ
-Scene::Scene() : objects(), back_scene(), count(0),enemy_max(10),
-bom_Max(1),GameTime(5),ones_place(0),tens_place(6),Score(0),
-S_ones_place(0),S_tens_place(0),S_hundreds_place(0),S_thousands_place(0),
-Soundflag(0)
+Scene::Scene() : objects(), back_scene(),count(0),enemy_max(10),
+bom_max(1),ones_place(0),tens_place(6),Score(0),GameTime(0),
+Result_flag(0),hight_Score(0),restart(false)
 {
 	//X座標の設定
 	Location_X[0] = 0.0f;
 	Location_X[1] = 640.0f;
 
 	//Y座標の設定
-	Location_Y[0] = 340.0f;
+	Location_Y[0] = 320.0f;
 	Location_Y[1] = 280.0f;
 	Location_Y[2] = 220.0f;
 	Location_Y[3] = 140.0f;
-	Location_Y[4] = 340.0f;
+	Location_Y[4] = 360.0f;
 
-	//各敵の最大出現数
-	enemy_count[HANE] = 5;
-	enemy_count[HAKO] = 2;
-	enemy_count[HAPI] = 2;
-	enemy_count[KIN] = 1;
+	for (int i = 0; i < 4; i++)
+	{
+		enemy_count[i] = 0;
+	}
 
 	//フォント用変数の初期化
 	for (int i = 0; i < 10; i++)
@@ -69,6 +68,14 @@ Soundflag(0)
 	{
 		SE[i] = NULL;
 	}
+
+	for (int i = 0; i < 2; i++)
+	{
+		S_ones_place[i] = 0;
+		S_tens_place[i] = 0;
+		S_hundreds_place[i] = 0;
+		S_thousands_place[i] = 0;
+	}
 }
 
 //デストラクタ
@@ -81,8 +88,22 @@ Scene::~Scene()
 //初期化処理
 void Scene::Initialize()
 {
+	GameTime = 10;
+
 	//プレイヤーを生成する
 	p=CreateObject<Player>(Vector2D(320.0f, 50.0f));
+
+	//各敵の最大出現数
+	enemy_count[HANE] = 5;
+	enemy_count[HAKO] = 2;
+	enemy_count[HAPI] = 2;
+	enemy_count[KIN] = 1;
+
+	enemy_max = 10;
+
+	Score = 0;
+
+	bom_max = 1;
 	
 	//背景画像
 	back_scene = LoadGraph("Resource/images/backscene.png");
@@ -115,12 +136,22 @@ void Scene::Initialize()
 	SE[2] = LoadSoundMem("Resource/Sound/ResultSE/SE_good.wav");
 	SE[3] = LoadSoundMem("Resource/Sound/ResultSE/SE_perfect.wav");
 
+
+	//スコアに沿ってフォントを変える為の処理
+	S_ones_place[1] = hight_Score % 10;
+	S_tens_place[1] = hight_Score % 100 / 10;
+	S_hundreds_place[1] = hight_Score % 1000 / 100;
+	S_thousands_place[1] = hight_Score % 10000 / 1000;
+
+	Result_flag = 0;
+
+	restart = false;
+
 }
 
 //更新処理
 void Scene::Update()
 {
-
 	//制限時間カウント処理
 	count++;
 	if (count >= 60)
@@ -135,17 +166,12 @@ void Scene::Update()
 		
 	}
 
-	
 
 	//制限時間が０秒になったら終了
 	if (GameTime <= 0)
 	{
 		Finalize();
 	}
-
-
-	
-	
 
 	//シーンに存在するオブジェクトの更新処理
 	for (GameObject* obj : objects)
@@ -156,10 +182,10 @@ void Scene::Update()
 	//爆弾生成処理
 	if (InputControl::GetKeyDown(KEY_INPUT_SPACE))
 	{
-		if (bom_Max > 0 && GameTime > 0)
+		if (bom_max > 0 && GameTime > 0)
 		{
 			CreateObject<Bom>(Vector2D(objects[0]->GetLocation()));
-			bom_Max--;
+			bom_max--;
 		}
 	}
 	
@@ -169,7 +195,9 @@ void Scene::Update()
 	//敵の弾生成処理
 	for (int i = 0; i < objects.size(); i++)
 	{
-		if (objects[i]->GetType() == HAKO)
+		int type = objects[i]->GetType();
+
+		if (type == HAKO)
 		{
 			probability = GameTime / 20;
 
@@ -183,12 +211,17 @@ void Scene::Update()
 				}
 			}
 		}
+
+		if (objects[i]->TimeMinus() == TRUE && type == BULLET)
+		{
+			GameTime += GameTime / 12 * -1;
+		}
 	}
 		
 
 
 	//敵の生成処理
-	if (enemy_max > 0 && GameTime <= 60)
+	if (enemy_max > 0 && GameTime > 0)
 	{
 		//ハネテキを生成する処理
 		if (enemy_count[HANE] > 0 && GetRand(100) < 50)
@@ -246,7 +279,7 @@ void Scene::Update()
 			if ((objects[i]->GetLocation().x < 0.0f) || (objects[i]->GetLocation().x > 640.0f))
 			{
 				int type = objects[i]->GetType();
-				if (type < EnemyType /*&& type != BOM && type != BLAST && type != BULLET*/)
+				if (type < EnemyType)
 				{
 					enemy_max++;
 					if (type != KIN)
@@ -264,7 +297,7 @@ void Scene::Update()
 				int type = objects[i]->GetType();
 
 				//テキを消す処理
-				if (type != BOM && type != BLAST && type != BULLET)
+				if (type < EnemyType/*!= BOM && type != BLAST && type != BULLET*/)
 				{
 					Score += objects[i]->GetScorePoint();
 					if (Score <= 0)
@@ -277,7 +310,7 @@ void Scene::Update()
 				else if (type == BOM)	//爆弾がテキや画面下に触れたとき、その場所に爆風を生成する処理
 				{
 					CreateObject<Blast>(objects[i]->GetLocation());
-					bom_Max++;
+					bom_max++;
 				}
 	
 				objects.erase(objects.begin() + i);
@@ -285,18 +318,16 @@ void Scene::Update()
 		}
 
 		//スコアに沿ってフォントを変える為の処理
-		S_ones_place = Score % 10;
-		S_tens_place = Score % 100 / 10;
-		S_hundreds_place = Score % 1000 / 100;
-		S_thousands_place = Score % 10000 / 1000;
+		S_ones_place[0] = Score % 10;
+		S_tens_place[0] = Score % 100 / 10;
+		S_hundreds_place[0] = Score % 1000 / 100;
+		S_thousands_place[0] = Score % 10000 / 1000;
 
-	
 }
 
 //描画処理
 void Scene::Draw() const
 {
-	int f;
 
 	//背景画像描画処理
 	DrawRotaGraphF(320, 220, 0.73, 0, back_scene, TRUE);
@@ -311,42 +342,28 @@ void Scene::Draw() const
 	DrawExtendGraph(55, 445, 85, 480, Font[tens_place], TRUE);
 
 	//スコア描画処理
-	DrawRotaGraphF(190, 460, 1.7, 0, UI_image[1], TRUE);
+	DrawRotaGraphF(170, 460, 1.5, 0, UI_image[1], TRUE);
 	//一の位
-	DrawExtendGraph(325, 445, 355, 480, Font[S_ones_place], TRUE);
+	DrawExtendGraph(285, 450, 305, 475, Font[S_ones_place[0]], TRUE);
 	//十の位
-	DrawExtendGraph(295, 445, 325, 480, Font[S_tens_place], TRUE);
+	DrawExtendGraph(260, 450, 280, 475, Font[S_tens_place[0]], TRUE);
 	//百の位
-	DrawExtendGraph(265, 445, 295, 480, Font[S_hundreds_place], TRUE);
+	DrawExtendGraph(235, 450, 255, 475, Font[S_hundreds_place[0]], TRUE);
 	//千の位
-	DrawExtendGraph(235, 445, 265, 480, Font[S_thousands_place], TRUE);	
+	DrawExtendGraph(210, 450, 230, 475, Font[S_thousands_place[0]], TRUE);	
 
-	//if (GameTime <= 0)
-	//{
-	//	/*f++;*/
-	//	if (3000 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[4], TRUE);
-	//		/*PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1500 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
-	//		/*PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1000 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
-	//		/*PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1000 > Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
-	//		PlaySoundMem(SE[0], DX_PLAYTYPE_BACK, TRUE);
-	//		
-	//	}
-	//}
+	//ハイスコア描画
+	DrawRotaGraphF(385, 460, 1.5, 0, UI_image[2], TRUE);
+	//一の位
+	DrawExtendGraph(520, 450, 540, 475, Font[S_ones_place[1]], TRUE);
+	//十の位
+	DrawExtendGraph(495, 450, 515, 475, Font[S_tens_place[1]], TRUE);
+	//百の位
+	DrawExtendGraph(470, 450, 490, 475, Font[S_hundreds_place[1]], TRUE);
+	//千の位
+	DrawExtendGraph(445, 450, 465, 475, Font[S_thousands_place[1]], TRUE);
 
+	
 	//シーンに存在するオブジェクトの描画処理
 	for (GameObject* obj : objects)
 	{
@@ -377,7 +394,11 @@ void Scene::Finalize()
 	}
 
 	PlaySoundMem(BGM[1], DX_PLAYTYPE_BACK, TRUE);
-
+	
+	if (Score > hight_Score)
+	{
+		hight_Score = Score;
+	}
 	//動的配列の解放
 	objects.clear();
 	
@@ -401,42 +422,100 @@ void Scene::HitCheckObject(GameObject* a, GameObject* b)
 	}
 }
 
-void Scene::ResultDraw(int count)
+void Scene::ResultDraw()
+{
+	
+	////終了時のスコアによって評価フォントを描画する処理
+	if (GameTime <= 0 && restart != true)
+	{
+		count++;
+		//FINISHの画像描画
+		if (count < 180 && Result_flag == 0)
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[0], TRUE);
+		}
+		else if (Result_flag == 0)
+		{
+			Result_flag = 1;
+		}
+
+		if (3000 <= Score && Result_flag >= 1)	//Perfectの画像描画
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[4], TRUE);
+			
+			if (Result_flag == 1)	//Result_flagが１の時だけSEを再生する（SEが何回も再生されることを防ぐため）
+			{
+				Result_flag = 2;
+				PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);
+			}
+		}
+		else if (1500 <= Score && Result_flag >= 1)	//GOODの画像描画
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
+			
+			if (Result_flag == 1)
+			{
+				Result_flag = 2;
+				PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);
+			}
+		}
+		else if (1000 <= Score && Result_flag >= 1)	//OKの画像描画
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
+			
+			if (Result_flag == 1)
+			{
+				Result_flag = 2;
+				PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);
+			}
+		}
+		else if (1000 > Score && Result_flag >= 1) //BADの画像描画
+		{
+			DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);	
+			
+			if (Result_flag == 1)
+			{
+				Result_flag = 2;
+				PlaySoundMem(SE[0], DX_PLAYTYPE_BACK, TRUE);
+			}
+			
+		}	
+
+		if (Result_flag == 2)
+		{
+			SetFontSize(40);
+
+			DrawFormatString(90, 360, GetColor(255,255,255), "Rキーを押すとリスタート");
+
+			if (InputControl::GetKeyDown(KEY_INPUT_R))
+			{
+				restart = true;
+				StopSoundMem(BGM[1]);
+				Initialize();
+			}
+		}
+		
+
+	}
+}
+
+void Scene::Hight_Score()
 {
 	
 
-	//////終了時のスコアによって評価フォントを描画する処理
-	//if (GameTime <= 0)
-	//{
-	//	if (count < 120)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[0], TRUE);
-	//	}
-	//	else if (3000 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[4], TRUE);
-	//		/*PlaySoundMem(SE[3], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1500 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[3], TRUE);
-	//		/*PlaySoundMem(SE[2], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1000 <= Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[2], TRUE);
-	//		/*PlaySoundMem(SE[1], DX_PLAYTYPE_BACK, TRUE);*/
-	//	}
-	//	else if (1000 > Score)
-	//	{
-	//		DrawRotaGraphF(320, 220, 0.6, 0, Result_image[1], TRUE);
-	//		PlaySoundMem(SE[0], DX_PLAYTYPE_NORMAL, TRUE);
-	//	}	
-
-	/*}*/
+	//ハイスコア描画
+	DrawRotaGraphF(385, 460, 1.5, 0, UI_image[2], TRUE);
+	//一の位
+	DrawExtendGraph(520, 450, 540, 475, Font[S_ones_place[1]], TRUE);
+	//十の位
+	DrawExtendGraph(495, 450, 515, 475, Font[S_tens_place[1]], TRUE);
+	//百の位
+	DrawExtendGraph(470, 450, 490, 475, Font[S_hundreds_place[1]], TRUE);
+	//千の位
+	DrawExtendGraph(445, 450, 465, 475, Font[S_thousands_place[1]], TRUE);
 }
 
-int Scene::GetTime()
+bool Scene::Restart()
 {
-	return GameTime;
+	return restart;
 }
