@@ -6,8 +6,8 @@
 //エネミー状態
 enum eEnemyState
 {
-	IDLE,		//待機状態
-	DIE,		//死亡状態
+	ible,		//待機状態
+	die,		//死亡状態
 	TERITORY,	//縄張り状態
 	CHASE,		//追跡状態
 	FEAR,		//イジケ状態
@@ -30,26 +30,27 @@ protected:
 	float speed;					//エネミースピード
 	eEnemyState enemy_state;		//エネミー状態
 	Vector2D teritory_location;		//エネミーの縄張り位置
+	eEnemyType enemy_type;			//エネミーの種類
 
 private:
-	enum eDirectionState
+	enum eEnemyDirection
 	{
-		UP,
-		RIGHT,
-		DOWN,
-		LEFT,
+		up,
+		right,
+		down,
+		left,
 	};
 
 	std::vector<int> move_animation;	//移動アニメーション画像
 	std::vector<int> eye_animation;		//目のアニメーション画像
 	Vector2D velocity;					//移動量
-	eDirectionState direction;			//移動方向
+	eEnemyDirection direction;			//移動方向
 	float animation_time;				//アニメーション時間
 	int animation_count;				//アニメーション添字
 	int flash_count;					//点滅カウント
 	float state_time;					//エネミー状態時間
 	int enemy_level;					//エネミーレベル
-	
+	const int animation_num[2] = { 0, 1, };
 
 
 public:

@@ -7,5 +7,6 @@
     <NintendoTargetName>Default</NintendoTargetName>
     <NXTargetSerialNumber>$(NintendoTargetSerialNumber)</NXTargetSerialNumber>
     <NXTargetName>$(NintendoTargetName)</NXTargetName>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
 </Project>

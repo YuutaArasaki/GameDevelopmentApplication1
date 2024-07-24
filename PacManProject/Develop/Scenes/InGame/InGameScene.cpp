@@ -8,6 +8,7 @@
 #include "../../Utility/ResourceManager.h"
 #include "DxLib.h"
 #include <fstream>
+#include "../../Objects/Enemy/Akabe.h"
 
 InGameScene::InGameScene() 
 	: player(nullptr)
@@ -187,7 +188,7 @@ void InGameScene::LoadStageMapCSV()
 			// エネミー
 			case 'E':
 				generate_location = (Vector2D((float)(spos_x - 1), (float)(spos_y - 1)) * D_OBJECT_SIZE) + (D_OBJECT_SIZE / 2.0f);
-				CreateObject<EnemyBase>(generate_location);
+				CreateObject<Akabe>(generate_location)->Set_Player(player);
 				break;
 			// 上記以外
 			default:
