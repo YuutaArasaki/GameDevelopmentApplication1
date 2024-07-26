@@ -1,6 +1,7 @@
 #include "EnemyBase.h"
 #include "../../Utility/ResourceManager.h"
 #include "DxLib.h"
+#include "Pinky.h"
 
 EnemyBase::EnemyBase() : speed(),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
@@ -17,9 +18,10 @@ void EnemyBase::Initialize()
 {
 	//‰æ‘œ‚Ì“Ç‚İ‚İ
 	ResourceManager* rm = ResourceManager::GetInstance();
-	move_animation = rm->GetImages("Resource/Images/monster.png", 20, 20, 1, 32, 32);
+	move_animation =rm->GetImages("Resource/Images/monster.png", 20, 20, 1, 32, 32);
 	eye_animation = rm->GetImages("Resource/Images/eyes.png", 4, 4, 1, 32, 32);
 
+	
 	// “–‚½‚è”»’è‚Ìİ’è
 	collision.is_blocking = true;
 	collision.object_type = eObjectType::enemy;
@@ -160,27 +162,28 @@ void EnemyBase::AnimationControl(float delta_second)
 			animation_count = 0;
 		}
 		// ‰æ‘œ‚Ìİ’è
-		int type_num = 0/*(int)Get_EnemyType()*/;
+		int type_num = Get_EnemyType();
+
 		if (0 <= type_num && type_num < 4)
 		{
 			image = move_animation[(type_num * 2) + animation_num[animation_count]];
 		}
 
-		/*switch (direction)
+		switch (direction)
 		{
 		case up:
-			eye_animation[up];
+			eye_image = eye_animation[up];
 			break;
 		case right:
-			eye_animation[right];
+			eye_image = eye_animation[right];
 			break;
 		case down:
-			eye_animation[down];
+			eye_image = eye_animation[down];
 			break;
 		case left:
-			eye_animation[left];
+			eye_image = eye_animation[left];
 			break;
-		}*/
+		}
 
 	}
 

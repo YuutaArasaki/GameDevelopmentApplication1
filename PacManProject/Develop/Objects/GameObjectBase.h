@@ -22,6 +22,7 @@ protected:
 	Vector2D			location;		// 位置座標
 	CapsuleCollision	collision;		// 当たり判定情報
 	int					image;			// 画像情報
+	int					eye_image;		//Enemyの目画像
 	int					z_layer;		// レイヤー情報
 	eMobilityType		mobility;		// 可動性
 
