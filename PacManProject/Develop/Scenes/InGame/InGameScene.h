@@ -5,6 +5,7 @@
 class InGameScene : public SceneBase
 {
 private:
+	class EnemyBase* enemy;
 	class Player* player;		// プレイヤー情報
 	int back_ground_image;		// 背景画像
 	int back_ground_sound;		// BGM

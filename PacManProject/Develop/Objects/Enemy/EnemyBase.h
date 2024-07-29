@@ -39,6 +39,7 @@ private:
 		right,
 		down,
 		left,
+		none
 	};
 
 	std::vector<int> move_animation;	//移動アニメーション画像
@@ -64,7 +65,6 @@ public:
 	eEnemyState GetEnemyState();		//エネミーの状態を取得する
 	void Set_Player(Player* p);			//プレイヤーのポインタを取得する
 	
-
 private:
 	void Movement(float delta_second);			//移動処理
 	void Move_Teritory(float delta_second);		//縄張り状態の移動処理

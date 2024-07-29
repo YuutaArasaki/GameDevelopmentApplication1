@@ -3,7 +3,7 @@
 #include "DxLib.h"
 #include "Pinky.h"
 
-EnemyBase::EnemyBase() : speed(),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
+EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
 animation_count(0),flash_count(0),state_time(0.0f),enemy_level(0),enemy_type()
 {
@@ -36,6 +36,9 @@ void EnemyBase::Initialize()
 void EnemyBase::Update(float delta_second)
 {
 	AnimationControl(delta_second);
+	Movement(delta_second);
+	State_Change(delta_second);
+
 }
 
 void EnemyBase::Draw(const Vector2D& screen_offset) const
@@ -95,6 +98,7 @@ void EnemyBase::Set_Player(Player* p)
 
 void EnemyBase::Movement(float delta_second)
 {
+	
 	// 進行方向の移動量を追加
 	switch (direction)
 	{
@@ -115,6 +119,16 @@ void EnemyBase::Movement(float delta_second)
 		break;
 	}
 
+	switch (enemy_state)
+	{
+	case TERITORY:
+		Move_Teritory(delta_second);
+		break;
+
+	case CHASE:
+		Move_Chase(delta_second);
+		break;
+	}
 	// 画面外に行ったら、反対側にワープさせる
 	if (location.x < 0.0f)
 	{
@@ -128,16 +142,18 @@ void EnemyBase::Movement(float delta_second)
 		location.x = collision.radius;
 		velocity.y = 0.0f;
 	}
+
+	location += velocity * speed * delta_second;
 }
 
 void EnemyBase::Move_Teritory(float delta_second)
 {
-
+	direction = right;
 }
 
 void EnemyBase::Move_Chase(float delta_second)
 {
-
+	direction = left;
 }
 void EnemyBase::Move_Die(float delta_second)
 {
@@ -153,46 +169,99 @@ void EnemyBase::AnimationControl(float delta_second)
 {
 	// 移動中のアニメーション
 	animation_time += delta_second;
-	if (animation_time >= (1.0f / 16.0f))
-	{
-		animation_time = 0.0f;
-		animation_count++;
-		if (animation_count >= 2)
+	if (player->GetPowerUp() != true)
+	{ 
+		if (animation_time >= (1.0f / 16.0f))
 		{
-			animation_count = 0;
-		}
-		// 画像の設定
-		int type_num = Get_EnemyType();
+			animation_time = 0.0f;
+			animation_count++;
+			if (animation_count >= 2)
+			{
+				animation_count = 0;
+			}
+			// 画像の設定
+			int type_num = Get_EnemyType();
 
-		if (0 <= type_num && type_num < 4)
-		{
-			image = move_animation[(type_num * 2) + animation_num[animation_count]];
-		}
-	
+			if (0 <= type_num && type_num < 4)
+			{
+				image = move_animation[(type_num * 2) + animation_num[animation_count]];
+			}
 
-		switch (direction)
-		{
-		case up:
-			eye_image = eye_animation[up];
-			break;
-		case right:
-			eye_image = eye_animation[right];
-			break;
-		case down:
-			eye_image = eye_animation[down];
-			break;
-		case left:
-			eye_image = eye_animation[left];
-			break;
-		}
 
+			switch (direction)
+			{
+			case up:
+				eye_image = eye_animation[up];
+				break;
+			case right:
+				eye_image = eye_animation[right];
+				break;
+			case down:
+				eye_image = eye_animation[down];
+				break;
+			case left:
+				eye_image = eye_animation[left];
+				break;
+			}
+
+		}
 	}
+	else
+	{
+		if (animation_time >= (delta_second * 60))
+		{
+			animation_time = 0.0f;
+			animation_count++;
+			if (animation_count >= 2)
+			{
+				animation_count = 0;
+				flash_count++;
+			}
 
+			image = move_animation[ 17 + animation_num[animation_count]];
+		}
+	}
 }
 
 void EnemyBase::State_Change(float delta_second)
 {
+	
+	if (enemy_state == TERITORY)
+	{
+		state_time++;
+		if (state_time >= 240/*(delta_second * 60) * 4.5*/)
+		{
+			state_time = 0;
+			enemy_state = CHASE;
+		}
+	}
 
+	if (enemy_state == CHASE)
+	{
+		state_time++;
+		if (state_time >= 600/*(delta_second * 60) * 15*/)
+		{
+			state_time = 0;
+			enemy_state = TERITORY;
+		}
+	}
+
+	if (player->GetPowerUp() == true)
+	{
+		state_time = 0;
+		enemy_state = FEAR;
+
+		if (enemy_state == FEAR)
+		{
+			if (state_time >= (delta_second * 60) * 6); 
+			{
+				enemy_state == CHASE;
+			}
+		}
+		
+	}
+
+	
 }
 
 
