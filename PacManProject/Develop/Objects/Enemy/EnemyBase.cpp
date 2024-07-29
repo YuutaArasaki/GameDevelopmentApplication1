@@ -5,7 +5,7 @@
 
 EnemyBase::EnemyBase() : speed(),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
-animation_count(0),flash_count(0),state_time(0.0f),enemy_level(0),enemy_type(AKABE)
+animation_count(0),flash_count(0),state_time(0.0f),enemy_level(0),enemy_type()
 {
 }
 
@@ -21,7 +21,7 @@ void EnemyBase::Initialize()
 	move_animation =rm->GetImages("Resource/Images/monster.png", 20, 20, 1, 32, 32);
 	eye_animation = rm->GetImages("Resource/Images/eyes.png", 4, 4, 1, 32, 32);
 
-	
+
 	// “–‚½‚è”»’è‚Ìİ’è
 	collision.is_blocking = true;
 	collision.object_type = eObjectType::enemy;
@@ -168,6 +168,7 @@ void EnemyBase::AnimationControl(float delta_second)
 		{
 			image = move_animation[(type_num * 2) + animation_num[animation_count]];
 		}
+	
 
 		switch (direction)
 		{
@@ -193,6 +194,7 @@ void EnemyBase::State_Change(float delta_second)
 {
 
 }
+
 
 eEnemyType EnemyBase::Get_EnemyType()
 {

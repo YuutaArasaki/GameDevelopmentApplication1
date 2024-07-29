@@ -7,7 +7,8 @@ GameObjectBase::GameObjectBase() :
 	location(0.0f),
 	image(NULL),
 	z_layer(0),
-	mobility(eMobilityType::Stationary)
+	mobility(eMobilityType::Stationary),
+	eye_image(NULL)
 {
 
 }

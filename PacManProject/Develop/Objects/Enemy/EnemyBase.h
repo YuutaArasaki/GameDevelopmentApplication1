@@ -63,6 +63,7 @@ public:
 	void OnHitCollision(GameObjectBase* hit_object) override;	//当たり判定通知処理
 	eEnemyState GetEnemyState();		//エネミーの状態を取得する
 	void Set_Player(Player* p);			//プレイヤーのポインタを取得する
+	
 
 private:
 	void Movement(float delta_second);			//移動処理
