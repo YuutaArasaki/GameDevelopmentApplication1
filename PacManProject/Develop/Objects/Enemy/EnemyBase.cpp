@@ -5,7 +5,8 @@
 
 EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
-animation_count(0),flash_count(0),state_time(0.0f),enemy_level(0),enemy_type()
+animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
+enemy_type()
 {
 }
 
@@ -208,18 +209,32 @@ void EnemyBase::AnimationControl(float delta_second)
 	}
 	else
 	{
-		if (animation_time >= (delta_second * 60))
+		if (state_time >= 6)
 		{
-			animation_time = 0.0f;
-			animation_count++;
-			if (animation_count >= 2)
+			if (animation_time >= (delta_second * 60))
 			{
-				animation_count = 0;
-				flash_count++;
-			}
+				animation_time = 0.0f;
+				animation_count++;
+				if (animation_count >= 2)
+				{
+					animation_count = 0;
+					flash_count++;
+				}
 
-			image = move_animation[ 17 + animation_num[animation_count]];
+				image = move_animation[ 17 + animation_num[animation_count]];
+			}
 		}
+		else
+		{
+			image = move_animation[17];
+		}
+
+		if (flash_count > 6)
+		{
+			flash_count = 0;
+			player->SetPowerDown();
+		}
+		
 	}
 }
 
@@ -228,8 +243,8 @@ void EnemyBase::State_Change(float delta_second)
 	
 	if (enemy_state == TERITORY)
 	{
-		state_time++;
-		if (state_time >= 240/*(delta_second * 60) * 4.5*/)
+		state_time + delta_second;
+		if (state_time >= (delta_second * 60) * 4.5)
 		{
 			state_time = 0;
 			enemy_state = CHASE;
@@ -238,8 +253,8 @@ void EnemyBase::State_Change(float delta_second)
 
 	if (enemy_state == CHASE)
 	{
-		state_time++;
-		if (state_time >= 600/*(delta_second * 60) * 15*/)
+		state_time += delta_second;
+		if (state_time >= (delta_second * 60) * 15)
 		{
 			state_time = 0;
 			enemy_state = TERITORY;
@@ -248,14 +263,20 @@ void EnemyBase::State_Change(float delta_second)
 
 	if (player->GetPowerUp() == true)
 	{
-		state_time = 0;
 		enemy_state = FEAR;
 
 		if (enemy_state == FEAR)
 		{
+			state_time += delta_second;
 			if (state_time >= (delta_second * 60) * 6); 
 			{
-				enemy_state == CHASE;
+				flash_flag = true;
+				if (flash_flag == false)
+				{
+					state_time = 0;
+					enemy_state == TERITORY;
+				}
+				
 			}
 		}
 		

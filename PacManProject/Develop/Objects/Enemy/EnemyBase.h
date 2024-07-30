@@ -49,6 +49,7 @@ private:
 	float animation_time;				//アニメーション時間
 	int animation_count;				//アニメーション添字
 	int flash_count;					//点滅カウント
+	bool flash_flag;
 	float state_time;					//エネミー状態時間
 	int enemy_level;					//エネミーレベル
 	const int animation_num[2] = { 0, 1, };
