@@ -209,79 +209,98 @@ void EnemyBase::AnimationControl(float delta_second)
 	}
 	else
 	{
-		if (state_time >= 6)
+	
+		if (enemy_state == FEAR)
 		{
-			if (animation_time >= (delta_second * 60))
-			{
-				animation_time = 0.0f;
-				animation_count++;
-				if (animation_count >= 2)
-				{
-					animation_count = 0;
-					flash_count++;
-				}
+			eye_image = NULL;
 
-				image = move_animation[ 17 + animation_num[animation_count]];
+			if (flash_flag == false)
+			{	
+				//ƒCƒWƒPó‘Ô‚Ì‰æ‘œ
+				image = move_animation[17];
+			}
+			else
+			{
+				if (animation_time >= (delta_second * 144))
+				{
+					animation_time = 0.0f;
+					animation_count++;
+
+					if (animation_count >= 2)
+					{
+						animation_count = 0;
+						flash_count++;
+					}
+					
+
+					image = move_animation[17 + animation_num[animation_count]];
+				}
+			}
+
+			if (flash_count > 6)
+			{
+				flash_count = 0;
+				flash_flag = false;
 			}
 		}
-		else
-		{
-			image = move_animation[17];
-		}
+		
 
-		if (flash_count > 6)
-		{
-			flash_count = 0;
-			player->SetPowerDown();
-		}
+		
 		
 	}
 }
 
 void EnemyBase::State_Change(float delta_second)
 {
-	
+	state_time += delta_second;
+
 	if (enemy_state == TERITORY)
 	{
-		state_time + delta_second;
 		if (state_time >= (delta_second * 60) * 4.5)
 		{
 			state_time = 0;
 			enemy_state = CHASE;
 		}
+
+		if (player->GetPowerUp() == true)
+		{
+			state_time = 0;
+			enemy_state = FEAR;
+		}
 	}
+	
 
 	if (enemy_state == CHASE)
 	{
-		state_time += delta_second;
 		if (state_time >= (delta_second * 60) * 15)
 		{
 			state_time = 0;
 			enemy_state = TERITORY;
 		}
-	}
 
-	if (player->GetPowerUp() == true)
-	{
-		enemy_state = FEAR;
-
-		if (enemy_state == FEAR)
+		if (player->GetPowerUp() == true)
 		{
-			state_time += delta_second;
-			if (state_time >= (delta_second * 60) * 6); 
-			{
-				flash_flag = true;
-				if (flash_flag == false)
-				{
-					state_time = 0;
-					enemy_state == TERITORY;
-				}
-				
-			}
+			state_time = 0;
+			enemy_state = FEAR;
 		}
-		
 	}
+	
 
+	if (enemy_state == FEAR)
+	{
+		if (state_time >= (delta_second * 144) * 6);
+		{
+			flash_flag = true;
+
+			if (flash_flag == false)
+			{
+				player->SetPowerDown();
+				state_time = 0;
+				enemy_state = TERITORY;
+			}
+			
+		}
+	}
 	
 }
 

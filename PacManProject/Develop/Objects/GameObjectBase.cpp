@@ -5,9 +5,9 @@
 GameObjectBase::GameObjectBase() :
 	owner_scene(nullptr),
 	location(0.0f),
-	image(NULL),
 	z_layer(0),
 	mobility(eMobilityType::Stationary),
+	image(NULL),
 	eye_image(NULL)
 {
 
