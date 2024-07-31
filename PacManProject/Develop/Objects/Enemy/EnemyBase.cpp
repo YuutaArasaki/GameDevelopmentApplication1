@@ -36,6 +36,7 @@ void EnemyBase::Initialize()
 
 void EnemyBase::Update(float delta_second)
 {
+	
 	AnimationControl(delta_second);
 	Movement(delta_second);
 	State_Change(delta_second);
@@ -230,22 +231,19 @@ void EnemyBase::AnimationControl(float delta_second)
 					{
 						animation_count = 0;
 						flash_count++;
+				
 					}
-					
-
+				
 					image = move_animation[17 + animation_num[animation_count]];
 				}
 			}
-
+			
 			if (flash_count > 6)
 			{
-				flash_count = 0;
 				flash_flag = false;
 			}
+			
 		}
-		
-
-		
 		
 	}
 }
@@ -288,18 +286,18 @@ void EnemyBase::State_Change(float delta_second)
 
 	if (enemy_state == FEAR)
 	{
-		if (state_time >= (delta_second * 144) * 6);
+		if (state_time >= (delta_second * 60) * 6)
 		{
 			flash_flag = true;
-
-			if (flash_flag == false)
+			
+			if(flash_flag == false)
 			{
 				player->SetPowerDown();
 				state_time = 0;
 				enemy_state = TERITORY;
 			}
-			
 		}
+		
 	}
 	
 }
