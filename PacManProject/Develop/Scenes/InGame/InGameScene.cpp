@@ -143,6 +143,8 @@ void InGameScene::CheckCollision(GameObjectBase* target, GameObjectBase* partner
 /// </summary>
 void InGameScene::LoadStageMapCSV()
 {
+	int enemy_type = 0;
+
 	// 読み込むファイル名
 	std::string file_name = "Resource/Map/StageMap.csv";
 	// 指定ファイルを読み込む
@@ -191,6 +193,8 @@ void InGameScene::LoadStageMapCSV()
 				generate_location = (Vector2D((float)(spos_x - 1), (float)(spos_y - 1)) * D_OBJECT_SIZE) + (D_OBJECT_SIZE / 2.0f);
 				enemy = CreateObject<EnemyBase>(generate_location);
 				enemy->Set_Player(player);
+				enemy->SetEnemyType(enemy_type);
+				enemy_type++;
 				break;
 			// 上記以外
 			default:

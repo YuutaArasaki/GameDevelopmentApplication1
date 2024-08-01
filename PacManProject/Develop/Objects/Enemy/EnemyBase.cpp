@@ -32,6 +32,8 @@ void EnemyBase::Initialize()
 
 	// 可動性の設定
 	mobility = eMobilityType::Movable;
+
+	
 }
 
 void EnemyBase::Update(float delta_second)
@@ -46,8 +48,21 @@ void EnemyBase::Update(float delta_second)
 void EnemyBase::Draw(const Vector2D& screen_offset) const
 {
 	// 親クラスの描画処理を呼び出す
-	__super::Draw(screen_offset);
+	if (enemy_state != die)
+	{
+		__super::Draw(screen_offset);
+	}
+	
+	 
+	Vector2D graph_location = location + screen_offset;
+	
+	if (enemy_state == die || enemy_state != FEAR)
+	{
+		DrawRotaGraphF(graph_location.x, graph_location.y, 1.0, 0.0, eye_image, TRUE);
+	}
+	
 }
+	
 
 void EnemyBase::Finalize()
 {
@@ -82,7 +97,7 @@ void EnemyBase::OnHitCollision(GameObjectBase* hit_object)
 
 
 	// 当たったオブジェクトがプレイヤーだったら
-	if (hit_object->GetCollision().object_type == eObjectType::player && Get_EnemyType() == FEAR)
+	if (hit_object->GetCollision().object_type == eObjectType::player && enemy_state == FEAR)
 	{
 		enemy_state = eEnemyState::die;
 	}
@@ -171,7 +186,7 @@ void EnemyBase::AnimationControl(float delta_second)
 {
 	// 移動中のアニメーション
 	animation_time += delta_second;
-	if (player->GetPowerUp() != true)
+	if (enemy_state != FEAR)
 	{ 
 		if (animation_time >= (1.0f / 16.0f))
 		{
@@ -210,43 +225,36 @@ void EnemyBase::AnimationControl(float delta_second)
 	}
 	else
 	{
-	
-		if (enemy_state == FEAR)
-		{
-			eye_image = NULL;
-
-			if (flash_flag == false)
-			{	
-				//イジケ状態の画像
-				image = move_animation[17];
-			}
-			else
-			{
-				if (animation_time >= (delta_second * 144))
-				{
-					animation_time = 0.0f;
-					animation_count++;
-
-					if (animation_count >= 2)
-					{
-						animation_count = 0;
-						flash_count++;
-				
-					}
-				
-					image = move_animation[17 + animation_num[animation_count]];
-				}
-			}
-			
-			if (flash_count > 6)
-			{
-				flash_flag = false;
-			}
-			
+		if (flash_flag == false)
+		{	
+			//イジケ状態の画像
+			image = move_animation[17];
 		}
-		
+		else
+		{
+			if (animation_time >= (delta_second * 144))
+			{
+				animation_time = 0.0f;
+				animation_count++;
+
+				if (animation_count >= 2)
+				{
+					animation_count = 0;
+					flash_count++;	
+				}
+			
+				image = move_animation[17 + animation_num[animation_count]];
+			}
+		}
+			
+		if (flash_count > 6)
+		{
+			flash_flag = false;
+		}
+			
 	}
 }
+
 
 void EnemyBase::State_Change(float delta_second)
 {
@@ -286,16 +294,16 @@ void EnemyBase::State_Change(float delta_second)
 
 	if (enemy_state == FEAR)
 	{
-		if (state_time >= (delta_second * 60) * 6)
+		if (state_time >= (delta_second * 144) * 20 && flash_count < 6)
 		{
 			flash_flag = true;
-			
-			if(flash_flag == false)
-			{
-				player->SetPowerDown();
-				state_time = 0;
-				enemy_state = TERITORY;
-			}
+		}
+		else if(flash_flag == false && flash_count > 6)
+		{
+			flash_count = 0;
+			player->SetPowerDown();
+			state_time = 0;
+			enemy_state = TERITORY;
 		}
 		
 	}
@@ -311,4 +319,27 @@ eEnemyType EnemyBase::Get_EnemyType()
 float EnemyBase:: Enemy_Speed()
 {
 	return speed;
+}
+
+void EnemyBase::SetEnemyType(int t)
+{
+	switch (t)
+	{
+	case 1:
+		enemy_type = PINKY;
+		break;
+
+	case 2:
+		enemy_type = AOSUKE;
+		break;
+		
+	case 3:
+		enemy_type = GUZUTA;
+		break;
+
+	default:
+		enemy_type = AKABE;
+		break;
+	}
+	
 }
