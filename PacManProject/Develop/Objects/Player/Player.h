@@ -59,7 +59,7 @@ public:
 	/// </summary>
 	/// <param name="hit_object">当たったゲームオブジェクトのポインタ</param>
 	virtual void OnHitCollision(GameObjectBase* hit_object) override;
-
+	
 public:
 	/// <summary>
 	/// 餌を食べた数取得

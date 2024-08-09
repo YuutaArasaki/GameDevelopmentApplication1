@@ -22,6 +22,15 @@ enum eEnemyType
 	GUZUTA,
 };
 
+enum eEnemyDirection
+	{
+		up,
+		right,
+		down,
+		left,
+		none
+	};
+
 class EnemyBase : public GameObject
 {
 
@@ -31,20 +40,11 @@ protected:
 	eEnemyState enemy_state;		//エネミー状態
 	Vector2D teritory_location;		//エネミーの縄張り位置
 	eEnemyType enemy_type;			//エネミーの種類
+	Vector2D velocity;					//移動量
 
 private:
-	enum eEnemyDirection
-	{
-		up,
-		right,
-		down,
-		left,
-		none
-	};
-
 	std::vector<int> move_animation;	//移動アニメーション画像
 	std::vector<int> eye_animation;		//目のアニメーション画像
-	Vector2D velocity;					//移動量
 	eEnemyDirection direction;			//移動方向
 	float animation_time;				//アニメーション時間
 	int animation_count;				//アニメーション添字
@@ -76,7 +76,8 @@ private:
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	
+	EnemyBase* EnemyType();
+
 protected:
 	virtual void Move_Chase(float delta_second);	//追跡状態の移動処理
 };

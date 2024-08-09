@@ -1,7 +1,11 @@
 #include "EnemyBase.h"
 #include "../../Utility/ResourceManager.h"
 #include "DxLib.h"
+#include "Akabe.h"
 #include "Pinky.h"
+#include "Aosuke.h"
+#include "Guzuta.h"
+#include "math.h"
 
 EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
@@ -136,10 +140,12 @@ void EnemyBase::Movement(float delta_second)
 		break;
 	}
 
+	Move_Fear(delta_second);
+
 	switch (enemy_state)
 	{
 	case TERITORY:
-		Move_Teritory(delta_second);
+		/*Move_Teritory(delta_second);*/
 		break;
 
 	case CHASE:
@@ -170,7 +176,18 @@ void EnemyBase::Move_Teritory(float delta_second)
 
 void EnemyBase::Move_Chase(float delta_second)
 {
-	direction = left;
+	/*EnemyType()->Move_Chase(delta_second);*/
+	float a, x, y = 0.0f;
+	Vector2D tg;
+
+	x = (player->GetLocation().x - location.x) * (player->GetLocation().x - location.x);
+	y = (player->GetLocation().y - location.y) * (player->GetLocation().y - location.y);
+	a = sqrt(x + y);
+	x = (player->GetLocation().x - location.x) / a;
+	y = (player->GetLocation().y - location.y) / a;
+	tg = Vector2D(x, y);
+
+	velocity = tg;
 }
 void EnemyBase::Move_Die(float delta_second)
 {
@@ -179,7 +196,20 @@ void EnemyBase::Move_Die(float delta_second)
 
 void EnemyBase::Move_Fear(float delta_second)
 {
+	int a, x, y = 0;
+	Vector2D TG;
 
+	teritory_location = player->GetLocation() * -1;
+
+	x = (location.x - teritory_location.x) * (location.x - teritory_location.x);
+	y = (location.y - teritory_location.y) * (location.y - teritory_location.y);
+	a = sqrt(x + y);
+	x = (location.x - teritory_location.x) / a;
+	y = (location.y - teritory_location.y) / a;
+
+	TG = Vector2D(x, y);
+
+	location + TG;
 }
 
 void EnemyBase::AnimationControl(float delta_second)
@@ -342,4 +372,26 @@ void EnemyBase::SetEnemyType(int t)
 		break;
 	}
 	
+}
+
+EnemyBase* EnemyBase:: EnemyType()
+{
+	switch (enemy_type)
+	{
+	case AKABE:
+		return dynamic_cast<EnemyBase*>(new Akabe());
+		break;
+
+	case PINKY:
+		return dynamic_cast<EnemyBase*>(new Pinky());
+		break;
+
+	case AOSUKE:
+		return dynamic_cast<EnemyBase*>(new Aosuke());
+		break;
+
+	case GUZUTA:
+		return dynamic_cast<EnemyBase*>(new Guzuta());
+		break;
+	}
 }
