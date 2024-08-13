@@ -37,7 +37,7 @@ void EnemyBase::Initialize()
 	// 可動性の設定
 	mobility = eMobilityType::Movable;
 
-	
+	z_layer = 5;
 }
 
 void EnemyBase::Update(float delta_second)
@@ -119,7 +119,53 @@ void EnemyBase::Set_Player(Player* p)
 
 void EnemyBase::Movement(float delta_second)
 {
-	/*std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);*/
+	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
+
+	std::map<eAdjacentDirection, ePanelID> ret = {
+		{ eAdjacentDirection::UP, ePanelID::NONE },
+		{ eAdjacentDirection::DOWN, ePanelID::NONE },
+		{ eAdjacentDirection::LEFT, ePanelID::NONE },
+		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
+	};
+	
+	/*for (int i = 0; i < 1; i++)
+	{
+		if (panel[eAdjacentDirection::UP] == ret[eAdjacentDirection::UP])
+		{
+			if (direction != down)
+			{
+				direction = up;
+			}
+			break;
+		}
+		if (panel[eAdjacentDirection::RIGHT] == ret[eAdjacentDirection::RIGHT])
+		{
+			if (direction != left)
+			{
+				direction = right;
+			}
+			break;
+		}
+		if (panel[eAdjacentDirection::DOWN] == ret[eAdjacentDirection::DOWN])
+		{
+			if (direction != up)
+			{
+				direction = down;
+			}
+			break;
+		}
+		if (panel[eAdjacentDirection::LEFT] == ret[eAdjacentDirection::LEFT])
+		{
+			if (direction != right)
+			{
+				direction = left;
+			}
+			break;
+		}
+	 
+	
+	}*/
+	
 
 	// 進行方向の移動量を追加
 	switch (direction)
@@ -141,7 +187,7 @@ void EnemyBase::Movement(float delta_second)
 		break;
 	}
 
-	Move_Fear(delta_second);
+	
 
 	switch (enemy_state)
 	{
@@ -151,6 +197,10 @@ void EnemyBase::Movement(float delta_second)
 
 	case CHASE:
 		Move_Chase(delta_second);
+		break;
+
+	case FEAR:
+		Move_Fear(delta_second);
 		break;
 	}
 	// 画面外に行ったら、反対側にワープさせる
@@ -167,9 +217,7 @@ void EnemyBase::Movement(float delta_second)
 		velocity.y = 0.0f;
 	}
 
-	/*int i = 0;
-
-	 if (panel.begin() == eAdjacentDirection::UP )*/
+	int i = 0;
 	
 	location += velocity * speed * delta_second;
 }
@@ -185,14 +233,35 @@ void EnemyBase::Move_Chase(float delta_second)
 	float a, x, y = 0.0f;
 	Vector2D tg;
 
-	x = (player->GetLocation().x - location.x) * (player->GetLocation().x - location.x);
+	/*x = (player->GetLocation().x - location.x) * (player->GetLocation().x - location.x);
 	y = (player->GetLocation().y - location.y) * (player->GetLocation().y - location.y);
 	a = sqrt(x + y);
 	x = (player->GetLocation().x - location.x) / a;
-	y = (player->GetLocation().y - location.y) / a;
-	tg = Vector2D(x, y);
+	y = (player->GetLocation().y - location.y) / a;*/
 
-	velocity = tg;
+	x = player->GetLocation().x - location.x;
+	y = player->GetLocation().y - location.y;
+
+	if (x > 0)
+	{
+		direction = right;
+	}
+	else if (x < 0)
+	{
+		direction = left;
+	}
+	if (y > 0)
+	{
+		direction = down;
+	}
+	else if (y < 0)
+	{
+		direction = up;
+	}
+	
+	/*tg = Vector2D(x, y);
+
+	velocity = tg;*/
 }
 void EnemyBase::Move_Die(float delta_second)
 {
@@ -201,7 +270,7 @@ void EnemyBase::Move_Die(float delta_second)
 
 void EnemyBase::Move_Fear(float delta_second)
 {
-	int a, x, y = 0;
+	/*int a, x, y = 0;
 	Vector2D TG;
 
 	teritory_location = player->GetLocation() * -1;
@@ -214,7 +283,7 @@ void EnemyBase::Move_Fear(float delta_second)
 
 	TG = Vector2D(x, y);
 
-	location + TG;
+	velocity = TG;*/
 }
 
 void EnemyBase::AnimationControl(float delta_second)
