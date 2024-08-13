@@ -119,7 +119,8 @@ void EnemyBase::Set_Player(Player* p)
 
 void EnemyBase::Movement(float delta_second)
 {
-	
+	/*std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);*/
+
 	// is•ûŒü‚ÌˆÚ“®—Ê‚ğ’Ç‰Á
 	switch (direction)
 	{
@@ -166,6 +167,10 @@ void EnemyBase::Movement(float delta_second)
 		velocity.y = 0.0f;
 	}
 
+	/*int i = 0;
+
+	 if (panel.begin() == eAdjacentDirection::UP )*/
+	
 	location += velocity * speed * delta_second;
 }
 
