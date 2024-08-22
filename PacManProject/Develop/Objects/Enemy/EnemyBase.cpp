@@ -123,12 +123,12 @@ void EnemyBase::Movement(float delta_second)
 
 	std::map<eAdjacentDirection, ePanelID> ret = {
 		{ eAdjacentDirection::UP, ePanelID::NONE },
-		{ eAdjacentDirection::DOWN, ePanelID::NONE },
+		{ eAdjacentDirection::DOWN, ePanelID::NONE},
 		{ eAdjacentDirection::LEFT, ePanelID::NONE },
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
 	
-	/*for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		if (panel[eAdjacentDirection::UP] == ret[eAdjacentDirection::UP])
 		{
@@ -164,7 +164,7 @@ void EnemyBase::Movement(float delta_second)
 		}
 	 
 	
-	}*/
+	}
 	
 
 	// is•ûŒü‚ÌˆÚ“®—Ê‚ð’Ç‰Á
@@ -229,9 +229,16 @@ void EnemyBase::Move_Teritory(float delta_second)
 
 void EnemyBase::Move_Chase(float delta_second)
 {
+	Vector2D p, f;
+	float x, y, h = 0;
+
+	p = player->GetLocation();
+	x = (p.x - location.x) * (p.x - location.x);
+	y = (p.y - location.y) * (p.y - location.y);
+	h = x + y;
+	f = p + h;
+	
 	/*EnemyType()->Move_Chase(delta_second);*/
-	float a, x, y = 0.0f;
-	Vector2D tg;
 
 	/*x = (player->GetLocation().x - location.x) * (player->GetLocation().x - location.x);
 	y = (player->GetLocation().y - location.y) * (player->GetLocation().y - location.y);
@@ -239,26 +246,9 @@ void EnemyBase::Move_Chase(float delta_second)
 	x = (player->GetLocation().x - location.x) / a;
 	y = (player->GetLocation().y - location.y) / a;*/
 
-	x = player->GetLocation().x - location.x;
-	y = player->GetLocation().y - location.y;
+	/*x = player->GetLocation().x - location.x;
+	y = player->GetLocation().y - location.y;*/
 
-	if (x > 0)
-	{
-		direction = right;
-	}
-	else if (x < 0)
-	{
-		direction = left;
-	}
-	if (y > 0)
-	{
-		direction = down;
-	}
-	else if (y < 0)
-	{
-		direction = up;
-	}
-	
 	/*tg = Vector2D(x, y);
 
 	velocity = tg;*/
