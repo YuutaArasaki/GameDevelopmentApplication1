@@ -10,7 +10,7 @@
 EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
 animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
-enemy_type()
+enemy_type(),mine(0)
 {
 }
 
@@ -128,15 +128,13 @@ void EnemyBase::Movement(float delta_second)
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
 	
-	for (int i = 0; i < 1; i++)
-	{
-		if (panel[eAdjacentDirection::UP] == ret[eAdjacentDirection::UP])
+	
+		/*if (panel[eAdjacentDirection::UP] == ret[eAdjacentDirection::UP])
 		{
 			if (direction != down)
 			{
 				direction = up;
 			}
-			break;
 		}
 		if (panel[eAdjacentDirection::RIGHT] == ret[eAdjacentDirection::RIGHT])
 		{
@@ -144,7 +142,6 @@ void EnemyBase::Movement(float delta_second)
 			{
 				direction = right;
 			}
-			break;
 		}
 		if (panel[eAdjacentDirection::DOWN] == ret[eAdjacentDirection::DOWN])
 		{
@@ -152,7 +149,6 @@ void EnemyBase::Movement(float delta_second)
 			{
 				direction = down;
 			}
-			break;
 		}
 		if (panel[eAdjacentDirection::LEFT] == ret[eAdjacentDirection::LEFT])
 		{
@@ -160,11 +156,9 @@ void EnemyBase::Movement(float delta_second)
 			{
 				direction = left;
 			}
-			break;
-		}
+		}*/
 	 
 	
-	}
 	
 
 	// is•ûŒü‚ÌˆÚ“®—Ê‚ð’Ç‰Á
@@ -192,8 +186,8 @@ void EnemyBase::Movement(float delta_second)
 	switch (enemy_state)
 	{
 	case TERITORY:
-		/*Move_Teritory(delta_second);*/
-		break;
+		/*Move_Teritory(delta_second);
+		break;*/
 
 	case CHASE:
 		Move_Chase(delta_second);
@@ -229,14 +223,103 @@ void EnemyBase::Move_Teritory(float delta_second)
 
 void EnemyBase::Move_Chase(float delta_second)
 {
-	Vector2D p, f;
-	float x, y, h = 0;
 
-	p = player->GetLocation();
+	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
+
+	std::map<eAdjacentDirection, ePanelID> ret = {
+		{ eAdjacentDirection::UP, ePanelID::NONE },
+		{ eAdjacentDirection::DOWN, ePanelID::NONE},
+		{ eAdjacentDirection::LEFT, ePanelID::NONE },
+		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
+	};
+	Vector2D e, p;
+	float x, y, h= 0;
+	float f[4] = { 0, 0, 0, 0 };
+
+	if (StageData::GetPanelData(location) == ePanelID::BRANCH)
+	{
+		if (panel[UP] == ret[UP])
+		{
+			p = player->GetLocation();
+			e = this->GetLocation();
+			e.y = location.y - 10;
+			x = (p.x - location.x) * (p.x - location.x);
+			y = (p.y - e.y) * (p.y - e.y);
+			h = x + y;
+			p.x = p.x + p.y;
+			f[up] = p.x + h;
+		}
+
+		if (panel[RIGHT] == ret[RIGHT])
+		{
+			p = player->GetLocation();
+			e = this->GetLocation();
+			e.x = location.x + 10;
+			x = (p.x - e.x) * (p.x - e.x);
+			y = (p.y - location.y) * (p.y - location.y);
+			h = x + y;
+			p.x = p.x + p.y;
+			f[right] = p.x + h;
+		}
+
+		if (panel[DOWN] == ret[DOWN])
+		{
+			p = player->GetLocation();
+			e = this->GetLocation();
+			e.y = location.y + 10;
+			x = (p.x - location.x) * (p.x - location.x);
+			y = (p.y - e.y) * (p.y - e.y);
+			h = x + y;
+			p.x = p.x + p.y;
+			f[down] = p.x + h;
+		}
+
+		if (panel[LEFT] == ret[LEFT])
+		{
+			p = player->GetLocation();
+			e = this->GetLocation();
+			e.x = location.x - 10;
+			x = (p.x - e.x) * (p.x - e.x);
+			y = (p.y - location.y) * (p.y - location.y);
+			h = x + y;
+			p.x = p.x + p.y;
+			f[left] = p.x + h;
+		}
+
+		for (int i = 1; i < 4; i++)
+		{
+			if (mine == 0)
+			{
+				mine = f[0];
+			}
+			else if (mine > f[i] && f[i] > 0)
+			{
+				mine = f[i];
+			}
+		}
+
+		if (f[up] == mine)
+		{
+			direction = up;
+		}
+		else if (f[right] == mine)
+		{
+			direction = right;
+		}
+		else if (f[down] == mine)
+		{
+			direction = down;
+		}
+		else if (f[left] == mine)
+		{
+			direction = left;
+		}
+	}
+	/*p = player->GetLocation();
 	x = (p.x - location.x) * (p.x - location.x);
 	y = (p.y - location.y) * (p.y - location.y);
 	h = x + y;
-	f = p + h;
+	f = p + h;*/
 	
 	/*EnemyType()->Move_Chase(delta_second);*/
 

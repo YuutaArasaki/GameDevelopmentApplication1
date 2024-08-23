@@ -53,7 +53,7 @@ private:
 	float state_time;					//エネミー状態時間
 	int enemy_level;					//エネミーレベル
 	const int animation_num[2] = { 0, 1, };
-
+	float mine;
 
 public:
 	EnemyBase();
