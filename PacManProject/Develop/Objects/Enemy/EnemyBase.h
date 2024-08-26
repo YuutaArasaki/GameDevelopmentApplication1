@@ -54,6 +54,7 @@ private:
 	int enemy_level;					//エネミーレベル
 	const int animation_num[2] = { 0, 1, };
 	float mine;
+	float f[4] = { 0, 0, 0, 0 };
 
 public:
 	EnemyBase();

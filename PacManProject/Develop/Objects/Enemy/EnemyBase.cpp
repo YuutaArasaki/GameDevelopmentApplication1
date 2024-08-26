@@ -218,7 +218,7 @@ void EnemyBase::Movement(float delta_second)
 
 void EnemyBase::Move_Teritory(float delta_second)
 {
-	direction = right;
+	
 }
 
 void EnemyBase::Move_Chase(float delta_second)
@@ -232,9 +232,10 @@ void EnemyBase::Move_Chase(float delta_second)
 		{ eAdjacentDirection::LEFT, ePanelID::NONE },
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
+
 	Vector2D e, p;
-	float x, y, h= 0;
-	float f[4] = { 0, 0, 0, 0 };
+	float x, y, h, n, l= 0;
+
 
 	if (StageData::GetPanelData(location) == ePanelID::BRANCH)
 	{
@@ -246,8 +247,12 @@ void EnemyBase::Move_Chase(float delta_second)
 			x = (p.x - location.x) * (p.x - location.x);
 			y = (p.y - e.y) * (p.y - e.y);
 			h = x + y;
-			p.x = p.x + p.y;
-			f[up] = p.x + h;
+			n = p.x + p.y;
+			f[up] = n + h;
+		}
+		else
+		{
+			f[up] = 1;
 		}
 
 		if (panel[RIGHT] == ret[RIGHT])
@@ -258,10 +263,13 @@ void EnemyBase::Move_Chase(float delta_second)
 			x = (p.x - e.x) * (p.x - e.x);
 			y = (p.y - location.y) * (p.y - location.y);
 			h = x + y;
-			p.x = p.x + p.y;
-			f[right] = p.x + h;
+			n = p.x + p.y;
+			f[right] = n + h;
 		}
-
+		else
+		{
+			f[right] = 1;
+		}
 		if (panel[DOWN] == ret[DOWN])
 		{
 			p = player->GetLocation();
@@ -270,8 +278,12 @@ void EnemyBase::Move_Chase(float delta_second)
 			x = (p.x - location.x) * (p.x - location.x);
 			y = (p.y - e.y) * (p.y - e.y);
 			h = x + y;
-			p.x = p.x + p.y;
-			f[down] = p.x + h;
+			n = p.x + p.y;
+			f[down] = n + h;
+		}
+		else
+		{
+			f[down] = 1;
 		}
 
 		if (panel[LEFT] == ret[LEFT])
@@ -282,38 +294,74 @@ void EnemyBase::Move_Chase(float delta_second)
 			x = (p.x - e.x) * (p.x - e.x);
 			y = (p.y - location.y) * (p.y - location.y);
 			h = x + y;
-			p.x = p.x + p.y;
-			f[left] = p.x + h;
+			n = p.x + p.y;
+			f[left] = n + h;
+		}
+		else
+		{
+			f[left] = 1;
 		}
 
-		for (int i = 1; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (mine == 0)
 			{
 				mine = f[0];
 			}
-			else if (mine > f[i] && f[i] > 0)
+			else if (mine > f[i])
 			{
 				mine = f[i];
+				switch (i)
+				{
+				case 0:
+					velocity.x = 0;
+					direction = up;
+					break;
+
+				case 1:
+					velocity.y = 0;
+					direction = right;
+					break;
+
+				case 2:
+					velocity.x = 0;
+					direction = down;
+					break;
+					
+
+				case 3:
+					velocity.y = 0;
+					direction = left;
+					break;
+				}
 			}
 		}
 
-		if (f[up] == mine)
+
+		/*if (f[up] == mine)
 		{
+			velocity.x = 0;
 			direction = up;
+			
 		}
 		else if (f[right] == mine)
 		{
+			velocity.y = 0;
 			direction = right;
+			
 		}
 		else if (f[down] == mine)
 		{
+			velocity.x = 0;
 			direction = down;
+			
 		}
 		else if (f[left] == mine)
 		{
+			velocity.y = 0;
 			direction = left;
-		}
+			
+		}*/
 	}
 	/*p = player->GetLocation();
 	x = (p.x - location.x) * (p.x - location.x);
