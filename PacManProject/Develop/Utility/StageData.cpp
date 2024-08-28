@@ -221,3 +221,75 @@ void StageData::ConvertToIndex(const Vector2D& location, int& i, int& j)
 	j = static_cast<int>(location.x / D_OBJECT_SIZE);
 	i = static_cast<int>(location.y / D_OBJECT_SIZE);
 }
+
+const std::map<eAdjacentDirection, ePanelID> StageData::GetAdjacentPanelData(int i, int j)
+{
+	if (instance == nullptr)
+	{
+		// オブジェクトの作成
+		instance = new StageData();
+		instance->Load();
+	}
+
+	// 戻り値となるデータを作成する
+	std::map<eAdjacentDirection, ePanelID> ret = {
+		{ eAdjacentDirection::UP, ePanelID::NONE },
+		{ eAdjacentDirection::DOWN, ePanelID::NONE },
+		{ eAdjacentDirection::LEFT, ePanelID::NONE },
+		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
+	};
+
+
+	// 範囲チェック
+	if ((0 <= i) || (i < instance->data.size()))
+	{
+		// LEFTデータ作成
+		if (0 <= (j - 1))
+		{
+			ret[eAdjacentDirection::LEFT] = instance->data[i][j - 1];
+		}
+
+		// RIGHTデータ作成
+		if ((j + 1) < instance->data[i].size())
+		{
+			ret[eAdjacentDirection::RIGHT] = instance->data[i][j + 1];
+		}
+	}
+
+	// 範囲チェック
+	if ((0 <= j) || (j < instance->data[0].size()))
+	{
+		// UPデータ作成
+		if (0 <= (i - 1))
+		{
+			ret[eAdjacentDirection::UP] = instance->data[i - 1][j];
+		}
+
+		// DOWNデータ作成
+		if ((i + 1) < instance->data.size())
+		{
+			ret[eAdjacentDirection::DOWN] = instance->data[i + 1][j];
+		}
+	}
+
+	return ret;
+}
+
+const ePanelID StageData::GetPanelData(int i, int j)
+{
+	if (instance == nullptr)
+	{
+		// オブジェクトの作成
+		instance = new StageData();
+		instance->Load();
+	}
+
+
+	// iとjの範囲チェック
+	if ((i < 0) || (j < 0) || (instance->data.size() <= i) || (instance->data[0].size() <= j))
+	{
+		return ePanelID::NONE;
+	}
+
+	return instance->data[i][j];
+}

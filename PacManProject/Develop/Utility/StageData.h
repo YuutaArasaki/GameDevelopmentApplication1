@@ -56,12 +56,16 @@ public:
 	/// <returns>隣接するパネル情報</returns>
 	static const std::map<eAdjacentDirection, ePanelID> GetAdjacentPanelData(const Vector2D& location);
 
+	static const std::map<eAdjacentDirection, ePanelID> GetAdjacentPanelData(int i, int j);
+
 	/// <summary>
 	/// 現在座標のパネル情報を取得する
 	/// </summary>
 	/// <param name="location">現在座標</param>
 	/// <returns>パネル情報</returns>
 	static const ePanelID GetPanelData(const Vector2D& location);
+
+	static const ePanelID GetPanelData(int i, int j);
 
 	/// <summary>
 	/// 座標情報を添字に変換する

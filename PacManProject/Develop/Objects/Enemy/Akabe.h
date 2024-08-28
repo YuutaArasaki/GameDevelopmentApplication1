@@ -9,5 +9,6 @@ public:
 private:
 	void Move_Chase(float delta_second);
 	void AnimationControl(float delta_second);
+	void SetPlayer();
 };
 

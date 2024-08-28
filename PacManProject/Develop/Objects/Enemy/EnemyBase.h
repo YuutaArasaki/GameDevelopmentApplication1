@@ -55,6 +55,7 @@ private:
 	const int animation_num[2] = { 0, 1, };
 	float mine;
 	float f[4] = { 0, 0, 0, 0 };
+	bool count;
 
 public:
 	EnemyBase();
@@ -67,6 +68,7 @@ public:
 	eEnemyState GetEnemyState();		//エネミーの状態を取得する
 	void Set_Player(Player* p);			//プレイヤーのポインタを取得する
 	void SetEnemyType(int t);
+	EnemyBase* EnemyType();
 
 private:
 	void Movement(float delta_second);			//移動処理
@@ -77,8 +79,9 @@ private:
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	EnemyBase* EnemyType();
+	
 
 protected:
 	virtual void Move_Chase(float delta_second);	//追跡状態の移動処理
+	
 };

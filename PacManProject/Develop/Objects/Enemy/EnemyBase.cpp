@@ -10,7 +10,7 @@
 EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
 animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
-enemy_type(),mine(0)
+enemy_type(),mine(0),count(true)
 {
 }
 
@@ -166,15 +166,19 @@ void EnemyBase::Movement(float delta_second)
 	{
 	case up:
 		velocity.y = -1.0f;
+		velocity.x = 0;
 		break;
 	case down:
 		velocity.y = 1.0f;
+		velocity.x = 0;
 		break;
 	case left:
 		velocity.x = -1.0f;
+		velocity.y = 0;
 		break;
 	case right:
 		velocity.x = 1.0f;
+		velocity.y = 0;
 		break;
 	default:
 		velocity = 0.0f;
@@ -223,6 +227,7 @@ void EnemyBase::Move_Teritory(float delta_second)
 
 void EnemyBase::Move_Chase(float delta_second)
 {
+	ePanelID nel;
 
 	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
 
@@ -233,136 +238,140 @@ void EnemyBase::Move_Chase(float delta_second)
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
 
-	Vector2D e, p;
-	float x, y, h, n, l= 0;
-
+	int px, py, ex, ey, x, y, h, n, j, a= 0;
+	
 
 	if (StageData::GetPanelData(location) == ePanelID::BRANCH)
 	{
-		if (panel[UP] == ret[UP])
+		if (panel[UP] == ret[UP] && direction != down)
 		{
-			p = player->GetLocation();
-			e = this->GetLocation();
-			e.y = location.y - 10;
-			x = (p.x - location.x) * (p.x - location.x);
-			y = (p.y - e.y) * (p.y - e.y);
+			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			ey += -1;
+			x = (px - ex) * (px - ex);
+			y = (py - ey) * (py - ey);
 			h = x + y;
-			n = p.x + p.y;
+			n = (px - ex) + (py - ey);
 			f[up] = n + h;
 		}
 		else
 		{
-			f[up] = 1;
+			f[up] = 0;
 		}
 
-		if (panel[RIGHT] == ret[RIGHT])
+		if (panel[RIGHT] == ret[RIGHT] && direction != left)
 		{
-			p = player->GetLocation();
-			e = this->GetLocation();
-			e.x = location.x + 10;
-			x = (p.x - e.x) * (p.x - e.x);
-			y = (p.y - location.y) * (p.y - location.y);
+			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			ex += 1;
+			x = (px - ex) * (px - ex);
+			y = (py - ey) * (py - ey);
 			h = x + y;
-			n = p.x + p.y;
+			n = (px - ex) + (py - ey);
+			
 			f[right] = n + h;
 		}
 		else
 		{
-			f[right] = 1;
+			f[right] = 0;
 		}
-		if (panel[DOWN] == ret[DOWN])
+		
+		if (panel[DOWN] == ret[DOWN] && direction != up)
 		{
-			p = player->GetLocation();
-			e = this->GetLocation();
-			e.y = location.y + 10;
-			x = (p.x - location.x) * (p.x - location.x);
-			y = (p.y - e.y) * (p.y - e.y);
+			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			ey += 1;
+			x = (px - ex) * (px - ex);
+			y = (py - ey) * (py - ey);
 			h = x + y;
-			n = p.x + p.y;
+			n = (px - ex) + (py - ey);
 			f[down] = n + h;
-		}
+		}	
 		else
 		{
-			f[down] = 1;
+			f[down] = 0;
 		}
 
-		if (panel[LEFT] == ret[LEFT])
+		if (panel[LEFT] == ret[LEFT] && direction != right)
 		{
-			p = player->GetLocation();
-			e = this->GetLocation();
-			e.x = location.x - 10;
-			x = (p.x - e.x) * (p.x - e.x);
-			y = (p.y - location.y) * (p.y - location.y);
+			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			ex += -1;
+			x = (px - ex) * (px - ex);
+			y = (py - ey) * (py - ey);
 			h = x + y;
-			n = p.x + p.y;
-			f[left] = n + h;
+			n = (px - ex) + (py - ey);
+   			f[left] = n + h;
 		}
 		else
 		{
-			f[left] = 1;
+			f[left] = 0;
 		}
+
+		mine = 0;
 
 		for (int i = 0; i < 4; i++)
 		{
 			if (mine == 0)
 			{
-				mine = f[0];
+				mine = f[i];
+				j = i;
 			}
-			else if (mine > f[i])
+
+ 			if (mine > f[i] && f[i] > 0)
 			{
 				mine = f[i];
-				switch (i)
-				{
-				case 0:
-					velocity.x = 0;
-					direction = up;
-					break;
 
-				case 1:
-					velocity.y = 0;
-					direction = right;
-					break;
-
-				case 2:
-					velocity.x = 0;
-					direction = down;
-					break;
-					
-
-				case 3:
-					velocity.y = 0;
-					direction = left;
-					break;
-				}
+				j = i;
+				
 			}
-		}
+		} 
+
+		switch (j)
+		{
+		case up:
+			if (count == true)
+			{
+				direction = up;
+				count = false;
+			}
+			break;
 
 
-		/*if (f[up] == mine)
-		{
-			velocity.x = 0;
-			direction = up;
-			
+
+		case right:
+			if (count == true)
+			{
+				direction = right;
+				count = false;
+			}
+			break;
+
+		case down:
+			if (count == true)
+			{
+				direction = down;
+				count = false;
+			}
+			break;
+
+
+		case left:
+			if (count == true)
+			{
+				direction = left;
+				count = false;
+			}
+			break;
 		}
-		else if (f[right] == mine)
-		{
-			velocity.y = 0;
-			direction = right;
-			
-		}
-		else if (f[down] == mine)
-		{
-			velocity.x = 0;
-			direction = down;
-			
-		}
-		else if (f[left] == mine)
-		{
-			velocity.y = 0;
-			direction = left;
-			
-		}*/
 	}
+	
+	if (StageData::GetPanelData(location) != BRANCH)
+	{
+		count = true;
+	}
+	
+	
 	/*p = player->GetLocation();
 	x = (p.x - location.x) * (p.x - location.x);
 	y = (p.y - location.y) * (p.y - location.y);
