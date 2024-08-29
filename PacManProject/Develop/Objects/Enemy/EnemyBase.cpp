@@ -65,6 +65,18 @@ void EnemyBase::Draw(const Vector2D& screen_offset) const
 		DrawRotaGraphF(graph_location.x, graph_location.y, 1.0, 0.0, eye_image, TRUE);
 	}
 	
+	int px, py, ex, ey = 0;
+
+	StageData::ConvertToIndex(player->GetLocation(), py, px);
+	if (enemy_type == AKABE)
+	{
+		StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+		DrawFormatString(200, 40, 0xffffff, "EX : %d EY : %d", ex, ey);
+	}
+	
+
+	DrawFormatString(10, 40, 0xffffff, "PX : %d PY : %d", px, py);
+	
 }
 	
 
