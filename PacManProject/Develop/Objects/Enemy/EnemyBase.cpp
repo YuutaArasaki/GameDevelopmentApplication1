@@ -10,7 +10,7 @@
 EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
 animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
-enemy_type(),mine(0),count(true)
+enemy_type(),mine(0),direction_flag(true)
 {
 }
 
@@ -71,7 +71,7 @@ void EnemyBase::Draw(const Vector2D& screen_offset) const
 	if (enemy_type == AKABE)
 	{
 		StageData::ConvertToIndex(this->GetLocation(), ey, ex);
-		DrawFormatString(200, 40, 0xffffff, "EX : %d EY : %d", ex, ey);
+		DrawFormatString(200, 40, 0xffffff, "EX : %d EY : %d", ex,ey);
 	}
 	
 
@@ -131,14 +131,14 @@ void EnemyBase::Set_Player(Player* p)
 
 void EnemyBase::Movement(float delta_second)
 {
-	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
+	/*std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
 
 	std::map<eAdjacentDirection, ePanelID> ret = {
 		{ eAdjacentDirection::UP, ePanelID::NONE },
 		{ eAdjacentDirection::DOWN, ePanelID::NONE},
 		{ eAdjacentDirection::LEFT, ePanelID::NONE },
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
-	};
+	};*/
 	
 	
 		/*if (panel[eAdjacentDirection::UP] == ret[eAdjacentDirection::UP])
@@ -250,21 +250,23 @@ void EnemyBase::Move_Chase(float delta_second)
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
 
-	int px, py, ex, ey, x, y, h, n, j, a= 0;
+	int px, py, ex, ey, x, y, h, n, j = 0;
+	Vector2D a,b;
 	
-
 	if (StageData::GetPanelData(location) == ePanelID::BRANCH)
 	{
+		StageData::ConvertToIndex(player->GetLocation(), py, px);
+		StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+
 		if (panel[UP] == ret[UP] && direction != down)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 			ey += -1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
 			h = x + y;
 			n = (px - ex) + (py - ey);
 			f[up] = n + h;
+			ey += 1;
 		}
 		else
 		{
@@ -273,32 +275,29 @@ void EnemyBase::Move_Chase(float delta_second)
 
 		if (panel[RIGHT] == ret[RIGHT] && direction != left)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 			ex += 1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
 			h = x + y;
 			n = (px - ex) + (py - ey);
-			
 			f[right] = n + h;
+			ex += -1;
 		}
 		else
 		{
 			f[right] = 0;
 		}
-		
+
 		if (panel[DOWN] == ret[DOWN] && direction != up)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 			ey += 1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
 			h = x + y;
 			n = (px - ex) + (py - ey);
 			f[down] = n + h;
-		}	
+			ey += -1;
+		}
 		else
 		{
 			f[down] = 0;
@@ -306,14 +305,13 @@ void EnemyBase::Move_Chase(float delta_second)
 
 		if (panel[LEFT] == ret[LEFT] && direction != right)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 			ex += -1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
 			h = x + y;
 			n = (px - ex) + (py - ey);
-   			f[left] = n + h;
+			f[left] = n + h;
+			ex += 1;
 		}
 		else
 		{
@@ -330,80 +328,37 @@ void EnemyBase::Move_Chase(float delta_second)
 				j = i;
 			}
 
- 			if (mine > f[i] && f[i] > 0)
+			if (mine > f[i] && f[i] > 0)
 			{
 				mine = f[i];
 
 				j = i;
-				
+
 			}
-		} 
+		}
 
 		switch (j)
 		{
 		case up:
-			if (count == true)
-			{
-				direction = up;
-				count = false;
-			}
+			SetDirection(up);
 			break;
-
-
-
 		case right:
-			if (count == true)
-			{
-				direction = right;
-				count = false;
-			}
+			SetDirection(right);
 			break;
-
 		case down:
-			if (count == true)
-			{
-				direction = down;
-				count = false;
-			}
+			SetDirection(down);
 			break;
-
-
 		case left:
-			if (count == true)
-			{
-				direction = left;
-				count = false;
-			}
+			SetDirection(left);
 			break;
 		}
 	}
-	
-	if (StageData::GetPanelData(location) != BRANCH)
+
+	if (StageData::GetPanelData(location) == ePanelID::NONE)
 	{
-		count = true;
+		direction_flag = true;
 	}
 	
-	
-	/*p = player->GetLocation();
-	x = (p.x - location.x) * (p.x - location.x);
-	y = (p.y - location.y) * (p.y - location.y);
-	h = x + y;
-	f = p + h;*/
-	
-	/*EnemyType()->Move_Chase(delta_second);*/
-
-	/*x = (player->GetLocation().x - location.x) * (player->GetLocation().x - location.x);
-	y = (player->GetLocation().y - location.y) * (player->GetLocation().y - location.y);
-	a = sqrt(x + y);
-	x = (player->GetLocation().x - location.x) / a;
-	y = (player->GetLocation().y - location.y) / a;*/
-
-	/*x = player->GetLocation().x - location.x;
-	y = player->GetLocation().y - location.y;*/
-
-	/*tg = Vector2D(x, y);
-
-	velocity = tg;*/
 }
 void EnemyBase::Move_Die(float delta_second)
 {
@@ -466,7 +421,6 @@ void EnemyBase::AnimationControl(float delta_second)
 				eye_image = eye_animation[left];
 				break;
 			}
-
 		}
 	}
 	else
@@ -609,5 +563,134 @@ EnemyBase* EnemyBase:: EnemyType()
 	case GUZUTA:
 		return dynamic_cast<EnemyBase*>(new Guzuta());
 		break;
+	}
+}
+
+void EnemyBase::SetDirection(eEnemyDirection d)
+{
+	int ex, ey = 0;
+	StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+
+	int x = (int)location.x;
+	int y = (int)location.y;
+	Vector2D a,b;
+
+	switch (d)
+	{
+	case up:
+		a.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;	//パネルの中心座標を取得
+		b.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
+		if (direction_flag == true && x == a.x || x == b.x)		//直角に曲がる処理
+		{
+			direction = up;
+			direction_flag = false;
+		}
+		break;
+	case right:
+		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
+		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
+		if (direction_flag == true && y == a.y || y == b.y)
+		{
+			direction = right;
+			direction_flag = false;
+		}
+		break;
+	case down:
+		a.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
+		b.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
+		if (direction_flag == true && x == a.x || x == b.x)
+		{
+			direction = down;
+			direction_flag = false;
+		}
+		break;
+
+
+	case left:
+		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
+		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
+		if (direction_flag == true && y == a.y || y == b.y)
+		{
+			direction = left;
+			direction_flag = false;
+		}
+		break;
+	}
+}
+
+void EnemyBase::ShortRoute()
+{
+	int px, py, ex, ey, x, y, h, n, j = 0;
+
+	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
+
+	std::map<eAdjacentDirection, ePanelID> ret = {
+		{ eAdjacentDirection::UP, ePanelID::NONE },
+		{ eAdjacentDirection::DOWN, ePanelID::NONE},
+		{ eAdjacentDirection::LEFT, ePanelID::NONE },
+		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
+	};
+
+	StageData::ConvertToIndex(player->GetLocation(), py, px);
+	StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+
+	if (panel[UP] == ret[UP] && direction != down)
+	{
+		ey += -1;
+		x = (px - ex) * (px - ex);
+		y = (py - ey) * (py - ey);
+		h = x + y;
+		n = (px - ex) + (py - ey);
+		f[up] += n + h;
+		ey += 1;
+	}
+	else
+	{
+		f[up] = 0;
+	}
+
+	if (panel[RIGHT] == ret[RIGHT] && direction != left)
+	{
+		ex += 1;
+		x = (px - ex) * (px - ex);
+		y = (py - ey) * (py - ey);
+		h = x + y;
+		n = (px - ex) + (py - ey);
+		f[right] += n + h;
+		ex += -1;
+	}
+	else
+	{
+		f[right] = 0;
+	}
+
+	if (panel[DOWN] == ret[DOWN] && direction != up)
+	{
+		ey += 1;
+		x = (px - ex) * (px - ex);
+		y = (py - ey) * (py - ey);
+		h = x + y;
+		n += (px - ex) + (py - ey);
+		f[down] = n + h;
+		ey += -1;
+	}
+	else
+	{
+		f[down] = 0;
+	}
+
+	if (panel[LEFT] == ret[LEFT] && direction != right)
+	{
+		ex += -1;
+		x = (px - ex) * (px - ex);
+		y = (py - ey) * (py - ey);
+		h = x + y;
+		n = (px - ex) + (py - ey);
+		f[left] += n + h;
+		ex += 1;
+	}
+	else
+	{
+		f[left] = 0;
 	}
 }

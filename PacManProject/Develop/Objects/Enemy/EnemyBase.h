@@ -38,14 +38,19 @@ protected:
 	Player* player;					//プレイヤーのポインタ
 	float speed;					//エネミースピード
 	eEnemyState enemy_state;		//エネミー状態
-	Vector2D teritory_location;		//エネミーの縄張り位置
+	int teritory_location;		//エネミーの縄張り位置
 	eEnemyType enemy_type;			//エネミーの種類
 	Vector2D velocity;					//移動量
-
+	eEnemyDirection direction;			//移動方向
+	int teritory_panel[4][2] = { {0,0},
+								 {0,0},
+								 {0,0},
+								 {0,0} };//エネミーの縄張り位置格納配列
+	
 private:
 	std::vector<int> move_animation;	//移動アニメーション画像
 	std::vector<int> eye_animation;		//目のアニメーション画像
-	eEnemyDirection direction;			//移動方向
+	
 	float animation_time;				//アニメーション時間
 	int animation_count;				//アニメーション添字
 	int flash_count;					//点滅カウント
@@ -55,7 +60,8 @@ private:
 	const int animation_num[2] = { 0, 1, };
 	float mine;
 	float f[4] = { 0, 0, 0, 0 };
-	bool count;
+	bool direction_flag;		//移動方向変更フラグ
+	EnemyBase* a;
 
 public:
 	EnemyBase();
@@ -72,16 +78,18 @@ public:
 
 private:
 	void Movement(float delta_second);			//移動処理
-	void Move_Teritory(float delta_second);		//縄張り状態の移動処理
+	
 	void Move_Fear(float delta_second);			//イジケ状態の移動処理
 	void Move_Die(float delta_second);			//死亡状態の移動処理
 	void AnimationControl(float delta_second);	//アニメーション処理
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
+	void SetDirection(eEnemyDirection d);
+	void ShortRoute();
 	
 
 protected:
 	virtual void Move_Chase(float delta_second);	//追跡状態の移動処理
-	
+	virtual void Move_Teritory(float delta_second);		//縄張り状態の移動処理
 };
