@@ -121,7 +121,7 @@ void Scene::Initialize()
 	LoadDivGraph("Resource/images/Score/Font_numbers.png", 10, 5, 2, 160, 214, Font);
 
 	//スコア評価のフォント画像
-	LoadDivGraph("Resource/images/Score/Resulte_image.png", 5, 1, 5, 800, 315, Result_image);
+	LoadDivGraph("Resource/images/Score/Resulte_image.png", 5, 1, 5, 800, 317, Result_image);
 	
 	//BGM読み込み
 	BGM[0] = LoadSoundMem("Resource/Sound/BGM/BGM_arrows.wav");

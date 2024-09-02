@@ -7,7 +7,7 @@
 #include "Guzuta.h"
 #include "math.h"
 
-EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),teritory_location(),
+EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),
 velocity(0.0f),direction(eEnemyDirection::left),animation_time(0.0f),
 animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
 enemy_type(),mine(0),direction_flag(true)
@@ -202,8 +202,8 @@ void EnemyBase::Movement(float delta_second)
 	switch (enemy_state)
 	{
 	case TERITORY:
-		/*Move_Teritory(delta_second);
-		break;*/
+		Move_Teritory(location);
+		break;
 
 	case CHASE:
 		Move_Chase(delta_second);
@@ -232,16 +232,14 @@ void EnemyBase::Movement(float delta_second)
 	location += velocity * speed * delta_second;
 }
 
-void EnemyBase::Move_Teritory(float delta_second)
+void EnemyBase::Move_Teritory(Vector2D locatoin)
 {
-	
+	EnemyType()->Move_Teritory(location);
 }
 
-void EnemyBase::Move_Chase(float delta_second)
+void EnemyBase::Move_Chase(Vector2D location)
 {
-	ePanelID nel;
-
-	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
+	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(this->location);
 
 	std::map<eAdjacentDirection, ePanelID> ret = {
 		{ eAdjacentDirection::UP, ePanelID::NONE },
@@ -253,7 +251,7 @@ void EnemyBase::Move_Chase(float delta_second)
 	int px, py, ex, ey, x, y, h, n, j = 0;
 	Vector2D a,b;
 	
-	if (StageData::GetPanelData(location) == ePanelID::BRANCH)
+	if (StageData::GetPanelData(this->location) == ePanelID::BRANCH)
 	{
 		StageData::ConvertToIndex(player->GetLocation(), py, px);
 		StageData::ConvertToIndex(this->GetLocation(), ey, ex);
@@ -354,7 +352,7 @@ void EnemyBase::Move_Chase(float delta_second)
 		}
 	}
 
-	if (StageData::GetPanelData(location) == ePanelID::NONE)
+	if (StageData::GetPanelData(this->location) != ePanelID::BRANCH)
 	{
 		direction_flag = true;
 	}
@@ -464,8 +462,8 @@ void EnemyBase::State_Change(float delta_second)
 	{
 		if (state_time >= (delta_second * 60) * 4.5)
 		{
-			state_time = 0;
-			enemy_state = CHASE;
+			/*state_time = 0;
+			enemy_state = CHASE;*/
 		}
 
 		if (player->GetPowerUp() == true)
@@ -527,18 +525,22 @@ void EnemyBase::SetEnemyType(int t)
 	{
 	case 1:
 		enemy_type = PINKY;
+		/*EnemyType()->Initialize();*/
 		break;
 
 	case 2:
 		enemy_type = AOSUKE;
+		/*EnemyType()->Initialize();*/
 		break;
 		
 	case 3:
 		enemy_type = GUZUTA;
+		/*EnemyType()->Initialize();*/
 		break;
 
 	default:
 		enemy_type = AKABE;
+		EnemyType()->Initialize();
 		break;
 	}
 	
@@ -580,28 +582,37 @@ void EnemyBase::SetDirection(eEnemyDirection d)
 	case up:
 		a.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;	//パネルの中心座標を取得
 		b.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
-		if (direction_flag == true && x == a.x || x == b.x)		//直角に曲がる処理
+		if (direction_flag == true)	//直角に曲がる処理
 		{
-			direction = up;
-			direction_flag = false;
+			if (x == a.x || x == b.x)
+			{
+				direction = up;
+				direction_flag = false;
+			}
 		}
 		break;
 	case right:
 		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
 		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true && y == a.y || y == b.y)
+		if (direction_flag == true)
 		{
-			direction = right;
-			direction_flag = false;
+			if (y == a.y || y == b.y)
+			{
+				direction = right;
+				direction_flag = false;
+			}
 		}
 		break;
 	case down:
 		a.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
 		b.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true && x == a.x || x == b.x)
+		if (direction_flag == true)
 		{
-			direction = down;
-			direction_flag = false;
+			if (x == a.x || x == b.x)
+			{
+				direction = down;
+				direction_flag = false;
+			}
 		}
 		break;
 
@@ -609,10 +620,13 @@ void EnemyBase::SetDirection(eEnemyDirection d)
 	case left:
 		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
 		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true && y == a.y || y == b.y)
+		if (direction_flag == true)
 		{
-			direction = left;
-			direction_flag = false;
+			if (y == a.y || y == b.y)
+			{
+				direction = left;
+				direction_flag = false;
+			}
 		}
 		break;
 	}
@@ -693,4 +707,9 @@ void EnemyBase::ShortRoute()
 	{
 		f[left] = 0;
 	}
+}
+
+Vector2D EnemyBase::Set_location()
+{
+	return location;
 }

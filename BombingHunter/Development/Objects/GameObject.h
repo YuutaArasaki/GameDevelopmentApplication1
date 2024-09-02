@@ -71,7 +71,7 @@ public:
 	//各敵のスコアを取得する処理
 	int GetScorePoint();
 	
-	//時間を減らすかどうかの判定取得
+	//時間を減らすかどうかの判定取得 
 	bool TimeMinus();
 };
 

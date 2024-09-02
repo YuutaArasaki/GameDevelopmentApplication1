@@ -7,7 +7,7 @@ public:
 	void Initialize() override;
 
 private:
-	void Move_Chase(float delta_second) override;
+virtual	void Move_Chase(Vector2D location) override;
 
 };
 

@@ -76,7 +76,7 @@ void Enemy::Initialize()
 	}
 
 	//ハネテキのスコア
-	Score_Point = 30;
+	Score_Point = 200;
 }
 
 //更新処理

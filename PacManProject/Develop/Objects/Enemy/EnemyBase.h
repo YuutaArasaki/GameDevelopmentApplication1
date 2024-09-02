@@ -38,10 +38,10 @@ protected:
 	Player* player;					//プレイヤーのポインタ
 	float speed;					//エネミースピード
 	eEnemyState enemy_state;		//エネミー状態
-	int teritory_location;		//エネミーの縄張り位置
 	eEnemyType enemy_type;			//エネミーの種類
 	Vector2D velocity;					//移動量
 	eEnemyDirection direction;			//移動方向
+	bool direction_flag;		//移動方向変更フラグ
 	int teritory_panel[4][2] = { {0,0},
 								 {0,0},
 								 {0,0},
@@ -60,8 +60,6 @@ private:
 	const int animation_num[2] = { 0, 1, };
 	float mine;
 	float f[4] = { 0, 0, 0, 0 };
-	bool direction_flag;		//移動方向変更フラグ
-	EnemyBase* a;
 
 public:
 	EnemyBase();
@@ -85,11 +83,12 @@ private:
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	void SetDirection(eEnemyDirection d);
 	void ShortRoute();
 	
 
 protected:
-	virtual void Move_Chase(float delta_second);	//追跡状態の移動処理
-	virtual void Move_Teritory(float delta_second);		//縄張り状態の移動処理
+	virtual void Move_Chase(Vector2D location);	//追跡状態の移動処理
+	virtual void Move_Teritory(Vector2D lcoation);		//縄張り状態の移動処理
+	void SetDirection(eEnemyDirection d);
+	Vector2D Set_location();
 };

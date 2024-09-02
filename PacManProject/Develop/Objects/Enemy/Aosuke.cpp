@@ -5,7 +5,7 @@ void Aosuke::Initialize()
 	enemy_state = TERITORY;
 }
 
-void Aosuke::Move_Chase(float delta_second)
+void Aosuke::Move_Chase(Vector2D location)
 {
 
 }
