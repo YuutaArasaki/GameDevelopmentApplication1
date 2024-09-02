@@ -42,10 +42,7 @@ protected:
 	Vector2D velocity;					//移動量
 	eEnemyDirection direction;			//移動方向
 	bool direction_flag;		//移動方向変更フラグ
-	int teritory_panel[4][2] = { {0,0},
-								 {0,0},
-								 {0,0},
-								 {0,0} };//エネミーの縄張り位置格納配列
+	int teritory_panel[4][2];//エネミーの縄張り位置格納配列
 	
 private:
 	std::vector<int> move_animation;	//移動アニメーション画像
@@ -58,8 +55,10 @@ private:
 	float state_time;					//エネミー状態時間
 	int enemy_level;					//エネミーレベル
 	const int animation_num[2] = { 0, 1, };
-	float mine;
+	float mini;
 	float f[4] = { 0, 0, 0, 0 };
+	int tp_x; //縄張りのX座標
+	int tp_y; //縄張りのY座標
 
 public:
 	EnemyBase();
@@ -84,11 +83,11 @@ private:
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
 	void ShortRoute();
-	
+	void SetDirection(eEnemyDirection d);
+	void Set_TeritoryPanel();
 
 protected:
 	virtual void Move_Chase(Vector2D location);	//追跡状態の移動処理
-	virtual void Move_Teritory(Vector2D lcoation);		//縄張り状態の移動処理
-	void SetDirection(eEnemyDirection d);
+	virtual void Move_Teritory();		//縄張り状態の移動処理
 	Vector2D Set_location();
 };

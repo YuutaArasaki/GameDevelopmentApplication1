@@ -17,9 +17,10 @@ public:
 	void Initialize() override;
 
 private:
-	void Move_Teritory(Vector2D location) override;
+	void Move_Teritory() override;
 	virtual void Move_Chase(Vector2D location) override;
 	void AnimationControl(float delta_second);
 	void SetPlayer(Player* p);
+	void Set_Direction(eEnemyDirection d);
 };
 
