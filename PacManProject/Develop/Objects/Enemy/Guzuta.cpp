@@ -2,7 +2,7 @@
 
 void Guzuta::Initialize()
 {
-	enemy_state = TERITORY;
+	enemy_state = idle;
 	
 }
 

@@ -14,6 +14,7 @@ enum eMobilityType
 	Movable,		// 可動
 };
 
+
 // ゲームオブジェクト基底クラス
 class GameObjectBase
 {

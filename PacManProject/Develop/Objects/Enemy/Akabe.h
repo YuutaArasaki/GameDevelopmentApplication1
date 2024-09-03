@@ -9,10 +9,6 @@ private:
 	int tp_x; //縄張りのX座標
 	int tp_y; //縄張りのY座標
 
-	int teritory_panel[4][2] = { {21,1},
-								 {26,1},
-								 {26,5},
-								 {21,5} };//エネミーの縄張り位置格納配列
 public:
 	void Initialize() override;
 

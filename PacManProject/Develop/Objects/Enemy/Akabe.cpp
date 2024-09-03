@@ -4,7 +4,6 @@
 void Akabe::Initialize()
 {
 	enemy_state = TERITORY;
-
 }
 void Akabe::Move_Teritory()
 {
@@ -32,7 +31,7 @@ void Akabe::Move_Chase(Vector2D location)
 		if (panel[UP] == ret[UP] && direction != down)
 		{
 			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			StageData::ConvertToIndex(location, ey, ex);
 			ey += -1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
@@ -48,7 +47,7 @@ void Akabe::Move_Chase(Vector2D location)
 		if (panel[RIGHT] == ret[RIGHT] && direction != left)
 		{
 			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			StageData::ConvertToIndex(location, ey, ex);
 			ex += 1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
@@ -64,7 +63,7 @@ void Akabe::Move_Chase(Vector2D location)
 		if (panel[DOWN] == ret[DOWN] && direction != up)
 		{
 			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			StageData::ConvertToIndex(location, ey, ex);
 			ey += 1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);
@@ -80,7 +79,7 @@ void Akabe::Move_Chase(Vector2D location)
 		if (panel[LEFT] == ret[LEFT] && direction != right)
 		{
 			StageData::ConvertToIndex(player->GetLocation(), py, px);
-			StageData::ConvertToIndex(this->GetLocation(), ey, ex);
+			StageData::ConvertToIndex(location, ey, ex);
 			ex += -1;
 			x = (px - ex) * (px - ex);
 			y = (py - ey) * (py - ey);

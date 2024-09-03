@@ -6,7 +6,7 @@
 //エネミー状態
 enum eEnemyState
 {
-	ible,		//待機状態
+	idle,		//待機状態
 	die,		//死亡状態
 	TERITORY,	//縄張り状態
 	CHASE,		//追跡状態
@@ -42,7 +42,7 @@ protected:
 	Vector2D velocity;					//移動量
 	eEnemyDirection direction;			//移動方向
 	bool direction_flag;		//移動方向変更フラグ
-	int teritory_panel[4][2];//エネミーの縄張り位置格納配列
+	Vector2D teritory_panel[2];//エネミーの縄張り位置
 	
 private:
 	std::vector<int> move_animation;	//移動アニメーション画像
@@ -57,8 +57,6 @@ private:
 	const int animation_num[2] = { 0, 1, };
 	float mini;
 	float f[4] = { 0, 0, 0, 0 };
-	int tp_x; //縄張りのX座標
-	int tp_y; //縄張りのY座標
 
 public:
 	EnemyBase();
@@ -75,19 +73,18 @@ public:
 
 private:
 	void Movement(float delta_second);			//移動処理
-	
+	void Move_Idle();
 	void Move_Fear(float delta_second);			//イジケ状態の移動処理
 	void Move_Die(float delta_second);			//死亡状態の移動処理
 	void AnimationControl(float delta_second);	//アニメーション処理
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	void ShortRoute();
+	eEnemyDirection ShortRoute(Vector2D tg);
 	void SetDirection(eEnemyDirection d);
 	void Set_TeritoryPanel();
 
 protected:
 	virtual void Move_Chase(Vector2D location);	//追跡状態の移動処理
 	virtual void Move_Teritory();		//縄張り状態の移動処理
-	Vector2D Set_location();
 };
