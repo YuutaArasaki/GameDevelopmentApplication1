@@ -81,11 +81,12 @@ private:
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	eEnemyDirection ShortRoute(Vector2D tg);
-	void SetDirection(eEnemyDirection d);
+	eEnemyDirection StartRoute(Vector2D tg);
+	
 	void Set_TeritoryPanel();
 
 protected:
-	virtual void Move_Chase(Vector2D location);	//追跡状態の移動処理
+	virtual void Move_Chase(Vector2D location, Vector2D p_location);	//追跡状態の移動処理
 	virtual void Move_Teritory();		//縄張り状態の移動処理
+	void SetDirection(eEnemyDirection d);
 };

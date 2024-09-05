@@ -1,5 +1,6 @@
 #include "Akabe.h"
 #include "math.h"
+#include "DxLib.h"
 
 void Akabe::Initialize()
 {
@@ -10,7 +11,7 @@ void Akabe::Move_Teritory()
 	
 }
 
-void Akabe::Move_Chase(Vector2D location)
+void Akabe::Move_Chase(Vector2D location,Vector2D p_location)
 {
 
 	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(location);
@@ -30,7 +31,7 @@ void Akabe::Move_Chase(Vector2D location)
 
 		if (panel[UP] == ret[UP] && direction != down)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(p_location, py, px);
 			StageData::ConvertToIndex(location, ey, ex);
 			ey += -1;
 			x = (px - ex) * (px - ex);
@@ -46,7 +47,7 @@ void Akabe::Move_Chase(Vector2D location)
 
 		if (panel[RIGHT] == ret[RIGHT] && direction != left)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(p_location, py, px);
 			StageData::ConvertToIndex(location, ey, ex);
 			ex += 1;
 			x = (px - ex) * (px - ex);
@@ -62,7 +63,7 @@ void Akabe::Move_Chase(Vector2D location)
 
 		if (panel[DOWN] == ret[DOWN] && direction != up)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(p_location, py, px);
 			StageData::ConvertToIndex(location, ey, ex);
 			ey += 1;
 			x = (px - ex) * (px - ex);
@@ -78,7 +79,7 @@ void Akabe::Move_Chase(Vector2D location)
 
 		if (panel[LEFT] == ret[LEFT] && direction != right)
 		{
-			StageData::ConvertToIndex(player->GetLocation(), py, px);
+			StageData::ConvertToIndex(p_location, py, px);
 			StageData::ConvertToIndex(location, ey, ex);
 			ex += -1;
 			x = (px - ex) * (px - ex);
@@ -116,7 +117,7 @@ void Akabe::Move_Chase(Vector2D location)
 		case up:
 			if (direction_flag == true )
 			{
-				direction = up;
+				SetDirection(up);
 				direction_flag = false;
 
 			}
@@ -124,14 +125,14 @@ void Akabe::Move_Chase(Vector2D location)
 		case right:
 			if (direction_flag == true)
 			{
-				direction = right;
+				SetDirection(right);
 				direction_flag = false;
 			}
 			break;
 		case down:
 			if (direction_flag == true)
 			{
-				direction = down;
+				SetDirection(down);
 				direction_flag = false;
 			}
 			break;
@@ -140,7 +141,7 @@ void Akabe::Move_Chase(Vector2D location)
 		case left:
 			if (direction_flag == true)
 			{
-				direction = left;
+				SetDirection(left);
 				direction_flag = false;
 			}
 			break;
@@ -154,71 +155,8 @@ void Akabe::Move_Chase(Vector2D location)
 
 }
 
-void Akabe::SetPlayer(Player* p)
+
+void Akabe::SetDirection(eEnemyDirection d)
 {
-	player = p;
-}
-
-void Akabe::Set_Direction(eEnemyDirection d)
-{
-	int ex, ey = 0;
-	StageData::ConvertToIndex(this->GetLocation(), ey, ex);
-
-	int x = (int)location.x;
-	int y = (int)location.y;
-	Vector2D a, b;
-
-	switch (d)
-	{
-	case up:
-		a.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;	//パネルの中心座標を取得
-		b.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
-		if (direction_flag == true)	//直角に曲がる処理
-		{
-			if (x == a.x || x == b.x)
-			{
-				direction = up;
-				direction_flag = false;
-			}
-		}
-		break;
-	case right:
-		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
-		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true)
-		{
-			if (y == a.y || y == b.y)
-			{
-				direction = right;
-				direction_flag = false;
-			}
-		}
-		break;
-	case down:
-		a.x = (int)(ex + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
-		b.x = (int)(ex + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true)
-		{
-			if (x == a.x || x == b.x)
-			{
-				direction = down;
-				direction_flag = false;
-			}
-		}
-		break;
-
-
-	case left:
-		a.y = (int)(ey + 1) * D_OBJECT_SIZE - D_OBJECT_SIZE / 2;
-		b.y = (int)(ey + 1) * D_OBJECT_SIZE + D_OBJECT_SIZE / 2;
-		if (direction_flag == true)
-		{
-			if (y == a.y || y == b.y)
-			{
-				direction = left;
-				direction_flag = false;
-			}
-		}
-		break;
-	}
+	__super::SetDirection(d);
 }

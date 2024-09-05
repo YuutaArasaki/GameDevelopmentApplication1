@@ -6,7 +6,7 @@ void Guzuta::Initialize()
 	
 }
 
-void Guzuta::Move_Chase(Vector2D location)
+void Guzuta::Move_Chase(Vector2D location, Vector2D p_location)
 {
 
 }
