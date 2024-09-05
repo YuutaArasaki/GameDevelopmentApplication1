@@ -47,16 +47,17 @@ protected:
 private:
 	std::vector<int> move_animation;	//移動アニメーション画像
 	std::vector<int> eye_animation;		//目のアニメーション画像
-	
 	float animation_time;				//アニメーション時間
 	int animation_count;				//アニメーション添字
 	int flash_count;					//点滅カウント
-	bool flash_flag;
+	bool flash_flag;					//点滅フラグ
 	float state_time;					//エネミー状態時間
 	int enemy_level;					//エネミーレベル
 	const int animation_num[2] = { 0, 1, };
-	float mini;
-	float f[4] = { 0, 0, 0, 0 };
+	float mini;							//距離計算スコア最小値
+	float f[4] = { 0, 0, 0, 0 };		//距離計算スコア格納配列
+	bool state_flag;					//状態遷移フラグ
+	Vector2D enemy_nest;				//敵の待機状態位置
 
 public:
 	EnemyBase();

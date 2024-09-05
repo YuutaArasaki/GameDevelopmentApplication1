@@ -8,10 +8,10 @@
 #include "math.h"
 #include "../../Utility/InputManager.h"
 
-EnemyBase::EnemyBase() : speed(40.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),
+EnemyBase::EnemyBase() : speed(50.0f),enemy_state(eEnemyState::TERITORY),player(nullptr),
 velocity(0.0f),direction(eEnemyDirection::right),animation_time(0.0f),
 animation_count(0),flash_count(0),flash_flag(false),state_time(0.0f),enemy_level(0),
-enemy_type(),mini(0),direction_flag(true)
+enemy_type(),mini(0),direction_flag(true),state_flag(false),enemy_nest(Vector2D(13,15))
 {
 }
 
@@ -40,28 +40,10 @@ void EnemyBase::Initialize()
 
 	z_layer = 5;
 
-	switch (enemy_type)
-	{
-	case AKABE:
-		teritory_panel[0] = Vector2D(21,1);
-		teritory_panel[1] = Vector2D(26, 5);
-		break;
-
-	case PINKY:
-		teritory_panel[0] = Vector2D(6, 1);
-		teritory_panel[1] = Vector2D(1, 5);
-		break;
-
-	case AOSUKE:
-		teritory_panel[0] = Vector2D(26, 29);
-		teritory_panel[1] = Vector2D(18, 26);
-		break;
-
-	case GUZUTA:
-		teritory_panel[0] = Vector2D(1, 29);
-		teritory_panel[1] = Vector2D(9, 26);
-		break;
-	}
+	
+	teritory_panel[0] = Vector2D(21,1);
+	teritory_panel[1] = Vector2D(26, 5);
+	
 }
 
 void EnemyBase::Update(float delta_second)
@@ -92,7 +74,7 @@ void EnemyBase::Draw(const Vector2D& screen_offset) const
 	int px, py, ex, ey = 0;
 
 	StageData::ConvertToIndex(player->GetLocation(), py, px);
-	if (enemy_type == AKABE)
+	if (enemy_type == PINKY)
 	{
 		StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 		DrawFormatString(200, 40, 0xffffff, "EX : %d EY : %d", ex,ey);
@@ -114,26 +96,26 @@ void EnemyBase::Finalize()
 void EnemyBase::OnHitCollision(GameObjectBase* hit_object)
 {
 	// 当たった、オブジェクトが壁だったら
-	if (hit_object->GetCollision().object_type == eObjectType::wall)
-	{
-		// 当たり判定情報を取得して、カプセルがある位置を求める
-		CapsuleCollision hc = hit_object->GetCollision();
-		hc.point[0] += hit_object->GetLocation();
-		hc.point[1] += hit_object->GetLocation();
+	//if (hit_object->GetCollision().object_type == eObjectType::wall)
+	//{
+	//	// 当たり判定情報を取得して、カプセルがある位置を求める
+	//	CapsuleCollision hc = hit_object->GetCollision();
+	//	hc.point[0] += hit_object->GetLocation();
+	//	hc.point[1] += hit_object->GetLocation();
 
-		// 最近傍点を求める
-		Vector2D near_point = NearPointCheck(hc, this->location);
+	//	// 最近傍点を求める
+	//	Vector2D near_point = NearPointCheck(hc, this->location);
 
-		// Enemyからnear_pointへの方向ベクトルを取得
-		Vector2D dv2 = near_point - this->location;
-		Vector2D dv = this->location - near_point;
+	//	// Enemyからnear_pointへの方向ベクトルを取得
+	//	Vector2D dv2 = near_point - this->location;
+	//	Vector2D dv = this->location - near_point;
 
-		// めり込んだ差分
-		float diff = (this->GetCollision().radius + hc.radius) - dv.Length();
+	//	// めり込んだ差分
+	//	float diff = (this->GetCollision().radius + hc.radius) - dv.Length();
 
-		// diffの分だけ戻る
-		location += dv.Normalize() * diff;
-	}
+	//	// diffの分だけ戻る
+	//	location += dv.Normalize() * diff;
+	//}
 
 
 	// 当たったオブジェクトがプレイヤーだったら
@@ -222,8 +204,7 @@ void EnemyBase::Movement(float delta_second)
 
 void EnemyBase::Move_Teritory()
 {
-	teritory_panel[0] = Vector2D(6, 1);
-	teritory_panel[1] = Vector2D(1, 5);
+
 	int ex = 0;
 	int	ey = 0;
 	int x, y, h, n = 0;
@@ -353,9 +334,6 @@ void EnemyBase::Move_Teritory()
 
 void EnemyBase::Move_Chase(Vector2D location)
 {
-
-	
-
 	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(this->location);
 
 	std::map<eAdjacentDirection, ePanelID> ret = {
@@ -491,9 +469,10 @@ void EnemyBase::Move_Fear(float delta_second)
 
 void EnemyBase::Move_Idle()
 {
-	Vector2D target = Vector2D(14,11);
+	int ex, ey = 0;
+	Vector2D target = Vector2D(13,11);
 	std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(this->location);
-
+	StageData::ConvertToIndex(this->GetLocation(), ey, ex);
 	std::map<eAdjacentDirection, ePanelID> ret = {
 		{ eAdjacentDirection::UP, ePanelID::NONE },
 		{ eAdjacentDirection::DOWN, ePanelID::NONE},
@@ -501,25 +480,120 @@ void EnemyBase::Move_Idle()
 		{ eAdjacentDirection::RIGHT, ePanelID::NONE }
 	};
 
-	std::map<eAdjacentDirection, ePanelID> gat = { {eAdjacentDirection::UP, ePanelID::GATE} };
-
-	if (panel[UP] != ret[UP])
+	
+	if (state_flag == false)
 	{
-		 SetDirection(down);
+		if (panel[UP] != ret[UP])
+		{
+				 SetDirection(down);
+		}
+	
+		if (panel[DOWN] != ret[DOWN])
+		{
+			SetDirection(up);
+		}
 	}
 	
-	if (panel[DOWN] != ret[DOWN])
-	{
-		SetDirection(up);
-	}
+	eEnemyDirection i = up;
 
 	switch (enemy_type)
 	{
 	case PINKY:
-		SetDirection(ShortRoute(target));
+		if (player->GetFoodCount() > 30)
+		{
+			state_flag = true;
 
+			if (ex == target.x && target.y == ey)
+			{
+				enemy_state = TERITORY;
+			}
+
+			if (ex > target.x)
+			{
+				SetDirection(left);
+			}
+			else if (ex < target.x)
+			{
+				SetDirection(right);
+			}
+
+			if (target.x == ex && target.y != ey)
+			{
+				i = direction;
+				SetDirection(up);
+			}
+			else if (target.x == ex && target.y == ey)
+			{
+				direction = ShortRoute(teritory_panel[0]);
+				SetDirection(ShortRoute(teritory_panel[0]));
+			}
+			break;
+
+	case AOSUKE:
+		if (player->GetFoodCount() > 60)
+		{
+			state_flag = true;
+
+			if (ex == target.x && target.y == ey)
+			{
+				enemy_state = TERITORY;
+			}
+
+			if (ex > target.x)
+			{
+				SetDirection(left);
+			}
+			else if (ex < target.x)
+			{
+				SetDirection(right);
+			}
+
+			if (target.x == ex && target.y != ey)
+			{
+				i = direction;
+				SetDirection(up);
+			}
+			else if (target.x == ex && target.y == ey)
+			{
+				direction = ShortRoute(teritory_panel[0]);
+				SetDirection(ShortRoute(teritory_panel[0]));
+			}
+		}
+		break;
+
+	case GUZUTA:
+		if (player->GetFoodCount() > 90)
+		{
+			state_flag = true;
+
+			if (ex == target.x && target.y == ey)
+			{
+				enemy_state = TERITORY;
+			}
+
+			if (ex > target.x)
+			{
+				SetDirection(left);
+			}
+			else if (ex < target.x)
+			{
+				SetDirection(right);
+			}
+
+			if (target.x == ex && target.y != ey)
+			{
+				i = direction;
+				SetDirection(up);
+			}
+			else if (target.x == ex && target.y == ey)
+			{
+				direction = ShortRoute(teritory_panel[0]);
+				SetDirection(ShortRoute(teritory_panel[0]));
+			}
+		}
+			break;
+		}
 	}
-
 	if (StageData::GetPanelData(this->location) != ePanelID::BRANCH)
 	{
 		direction_flag = true;
@@ -806,10 +880,10 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 	
 
 	std::map<eAdjacentDirection, ePanelID> ret = {
-		{ eAdjacentDirection::UP, ePanelID::NONE },
-		{ eAdjacentDirection::DOWN, ePanelID::NONE},
-		{ eAdjacentDirection::LEFT, ePanelID::NONE },
-		{ eAdjacentDirection::RIGHT, ePanelID::NONE } };
+		{ eAdjacentDirection::UP, ePanelID::WALL},
+		{ eAdjacentDirection::DOWN, ePanelID::WALL},
+		{ eAdjacentDirection::LEFT, ePanelID::WALL},
+		{ eAdjacentDirection::RIGHT, ePanelID::WALL} };
 
 
 	tp = tg;
@@ -819,12 +893,12 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 		tp = teritory_panel[1];
 	}*/
 
-	if (StageData::GetPanelData(this->location) == ePanelID::NONE)
-	{
+	/*f (StageData::GetPanelData(this->location) == ePanelID::NONE)
+	{*/
 		std::map<eAdjacentDirection, ePanelID> panel = StageData::GetAdjacentPanelData(this->location);
 		StageData::ConvertToIndex(this->location, ey, ex);
 
-		if (panel[UP] == ret[UP] && direction != down)
+		if (panel[UP] != ret[UP] && direction != down)
 		{
 			ey += -1;
 			x = (tp.x - ex) * (tp.x - ex);
@@ -839,7 +913,7 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 			f[up] = 0;
 		}
 
-		if (panel[RIGHT] == ret[RIGHT] && direction != left)
+		if (panel[RIGHT] != ret[RIGHT] && direction != left)
 		{
 			ex += 1;
 			x = (tp.x - ex) * (tp.x - ex);
@@ -852,9 +926,9 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 		else
 		{
 			f[right] = 0;
-		}
+		} 
 
-		if (panel[DOWN] == ret[DOWN] && direction != up)
+		if (panel[DOWN] != ret[DOWN] && direction != up)
 		{
 			ey += 1;
 			x = (tp.x - ex) * (tp.x - ex);
@@ -869,7 +943,7 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 			f[down] = 0;
 		}
 
-		if (panel[LEFT] == ret[LEFT] && direction != right)
+		if (panel[LEFT] != ret[LEFT] && direction != right)
 		{
 			ex += -1;
 			x = (tp.x - ex) * (tp.x - ex);
@@ -924,5 +998,5 @@ eEnemyDirection EnemyBase::ShortRoute(Vector2D tg)
 			break;
 		}
 	}
-}
+//}
 
