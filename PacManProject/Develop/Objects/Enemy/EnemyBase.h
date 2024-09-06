@@ -81,11 +81,10 @@ private:
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
 	eEnemyDirection StartRoute(Vector2D tg);	//引数で受け取った位置までの最短距離計算処理
-	
+	virtual void Move_Teritory();				//縄張り状態の移動処理
 
 
 protected:
 	virtual void Move_Chase(Vector2D location, Vector2D p_location);	//追跡状態の移動処理
-	virtual void Move_Teritory();		//縄張り状態の移動処理
 	void SetDirection(eEnemyDirection d);	//方向設定処理
 };
