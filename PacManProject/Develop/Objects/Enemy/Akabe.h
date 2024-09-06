@@ -14,9 +14,9 @@ public:
 	void Initialize() override;
 
 private:
-	void Move_Teritory() override;
-	virtual void Move_Chase(Vector2D location,Vector2D p_location) override;
-	void AnimationControl(float delta_second);
-	void SetDirection(eEnemyDirection d);
+	void Move_Teritory() override;		//“ê’£‚èˆ—
+	virtual void Move_Chase(Vector2D location,Vector2D p_location) override;	//’ÇÕˆ—‹Iˆ—
+	void SetDirection(eEnemyDirection d);		//•ûŒüİ’èˆ—
+
 };
 

@@ -69,8 +69,7 @@ public:
 	void OnHitCollision(GameObjectBase* hit_object) override;	//当たり判定通知処理
 	eEnemyState GetEnemyState();		//エネミーの状態を取得する
 	void Set_Player(Player* p);			//プレイヤーのポインタを取得する
-	void SetEnemyType(int t);
-	EnemyBase* EnemyType();
+	void SetEnemyType(int t);			//エネミータイプ設定処理
 
 private:
 	void Movement(float delta_second);			//移動処理
@@ -81,12 +80,12 @@ private:
 	void State_Change(float delta_second);		//状態の変更処理
 	eEnemyType Get_EnemyType();					//エネミーのタイプを取得する
 	float Enemy_Speed();						//エネミーのスピードを設定する処理
-	eEnemyDirection StartRoute(Vector2D tg);
+	eEnemyDirection StartRoute(Vector2D tg);	//引数で受け取った位置までの最短距離計算処理
 	
-	void Set_TeritoryPanel();
+
 
 protected:
 	virtual void Move_Chase(Vector2D location, Vector2D p_location);	//追跡状態の移動処理
 	virtual void Move_Teritory();		//縄張り状態の移動処理
-	void SetDirection(eEnemyDirection d);
+	void SetDirection(eEnemyDirection d);	//方向設定処理
 };
